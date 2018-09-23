@@ -4,6 +4,8 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
+using OPFC.Repositories.Interfaces;
+using OPFC.Repositories.Providers;
 
 namespace OPFC.Repositories.UnitOfWork
 {
@@ -17,13 +19,19 @@ namespace OPFC.Repositories.UnitOfWork
         /// </summary>
         private OpfcDbContext OpfcDbContext { get; set; }
 
+        protected IRepositoryProvider RepositoryProvider { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OpfcUow()
+        public OpfcUow(IRepositoryProvider repositoryProvider)
         {
             CreateDbContext();
+            repositoryProvider.DbContext = OpfcDbContext;
+            RepositoryProvider = repositoryProvider;
         }
+
+        public IUserRepository UserRepository { get { return GetRepo<IUserRepository>(); } }
 
         /// <summary>
         /// Create new OpfcDbContext
@@ -98,6 +106,11 @@ namespace OPFC.Repositories.UnitOfWork
         public void RollbackTransaction(IDbContextTransaction dbContextTransaction)
         {
             dbContextTransaction.Rollback();
+        }
+
+        private T GetRepo<T>() where T : class
+        {
+            return RepositoryProvider.GetRepository<T>();
         }
 
         #region DISPOSAL

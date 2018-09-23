@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OPFC.Services.Interfaces;
+using ServiceStack;
 
 namespace OPFC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        // Dependency Injection. We should communicate with interface only
+        private readonly IUserService _userService = AppHostBase.Instance.Resolve<IUserService>();
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            // Testing method
+            var user = _userService.GetUserById(1);
             return new string[] { "value1", "value2" };
         }
 

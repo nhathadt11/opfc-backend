@@ -14,12 +14,20 @@ namespace OPFC.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHost(args).Run();
+            //CreateWebHost(args).Run();
+
+            var host = new WebHostBuilder()
+                            .UseKestrel()
+                            .UseContentRoot(Directory.GetCurrentDirectory())
+                            .UseIISIntegration()
+                            .UseStartup<Startup>()
+                            .Build();
+            host.Run();
         }
 
-        public static IWebHost CreateWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+        //public static IWebHost CreateWebHost(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //        .UseStartup<Startup>()
+        //        .Build();
     }
 }

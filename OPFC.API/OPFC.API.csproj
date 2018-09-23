@@ -5,16 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Tasks\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="ServiceStack" Version="5.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
+    <ProjectReference Include="..\OPFC.Service\OPFC.Services.csproj" />
   </ItemGroup>
 
 </Project>

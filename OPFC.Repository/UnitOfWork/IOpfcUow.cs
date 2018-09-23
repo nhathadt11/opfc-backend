@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using OPFC.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,8 +39,12 @@ namespace OPFC.Repositories.UnitOfWork
         /// </summary>
         void Commit();
 
-        // Repositories
-        // I..Repository I..Repository {get; }
+        // Our OPFC Repositories here
+
+        /// <summary>
+        /// The user Repository
+        /// </summary>
+        IUserRepository UserRepository { get; }
 
         /// <summary>
         /// Dispose

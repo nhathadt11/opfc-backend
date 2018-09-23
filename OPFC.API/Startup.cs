@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using OPFC.Repositories.UnitOfWork;
+using ServiceStack;
 
 namespace OPFC.API
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +20,7 @@ namespace OPFC.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // OPFC unit of work
             services.AddSingleton<IOpfcUow, OpfcUow>();
             services.AddMvc();
         }
@@ -36,6 +32,13 @@ namespace OPFC.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Register ServiceStack AppHost as a .NET Core module
+            app.UseServiceStack(new AppHost
+            {
+                // Use **appsettings.json** and config sources
+                AppSettings = new NetCoreAppSettings(Configuration)
+            });
 
             app.UseMvc();
         }

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Implementations\" />
+    <ProjectReference Include="..\OPFC.Models\OPFC.Models.csproj" />
+    <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
