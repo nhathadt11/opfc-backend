@@ -47,5 +47,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[User]
         /// </summary>
         public DbSet<User> User { get; set; }
+
+        /// <summary>
+        /// [dbo].[UserRole]
+        /// </summary>
+        public DbSet<UserRole> UserRole { get; set; }
     }
 }

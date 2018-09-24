@@ -18,10 +18,13 @@ namespace OPFC.Repositories.Factory
         /// </remarks>
         private IDictionary<Type, Func<DbContext, object>> GetOPFCFactories()
         {
+            // TODO: Register repository here
             return new Dictionary<Type, Func<DbContext, object>>
                 {
                 {typeof(IUserRepository), dbContext => new UserRepository(dbContext)},
-                 // TODO: Register repository here
+                {typeof(IUserRoleRepository), dbContext => new UserRoleRepository(dbContext)},
+                {typeof(IBrandRepository), dbContext => new BrandRepository(dbContext)},
+                {typeof(IEventAddressRepository), dbContext => new EventAddressRepository(dbContext)},
             };
         }
 

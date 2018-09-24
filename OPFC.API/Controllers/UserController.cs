@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using OPFC.Models;
 using OPFC.Services.Interfaces;
 using ServiceStack;
@@ -23,6 +24,14 @@ namespace OPFC.API.Controllers
         {
             var user = _userService.GetUserById(id);
             return user;
+        }
+
+        //Get api/user/GetAllUser
+        [HttpGet("GetAllUser/", Name = "GetAllUser")]
+        public ActionResult<List<User>> GetAllUser()
+        {
+            var userList = _userService.GetAllUser();
+            return userList;
         }
     }
 }

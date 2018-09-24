@@ -27,6 +27,23 @@ namespace OPFC.Services.Implementations
         }
 
         /// <summary>
+        /// Get all user
+        /// </summary>
+        /// <returns></returns>
+        public List<User> GetAllUser()
+        {
+            try
+            {
+                var userList = _opfcUow.UserRepository.GetAllUsers();
+                return userList;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Get user by id
         /// </summary>
         /// <param name="id">The user identifier.</param>

@@ -16,5 +16,11 @@ namespace OPFC.Services.Interfaces
         /// <param name="id">The user identifier</param>
         /// <returns>User model</returns>
         User GetUserById(long id);
+
+        /// <summary>
+        /// Get all user
+        /// </summary>
+        /// <returns></returns>
+        List<User> GetAllUser();
     }
 }

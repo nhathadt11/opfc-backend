@@ -25,6 +25,9 @@ namespace OPFC.API
             container.Register<IOpfcUow>(c => new OpfcUow(c.TryResolve<IRepositoryProvider>())).ReusedWithin(ReuseScope.None);
 
             container.Register<IUserService>(c => new UserService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IUserRoleService>(c => new UserRoleService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IBrandService>(c => new BrandService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IEventAddressService>(c => new EventAddressService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
         }
     }
 }
