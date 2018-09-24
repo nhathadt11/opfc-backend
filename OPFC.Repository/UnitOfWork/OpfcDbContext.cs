@@ -44,8 +44,8 @@ namespace OPFC.Repositories.UnitOfWork
         // public DbSet<[Model]> Model {get; set;}
 
         /// <summary>
-        /// [dbo].[Users]
+        /// [dbo].[User]
         /// </summary>
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }
