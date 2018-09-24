@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OPFC.Constants;
+using Microsoft.Extensions.Configuration;
+using OPFC.API.DTO;
 using OPFC.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace OPFC.Repositories.UnitOfWork
     /// </summary>
     public class OpfcDbContext : DbContext
     {
+
         /// <summary>
         /// The constructor
         /// </summary>
@@ -24,7 +26,12 @@ namespace OPFC.Repositories.UnitOfWork
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Config connection string here
-            optionsBuilder.UseSqlServer(ConnectionConst.CONNECTION_STRING);
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                                         .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                                         .AddJsonFile("appsettings.json")
+                                         .Build();
+
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("OpfcDbConnection"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

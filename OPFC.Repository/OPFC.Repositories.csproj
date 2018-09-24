@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OPFC.API.DTO\OPFC.API.DTO.csproj" />
     <ProjectReference Include="..\OPFC.Constant\OPFC.Constants.csproj" />
     <ProjectReference Include="..\OPFC.Models\OPFC.Models.csproj" />
   </ItemGroup>

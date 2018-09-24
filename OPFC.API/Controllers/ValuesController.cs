@@ -12,15 +12,12 @@ namespace OPFC.API.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        // Dependency Injection. We should communicate with interface only
-        private readonly IUserService _userService = AppHostBase.Instance.Resolve<IUserService>();
+        
 
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            // Testing method
-            var user = _userService.GetUserById(1);
             return new string[] { "value1", "value2" };
         }
 

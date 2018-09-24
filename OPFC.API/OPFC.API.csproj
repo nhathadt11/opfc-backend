@@ -11,12 +11,19 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="ServiceStack" Version="5.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
     <ProjectReference Include="..\OPFC.Service\OPFC.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
