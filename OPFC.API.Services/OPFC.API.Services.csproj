@@ -5,8 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OPFC.Models\OPFC.Models.csproj" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OPFC.API.ServiceModel\OPFC.API.ServiceModel.csproj" />
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
+    <ProjectReference Include="..\OPFC.Service\OPFC.Services.csproj" />
   </ItemGroup>
 
 </Project>

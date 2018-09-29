@@ -46,6 +46,8 @@ namespace OPFC.Repositories.UnitOfWork
         /// </summary>
         IUserRepository UserRepository { get; }
 
+        IBrandRepository BrandRepository { get; }
+
         /// <summary>
         /// Dispose
         /// </summary>

@@ -7,8 +7,23 @@ using System.Text;
 
 namespace OPFC.Repositories.Implementations
 {
-    public class BrandRepository: EFRepository<Brand>, IBrandRepository
+    public class BrandRepository : EFRepository<Brand>, IBrandRepository
     {
         public BrandRepository(DbContext dbContext) : base(dbContext) { }
+
+        public Brand CreateBrand(Brand brand)
+        {
+            try
+            {
+                DbContext.Add<Brand>(brand);
+                DbContext.SaveChanges();
+
+                return brand;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

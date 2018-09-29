@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using OPFC.API.DTO;
 using OPFC.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace OPFC.API.Tasks
+
+namespace OPFC.API.ServiceModel.Tasks
 {
     /// <summary>
     /// The auto mapper config
     /// </summary>
-    public class AutoMapperConfigTask : ITask
+    public class AutoMapperConfigTask : Profile, ITask
     {
         /// <summary>
         /// Create mapping on startup
@@ -19,6 +17,9 @@ namespace OPFC.API.Tasks
         public void Execute()
         {
             //IDBSET to MODEL
+            CreateMap<OPFC.Models.Brand, BrandDTO>();
+            
+            Mapper.Initialize(x => x.AddProfile<AutoMapperConfigTask>());
         }
     }
 }

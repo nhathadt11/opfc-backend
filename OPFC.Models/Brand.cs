@@ -12,7 +12,7 @@ namespace OPFC.Models
         /// Gets or set brand identifier
         /// </summary>
         [Key]
-        public long BrandId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets brand name
