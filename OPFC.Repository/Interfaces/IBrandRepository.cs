@@ -8,5 +8,7 @@ namespace OPFC.Repositories.Interfaces
     public interface IBrandRepository
     {
         Brand CreateBrand(Brand brand);
+        Brand GetBrandById(long id);
     }
+
 }

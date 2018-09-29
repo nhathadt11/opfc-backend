@@ -8,5 +8,6 @@ namespace OPFC.Services.Interfaces
     public interface IBrandService
     {
         Brand CreateBrand(Brand brand);
+        Brand GetBrandById(long id);
     }
 }

@@ -20,4 +20,10 @@ namespace OPFC.API.ServiceModel.Brand
 
         public long UserId { get; set; }
     }
+
+    [Route("/Brand/GetBrandById/{id}", "GET")]
+    public class GetBrandByIdRequest : IReturn<GetBrandByIdReponse>
+    {
+        public long Id { get; set; }
+    }
 }

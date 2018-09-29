@@ -25,5 +25,18 @@ namespace OPFC.Repositories.Implementations
                 throw;
             }
         }
+
+        public Brand GetBrandById(long id)
+        {
+            try
+            {
+                var brand = DbSet.SingleOrDefaultAsync<Brand>(c => c.Id == id)
+                            .Result;
+                return brand;
+            }
+            catch(Exception ex){
+                return null;
+            }
+        }
     }
 }

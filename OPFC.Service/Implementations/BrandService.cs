@@ -34,5 +34,16 @@ namespace OPFC.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
+
+        public Brand GetBrandById(long id)
+        {
+            try
+            {
+                return _opfcUow.BrandRepository.GetBrandById(id);
+            }catch
+            {
+                return null;
+            }
+        }
     }
 }
