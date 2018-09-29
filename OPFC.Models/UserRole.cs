@@ -11,7 +11,7 @@ namespace OPFC.Models
         /// Gets or set user role identifier
         /// </summary>
         [Key]
-        public long UserRoleId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets user role name

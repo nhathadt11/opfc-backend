@@ -32,7 +32,7 @@ namespace OPFC.Repositories.Implementations
         /// <returns></returns>
         public User GetUserById(long id)
         {
-            var user = DbSet.SingleOrDefaultAsync<User>(u => u.UserId == id)
+            var user = DbSet.SingleOrDefaultAsync<User>(u => u.Id == id)
                             .Result;
             return user;
         }

@@ -12,7 +12,7 @@ namespace OPFC.API.DTO
         /// <summary>
         /// Gets or sets the user identifier
         /// </summary>
-        public long UserId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the user name

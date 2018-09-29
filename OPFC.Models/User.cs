@@ -15,7 +15,7 @@ namespace OPFC.Models
         /// Gets or sets the user identifier
         /// </summary>
         [Key]
-        public long UserId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the user name

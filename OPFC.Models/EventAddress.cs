@@ -12,7 +12,7 @@ namespace OPFC.Models
         /// 
         /// </summary>
         [Key]
-        public long EventAddressId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets event address full name
