@@ -17,6 +17,11 @@ namespace OPFC.API.Services.Implementations
     {
         private IBrandService _brandService = AppHostBase.Instance.Resolve<IBrandService>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public GetBrandByIdReponse Get(GetBrandByIdRequest request)
         {
             var brand = _brandService.GetBrandById(request.Id);
@@ -27,6 +32,11 @@ namespace OPFC.API.Services.Implementations
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public CreateBrandResponse Post(CreateBrandRequest request)
         {
             var brand = Mapper.Map<Brand>(request);
@@ -34,6 +44,16 @@ namespace OPFC.API.Services.Implementations
             return new CreateBrandResponse
             {
                 Brand = Mapper.Map<BrandDTO>(_brandService.CreateBrand(brand))
+            };
+        }
+
+        public CreateCatererResponse Post(CreateCatererRequest request)
+        {
+            var caterer = Mapper.Map<Caterer>(request);
+
+            return new CreateCatererResponse
+            {
+                Caterer = Mapper.Map<CatererDTO>(_brandService.CreateCaterer(caterer))
             };
         }
     }

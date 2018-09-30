@@ -10,6 +10,8 @@ namespace OPFC.API.Services.Interfaces
         CreateBrandResponse Post(CreateBrandRequest request);
 
         GetBrandByIdReponse Get(GetBrandByIdRequest request);
+
+        CreateCatererResponse Post(CreateCatererRequest request);
     }
     
 }

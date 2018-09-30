@@ -23,5 +23,40 @@ namespace OPFC.API.DTO
         /// Gets or sets the user password
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Gets or set the user active flag
+        /// </summary>
+        public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Gets or sets user gender
+        /// </summary>
+        public bool Gender { get; set; }
+
+        /// <summary>
+        /// Gets or sets user phone number
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// Gets or set user email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets user birthdate
+        /// </summary>
+        public DateTime? DateOfBirth { get; set; }
+
+        /// <summary>
+        /// Gets or sets user role identifier
+        /// </summary>
+        public long UserRoleId { get; set; }
+
+        /// <summary>
+        /// Gets or set user avatar image
+        /// </summary>
+        public string Avatar { get; set; }
     }
 }

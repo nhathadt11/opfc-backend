@@ -9,5 +9,6 @@ namespace OPFC.Services.Interfaces
     {
         Brand CreateBrand(Brand brand);
         Brand GetBrandById(long id);
+        Caterer CreateCaterer(Caterer caterer);
     }
 }
