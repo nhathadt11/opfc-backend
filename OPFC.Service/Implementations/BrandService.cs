@@ -4,6 +4,7 @@ using OPFC.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Transactions;
 
 namespace OPFC.Services.Implementations
 {
@@ -35,12 +36,29 @@ namespace OPFC.Services.Implementations
             }
         }
 
+        public Caterer CreateCaterer(Caterer caterer)
+        {
+            try
+            {
+                caterer.User.IsActive = true;
+                caterer.User.IsDeleted = false;
+                caterer.Brand.IsActive = true;
+
+                return _opfcUow.BrandRepository.CreateCatere(caterer.User, caterer.Brand);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public Brand GetBrandById(long id)
         {
             try
             {
                 return _opfcUow.BrandRepository.GetBrandById(id);
-            }catch
+            }
+            catch
             {
                 return null;
             }

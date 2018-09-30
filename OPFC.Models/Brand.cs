@@ -38,5 +38,30 @@ namespace OPFC.Models
         /// Foreign key to table User
         /// </summary>
         public long UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets brand Phone
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// Gets or sets brand Email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets brand City
+        /// </summary>
+        public string City { get; set; }
+
+        /// <summary>
+        /// Gets or sets brand District
+        /// </summary>
+        public string District { get; set; }
+
+        /// <summary>
+        /// Gets or sets brand Ward
+        /// </summary>
+        public string Ward { get; set; }
     }
 }

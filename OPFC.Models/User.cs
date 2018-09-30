@@ -68,6 +68,11 @@ namespace OPFC.Models
         public long UserRoleId { get; set; }
 
         /// <summary>
+        /// Gets or set user avatar image
+        /// </summary>
+        public string Avatar { get; set; }
+
+        /// <summary>
         /// Userr role belong to this user
         /// Mapping field "UserRoleId"
         /// </summary>
