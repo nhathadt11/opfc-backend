@@ -22,5 +22,12 @@ namespace OPFC.Services.Interfaces
         /// </summary>
         /// <returns></returns>
         List<User> GetAllUser();
+
+        /// <summary>
+        /// Create new user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        User CreateUser(User user);
     }
 }

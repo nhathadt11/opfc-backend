@@ -26,6 +26,21 @@ namespace OPFC.Services.Implementations
             _opfcUow = opfcUow;
         }
 
+        public User CreateUser(User user)
+        {
+            try
+            {
+                var result = _opfcUow.UserRepository.CreateUser(user);
+                _opfcUow.Commit();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Get all user
         /// </summary>
@@ -37,7 +52,7 @@ namespace OPFC.Services.Implementations
                 var userList = _opfcUow.UserRepository.GetAllUsers();
                 return userList;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -52,8 +67,7 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                var user = _opfcUow.UserRepository.GetUserById(id);
-                return user;
+                return _opfcUow.UserRepository.GetById(id);
             }
             catch (Exception ex)
             {

@@ -14,31 +14,7 @@ namespace OPFC.Repositories.Implementations
 
         public Brand CreateBrand(Brand brand)
         {
-            try
-            {
-                DbContext.Add<Brand>(brand);
-                DbContext.SaveChanges();
-
-                return brand;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        public Brand GetBrandById(long id)
-        {
-            try
-            {
-                var brand = DbSet.SingleOrDefaultAsync<Brand>(c => c.Id == id)
-                            .Result;
-                return brand;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return DbSet.Add(brand).Entity;
         }
 
         public Caterer CreateCatere(User user, Brand brand)
@@ -48,8 +24,6 @@ namespace OPFC.Repositories.Implementations
                 using (var scope = new TransactionScope())
                 {
                     DbContext.Add<User>(user);
-                    DbContext.SaveChanges();
-
                     brand.UserId = user.Id;
                     DbContext.Add<Brand>(brand);
 
@@ -63,6 +37,11 @@ namespace OPFC.Repositories.Implementations
             {
                 throw;
             }
+        }
+
+        public Brand UpdateBrand(Brand brand)
+        {
+            return DbSet.Update(brand).Entity;
         }
     }
 }

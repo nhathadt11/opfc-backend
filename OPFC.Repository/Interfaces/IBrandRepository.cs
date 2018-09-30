@@ -5,12 +5,13 @@ using System.Text;
 
 namespace OPFC.Repositories.Interfaces
 {
-    public interface IBrandRepository
+    public interface IBrandRepository : IRepository<Brand>
     {
         Brand CreateBrand(Brand brand);
-        Brand GetBrandById(long id);
 
         Caterer CreateCatere(User user, Brand brand);
+
+        Brand UpdateBrand(Brand brand);
     }
 
 }

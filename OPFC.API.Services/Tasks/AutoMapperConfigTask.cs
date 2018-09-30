@@ -18,9 +18,14 @@ namespace OPFC.API.ServiceModel.Tasks
         {
             //IDBSET to MODEL
             CreateMap<OPFC.Models.Brand, BrandDTO>();
+            CreateMap<BrandDTO, OPFC.Models.Brand>();
+
             CreateMap<OPFC.Models.Caterer, CatererDTO>();
+            CreateMap<CatererDTO, OPFC.Models.Caterer>();
+
             CreateMap<OPFC.Models.User, UserDTO>();
-            
+            CreateMap<UserDTO, OPFC.Models.User>();
+
             Mapper.Initialize(x => x.AddProfile<AutoMapperConfigTask>());
         }
     }

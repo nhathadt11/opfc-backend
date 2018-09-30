@@ -12,6 +12,8 @@ namespace OPFC.API.Services.Interfaces
         GetBrandByIdReponse Get(GetBrandByIdRequest request);
 
         CreateCatererResponse Post(CreateCatererRequest request);
+
+        UpdateBrandResponse Post(UpdateBrandRequest request);
     }
     
 }

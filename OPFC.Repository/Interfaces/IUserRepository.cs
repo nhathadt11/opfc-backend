@@ -8,7 +8,7 @@ namespace OPFC.Repositories.Interfaces
     /// <summary>
     /// The User Repository Interface
     /// </summary>
-    public interface IUserRepository
+    public interface IUserRepository : IRepository<User>
     {
         /// <summary>
         /// Get all users
@@ -17,10 +17,10 @@ namespace OPFC.Repositories.Interfaces
         List<User> GetAllUsers();
 
         /// <summary>
-        /// Get user by id
+        /// Create new user
         /// </summary>
-        /// <param name="id">The user identifier</param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        User GetUserById(long id);
+        User CreateUser(User user);
     }
 }

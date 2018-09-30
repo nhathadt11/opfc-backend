@@ -35,4 +35,10 @@ namespace OPFC.API.ServiceModel.Brand
 
         public BrandDTO Brand { get; set; }
     }
+
+    [Route("/Brand/UpdateBrand/", "POST")]
+    public class UpdateBrandRequest : IReturn<UpdateBrandResponse>
+    {
+       public BrandDTO Brand { get; set; }
+    }
 }

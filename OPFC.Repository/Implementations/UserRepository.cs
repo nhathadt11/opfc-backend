@@ -11,6 +11,11 @@ namespace OPFC.Repositories.Implementations
     {
         public UserRepository(DbContext dbContext): base(dbContext) { }
 
+        public User CreateUser(User user)
+        {
+            return DbSet.Add(user).Entity;
+        }
+
         /// <summary>
         /// Get all users
         /// </summary>
@@ -23,18 +28,6 @@ namespace OPFC.Repositories.Implementations
                                 .ToListAsync<User>()
                                 .Result;
             return userList;
-        }
-
-        /// <summary>
-        /// Get user by id
-        /// </summary>
-        /// <param name="id">The user identifier.</param>
-        /// <returns></returns>
-        public User GetUserById(long id)
-        {
-            var user = DbSet.SingleOrDefaultAsync<User>(u => u.Id == id)
-                            .Result;
-            return user;
         }
     }
 }

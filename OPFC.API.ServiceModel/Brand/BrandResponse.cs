@@ -27,4 +27,11 @@ namespace OPFC.API.ServiceModel.Brand
 
         public CatererDTO Caterer { get; set; }
     }
+
+    public class UpdateBrandResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public BrandDTO Brand { get; set; }
+    }
 }

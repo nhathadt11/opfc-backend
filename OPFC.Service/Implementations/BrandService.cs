@@ -28,7 +28,10 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                return _opfcUow.BrandRepository.CreateBrand(brand);
+                var result = _opfcUow.BrandRepository.CreateBrand(brand);
+                _opfcUow.Commit();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -48,7 +51,7 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                return null;
+                throw;
             }
         }
 
@@ -56,11 +59,26 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                return _opfcUow.BrandRepository.GetBrandById(id);
+                return _opfcUow.BrandRepository.GetById(id);
             }
             catch
             {
                 return null;
+            }
+        }
+
+        public Brand UpdateBrand(Brand brand)
+        {
+            try
+            {
+                var result = _opfcUow.BrandRepository.UpdateBrand(brand);
+                _opfcUow.Commit();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }

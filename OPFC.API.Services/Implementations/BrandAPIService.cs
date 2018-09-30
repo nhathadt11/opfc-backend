@@ -56,5 +56,15 @@ namespace OPFC.API.Services.Implementations
                 Caterer = Mapper.Map<CatererDTO>(_brandService.CreateCaterer(caterer))
             };
         }
+
+        public UpdateBrandResponse Post(UpdateBrandRequest request)
+        {
+            var brand = Mapper.Map<Brand>(request.Brand);
+
+            return new UpdateBrandResponse
+            {
+                Brand = Mapper.Map<BrandDTO>(_brandService.UpdateBrand(brand))
+            };
+        }
     }
 }
