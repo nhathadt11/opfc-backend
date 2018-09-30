@@ -12,5 +12,7 @@ namespace OPFC.Services.Interfaces
         Caterer CreateCaterer(Caterer caterer);
 
         Brand UpdateBrand(Brand brand);
+
+        bool ChangeBrandStatus(long brandId, bool isActive);
     }
 }

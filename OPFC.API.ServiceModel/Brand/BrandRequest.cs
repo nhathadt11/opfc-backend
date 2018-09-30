@@ -41,4 +41,11 @@ namespace OPFC.API.ServiceModel.Brand
     {
        public BrandDTO Brand { get; set; }
     }
+
+    [Route("/Brand/ChangeBrandStatus/", "POST")]
+    public class ChangeBrandStatusRequest : IReturn<ChangeBrandStatusResponse>
+    {
+        public long Id { get; set; }
+        public bool IsActive { get; set; }
+    }
 }

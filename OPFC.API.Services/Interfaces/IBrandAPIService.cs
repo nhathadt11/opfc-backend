@@ -14,6 +14,8 @@ namespace OPFC.API.Services.Interfaces
         CreateCatererResponse Post(CreateCatererRequest request);
 
         UpdateBrandResponse Post(UpdateBrandRequest request);
+
+        ChangeBrandStatusResponse Post(ChangeBrandStatusRequest request);
     }
     
 }

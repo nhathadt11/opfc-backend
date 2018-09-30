@@ -66,5 +66,16 @@ namespace OPFC.API.Services.Implementations
                 Brand = Mapper.Map<BrandDTO>(_brandService.UpdateBrand(brand))
             };
         }
+
+        public ChangeBrandStatusResponse Post(ChangeBrandStatusRequest request)
+        {
+            var brandId = request.Id;
+            var isActive = request.IsActive;
+
+            return new ChangeBrandStatusResponse
+            {
+                IsSuccess = _brandService.ChangeBrandStatus(brandId, isActive)
+            };
+        }
     }
 }

@@ -81,5 +81,30 @@ namespace OPFC.Services.Implementations
                 throw;
             }
         }
+
+        public bool ChangeBrandStatus(long brandId, bool isActive)
+        {
+            try
+            {
+                var brand = GetBrandById(brandId);
+
+                if(brand != null)
+                {
+                    brand.IsActive = isActive;
+                    _opfcUow.BrandRepository.Update(brand);
+                    _opfcUow.Commit();
+
+                    return true;
+                }
+                else
+                {
+                    throw new Exception("Brand does not exist! ");
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
