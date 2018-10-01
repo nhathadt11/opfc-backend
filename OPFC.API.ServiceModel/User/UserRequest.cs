@@ -6,6 +6,7 @@ using System.Text;
 
 namespace OPFC.API.ServiceModel.User
 {
+    [EnableCors("*", "*")]
     [Route("/User/GetUserById/", "GET")]
     public class GetUserByIdRequest : IReturn<GetUserByIdResponse>
     {

@@ -22,6 +22,7 @@ namespace OPFC.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             // OPFC unit of work
             services.AddSingleton<IOpfcUow, OpfcUow>();
             services.AddMvc();
@@ -41,6 +42,10 @@ namespace OPFC.API
                 // Use **appsettings.json** and config sources
                 AppSettings = new NetCoreAppSettings(Configuration)
             });
+
+            app.UseCors(builder => builder.WithOrigins("*")
+                                          .AllowAnyHeader()
+                                          .AllowAnyMethod());
 
             app.UseMvc();
         }

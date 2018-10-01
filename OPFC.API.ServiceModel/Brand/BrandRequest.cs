@@ -6,6 +6,7 @@ using System.Text;
 
 namespace OPFC.API.ServiceModel.Brand
 {
+    [EnableCors("*", "*")]
     [Route("/Brand/CreateBrand/", "POST")]
     public class CreateBrandRequest : IReturn<CreateBrandResponse>
     {
@@ -22,12 +23,14 @@ namespace OPFC.API.ServiceModel.Brand
         public long UserId { get; set; }
     }
 
+    [EnableCors("*", "*")]
     [Route("/Brand/GetBrandById/{id}", "GET")]
     public class GetBrandByIdRequest : IReturn<GetBrandByIdReponse>
     {
         public long Id { get; set; }
     }
 
+    [EnableCors("*", "OPTIONS,POST")]
     [Route("/Brand/CreateCaterer/", "POST")]
     public class CreateCatererRequest : IReturn<CreateCatererResponse>
     {
@@ -36,12 +39,14 @@ namespace OPFC.API.ServiceModel.Brand
         public BrandDTO Brand { get; set; }
     }
 
+    [EnableCors("*", "*")]
     [Route("/Brand/UpdateBrand/", "POST")]
     public class UpdateBrandRequest : IReturn<UpdateBrandResponse>
     {
        public BrandDTO Brand { get; set; }
     }
 
+    [EnableCors("*", "*")]
     [Route("/Brand/ChangeBrandStatus/", "POST")]
     public class ChangeBrandStatusRequest : IReturn<ChangeBrandStatusResponse>
     {
