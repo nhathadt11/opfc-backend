@@ -20,6 +20,8 @@ namespace OPFC.Services.Implementations
         {
             try
             {
+                if (photo.BrandId == null && photo.MenuId == null) throw new Exception("Invalid data.");
+
                 _opfcUow.PhotoRepository.SavePhoto(photo);
                 _opfcUow.Commit();
             }

@@ -14,17 +14,17 @@ namespace OPFC.API.DTO
         /// <summary>
         /// Gets or sets foreign key brand identifier
         /// </summary>
-        public long BrandId { get; set; }
+        public long? BrandId { get; set; }
 
         /// <summary>
         /// Gets or sets foreign key menu identifier
         /// </summary>
-        public long MenuId { get; set; }
+        public long? MenuId { get; set; }
 
         /// <summary>
         /// Gets or set photo ref
         /// </summary>
-        public string[] PhotoRef { get; set; }
+        public List<string> PhotoRef { get; set; }
 
         public PhotoDTO Clone()
         {
