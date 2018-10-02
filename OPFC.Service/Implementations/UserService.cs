@@ -30,6 +30,9 @@ namespace OPFC.Services.Implementations
         {
             try
             {
+                user.IsActive = true;
+                user.IsDeleted = false;
+
                 var result = _opfcUow.UserRepository.CreateUser(user);
                 _opfcUow.Commit();
 
