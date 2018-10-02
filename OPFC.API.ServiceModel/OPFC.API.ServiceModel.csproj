@@ -12,4 +12,8 @@
     <ProjectReference Include="..\OPFC.API.DTO\OPFC.API.DTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Meal\" />
+    <Folder Include="Menu\" />
+  </ItemGroup>
 </Project>

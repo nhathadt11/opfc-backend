@@ -63,5 +63,14 @@ namespace OPFC.Models
         /// Gets or sets brand Ward
         /// </summary>
         public string Ward { get; set; }
+
+        /// <summary>
+        /// Gets or sets the menu list.
+        /// </summary>
+        [ForeignKey("BrandId")]
+        public List<Menu> MenuList { get; set; }
+
+        [ForeignKey("BrandId")]
+        public List<Meal> MealList { get; set; }
     }
 }
