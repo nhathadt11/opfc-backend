@@ -25,6 +25,7 @@ namespace OPFC.Repositories.Factory
                 {typeof(IUserRoleRepository), dbContext => new UserRoleRepository(dbContext)},
                 {typeof(IBrandRepository), dbContext => new BrandRepository(dbContext)},
                 {typeof(IEventAddressRepository), dbContext => new EventAddressRepository(dbContext)},
+                {typeof(IPhotoRepository), dbContext => new PhotoRepository(dbContext)},
             };
         }
 

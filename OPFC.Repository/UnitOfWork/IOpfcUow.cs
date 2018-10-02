@@ -48,6 +48,8 @@ namespace OPFC.Repositories.UnitOfWork
 
         IBrandRepository BrandRepository { get; }
 
+        IPhotoRepository PhotoRepository { get; }
+
         /// <summary>
         /// Dispose
         /// </summary>

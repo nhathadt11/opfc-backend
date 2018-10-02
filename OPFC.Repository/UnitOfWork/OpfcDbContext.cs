@@ -52,5 +52,15 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[UserRole]
         /// </summary>
         public DbSet<UserRole> UserRole { get; set; }
+
+        /// <summary>
+        /// [dbo].[Brand]
+        /// </summary>
+        public DbSet<Brand> Brand { get; set; }
+
+        /// <summary>
+        /// [dbo].[Photo]
+        /// </summary>
+        public DbSet<Photo> Photo { get; set; }
     }
 }
