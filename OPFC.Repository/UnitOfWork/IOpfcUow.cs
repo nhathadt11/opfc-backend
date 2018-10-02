@@ -48,6 +48,10 @@ namespace OPFC.Repositories.UnitOfWork
 
         IBrandRepository BrandRepository { get; }
 
+        IMealRepository MealRepository { get; }
+
+        IMenuRepository MenuRepository { get; }
+
         /// <summary>
         /// Dispose
         /// </summary>
