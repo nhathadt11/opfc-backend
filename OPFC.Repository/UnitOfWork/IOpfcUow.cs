@@ -52,6 +52,12 @@ namespace OPFC.Repositories.UnitOfWork
 
         IMenuRepository MenuRepository { get; }
 
+        ITransactionRepository TransactionRepository { get; }
+
+        ITransactionDetailRepository TransactionDetailRepository { get; }
+
+        IOrderRepository OrderRepository { get; }
+
         /// <summary>
         /// Dispose
         /// </summary>
