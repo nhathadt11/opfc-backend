@@ -15,9 +15,6 @@
   <ItemGroup>
     <Folder Include="Meal\" />
     <Folder Include="Menu\" />
-<<<<<<< HEAD
     <Folder Include="Order\" />
-=======
->>>>>>> fd8e09c0a6dbfa4f32dd39c52c01b410e8c62501
   </ItemGroup>
 </Project>
