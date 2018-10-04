@@ -9,7 +9,7 @@ namespace OPFC.Repositories.Interfaces
     {
         Brand CreateBrand(Brand brand);
 
-        Caterer CreateCatere(User user, Brand brand);
+        Caterer CreateCaterer(User user, Brand brand);
 
         Brand UpdateBrand(Brand brand);
     }
