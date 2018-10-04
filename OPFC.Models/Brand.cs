@@ -72,8 +72,11 @@ namespace OPFC.Models
 
         [ForeignKey("BrandId")]
         public List<Meal> MealList { get; set; }
+<<<<<<< HEAD
 
         [ForeignKey("BrandId")]
         public List<Transaction> TransactionList { get; set; }
+=======
+>>>>>>> fd8e09c0a6dbfa4f32dd39c52c01b410e8c62501
     }
 }

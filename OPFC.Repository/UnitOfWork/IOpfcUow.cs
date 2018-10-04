@@ -48,16 +48,23 @@ namespace OPFC.Repositories.UnitOfWork
 
         IBrandRepository BrandRepository { get; }
 
+<<<<<<< HEAD
+=======
+        IPhotoRepository PhotoRepository { get; }
+>>>>>>> fd8e09c0a6dbfa4f32dd39c52c01b410e8c62501
         IMealRepository MealRepository { get; }
 
         IMenuRepository MenuRepository { get; }
 
+<<<<<<< HEAD
         ITransactionRepository TransactionRepository { get; }
 
         ITransactionDetailRepository TransactionDetailRepository { get; }
 
         IOrderRepository OrderRepository { get; }
 
+=======
+>>>>>>> fd8e09c0a6dbfa4f32dd39c52c01b410e8c62501
         /// <summary>
         /// Dispose
         /// </summary>

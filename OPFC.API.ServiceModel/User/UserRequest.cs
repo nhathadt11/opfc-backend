@@ -12,4 +12,11 @@ namespace OPFC.API.ServiceModel.User
     {
         public long Id { get; set; }
     }
+
+    [EnableCors("*", "*")]
+    [Route("/User/CreateEventPlanner/", "POST")]
+    public class CreateEventPlannerRequest : IReturn<GetUserByIdResponse>
+    {
+        public UserDTO User;
+    }
 }

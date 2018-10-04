@@ -47,7 +47,7 @@ namespace OPFC.Services.Implementations
                 caterer.User.IsDeleted = false;
                 caterer.Brand.IsActive = true;
 
-                return _opfcUow.BrandRepository.CreateCatere(caterer.User, caterer.Brand);
+                return _opfcUow.BrandRepository.CreateCaterer(caterer.User, caterer.Brand);
             }
             catch (Exception ex)
             {

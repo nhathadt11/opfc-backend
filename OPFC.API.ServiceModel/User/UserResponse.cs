@@ -12,4 +12,11 @@ namespace OPFC.API.ServiceModel.User
 
         UserDTO User { get; set; }
     }
+
+    public class CreateEventPlannerResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public UserDTO User { get; set; }
+    }
 }

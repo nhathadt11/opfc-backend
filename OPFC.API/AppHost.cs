@@ -33,6 +33,7 @@ namespace OPFC.API
             container.Register<IUserRoleService>(c => new UserRoleService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
             container.Register<IBrandService>(c => new BrandService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
             container.Register<IEventAddressService>(c => new EventAddressService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IPhotoService>(c => new PhotoService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
         }
     }
 }

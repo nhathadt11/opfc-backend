@@ -13,8 +13,4 @@
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
     <ProjectReference Include="..\OPFC.Service\OPFC.Services.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Implementations\" />
-  </ItemGroup>
 </Project>

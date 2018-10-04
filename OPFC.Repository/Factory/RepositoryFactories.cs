@@ -26,6 +26,10 @@ namespace OPFC.Repositories.Factory
                 {typeof(IBrandRepository), dbContext => new BrandRepository(dbContext)},
                 {typeof(IEventAddressRepository), dbContext => new EventAddressRepository(dbContext)},
                 {typeof(IMealRepository), dbContext => new MealRepository(dbContext)},
+<<<<<<< HEAD
+=======
+                {typeof(IPhotoRepository), dbContext => new PhotoRepository(dbContext)},
+>>>>>>> fd8e09c0a6dbfa4f32dd39c52c01b410e8c62501
             };
         }
 

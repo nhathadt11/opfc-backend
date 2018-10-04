@@ -26,6 +26,9 @@ namespace OPFC.API.ServiceModel.Tasks
             CreateMap<OPFC.Models.User, UserDTO>();
             CreateMap<UserDTO, OPFC.Models.User>();
 
+            CreateMap<OPFC.Models.Photo, PhotoDTO>();
+            CreateMap<PhotoDTO, OPFC.Models.Photo>();
+
             Mapper.Initialize(x => x.AddProfile<AutoMapperConfigTask>());
         }
     }
