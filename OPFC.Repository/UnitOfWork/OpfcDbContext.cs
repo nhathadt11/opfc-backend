@@ -62,5 +62,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[Photo]
         /// </summary>
         public DbSet<Photo> Photo { get; set; }
+
+        /// <summary>
+        /// [dbo].[Event]
+        /// </summary>
+        public DbSet<Event> Event { get; set; }
     }
 }

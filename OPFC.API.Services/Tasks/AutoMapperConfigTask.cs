@@ -29,6 +29,9 @@ namespace OPFC.API.ServiceModel.Tasks
             CreateMap<OPFC.Models.Photo, PhotoDTO>();
             CreateMap<PhotoDTO, OPFC.Models.Photo>();
 
+            CreateMap<OPFC.Models.Event, EventDTO>();
+            CreateMap<EventDTO, OPFC.Models.Event>();
+
             Mapper.Initialize(x => x.AddProfile<AutoMapperConfigTask>());
         }
     }

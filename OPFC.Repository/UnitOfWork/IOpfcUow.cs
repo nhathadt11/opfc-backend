@@ -60,6 +60,8 @@ namespace OPFC.Repositories.UnitOfWork
 
         IOrderRepository OrderRepository { get; }
 
+        IEventRepository EventRepository { get; }
+
         /// <summary>
         /// Dispose
         /// </summary>
