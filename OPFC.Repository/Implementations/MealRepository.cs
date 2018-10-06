@@ -6,17 +6,14 @@ namespace OPFC.Repositories.Implementations
 {
     public class MealRepository : EFRepository<Meal>, IMealRepository
     {
-        public MealRepository(DbContext dbContext) :base(dbContext)
-        {
-
-        }
+        public MealRepository(DbContext dbContext) : base(dbContext) { }
 
         public Meal CreateMeal(Meal meal)
         {
             return DbSet.Add(meal).Entity;
         }
 
-        Meal IMealRepository.UpdateMeal(Meal meal)
+        public Meal UpdateMeal(Meal meal)
         {
             return DbSet.Update(meal).Entity;
         }

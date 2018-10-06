@@ -12,6 +12,8 @@ namespace OPFC.Repositories.Interfaces
         Caterer CreateCaterer(User user, Brand brand);
 
         Brand UpdateBrand(Brand brand);
+
+        List<Brand> GetAllBrand();
     }
 
 }

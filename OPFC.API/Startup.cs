@@ -49,7 +49,7 @@ namespace OPFC.API
             app.UseCors(builder => builder.WithOrigins("*")
                                           .AllowAnyHeader()
                                           .AllowAnyMethod());
-
+            
             app.UseMvc();
         }
     }

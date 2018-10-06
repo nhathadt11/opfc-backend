@@ -24,6 +24,7 @@ namespace OPFC.Services.UnitOfWork
         public IMenuService MenuService { get { return GetRepoService<IMenuService>(); } }
         public IOrderService OrderService { get { return GetRepoService<IOrderService>(); } }
         public IBookMarkService BookMarkService { get { return GetRepoService<IBookMarkService>(); } }
+        public IEventTypeService EventTypeService { get { return GetRepoService<IEventTypeService>(); } }
 
         private T GetRepoService<T>() where T : class
         {

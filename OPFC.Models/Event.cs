@@ -35,5 +35,7 @@ namespace OPFC.Models
         public long EventTypeId { get; set;}
 
         public long UserId { get; set; }
+
+        public bool? IsDeleted { get; set; }
     }
 }

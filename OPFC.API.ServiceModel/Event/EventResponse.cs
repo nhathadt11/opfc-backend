@@ -23,4 +23,16 @@ namespace OPFC.API.ServiceModel.Event
         public ResponseStatus ResponseStatus { get; set; }
         public bool IsSuccess { get; set; }
     }
+
+    public class GetAllEventResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+        public List<EventDTO> Events { get; set; }
+    }
+
+    public class GetAllEventTypeResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+        public List<EventTypeDTO> Event { get; set; }
+    }
 }

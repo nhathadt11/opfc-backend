@@ -39,6 +39,23 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [Route("/Event/GetAllEvent/")]
+        public GetAllEventResponse GetAllEvent()
+        {
+            try
+            {
+                return new GetAllEventResponse
+                {
+                    Events = Mapper.Map<List<EventDTO>>(_serviceUow.EventService.GettAllEvent()),
+                    ResponseStatus = new ServiceStack.ResponseStatus("200 OK")
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         [Route("/Event/UpdateEvent/")]
         public UpdateEventResponse Post(UpdateEventRequest request)
         {
@@ -77,6 +94,23 @@ namespace OPFC.API.Controllers
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+        [Route("/Event/GetAllEventType/")]
+        public GetAllEventTypeResponse GetAllEventType()
+        {
+            try
+            {
+                return new GetAllEventTypeResponse
+                {
+                    Event = Mapper.Map<List<EventTypeDTO>>(_serviceUow.EventTypeService.GetAllEventType()),
+                    ResponseStatus = new ServiceStack.ResponseStatus("200 OK")
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }

@@ -11,8 +11,6 @@ namespace OPFC.Repositories.Interfaces
 
         void UpdateEvent(Event modifiedEvent);
 
-        void DeleteEvent(Event deleteEvent);
-
         Event GetEventById(long eventId);
 
         List<Event> GettAllEvent();

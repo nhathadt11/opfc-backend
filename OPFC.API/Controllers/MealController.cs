@@ -5,6 +5,7 @@ using OPFC.API.ServiceModel.Meal;
 using OPFC.Models;
 using OPFC.Services.UnitOfWork;
 using System;
+using System.Collections.Generic;
 
 namespace OPFC.API.Controllers
 {
@@ -23,6 +24,17 @@ namespace OPFC.API.Controllers
             return new CreateMealResponse
             {
                 Meal = Mapper.Map<MealDTO>(_serviceUow.MealService.CreateMeal(meal))
+            };
+        }
+
+        [Route("/Meal/GetAllMeal/")]
+        public GetAllMealResponse Get()
+        {
+            var meals = _serviceUow.MealService.GetAllMeal();
+
+            return new GetAllMealResponse
+            {
+                Meals = Mapper.Map<List<MealDTO>>(meals)
             };
         }
 

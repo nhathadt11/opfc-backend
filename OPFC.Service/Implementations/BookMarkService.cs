@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
@@ -22,9 +24,35 @@ namespace OPFC.Services.Implementations
                 _opfcUow.Commit();
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public List<BookMark> GetAllBookMark()
+        {
+            try
+            {
+                return _opfcUow.BookMarkRepository.GetAll().ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public BookMark UpdateBookMark(BookMark bookMark)
+        {
+            try
+            {
+                var result = _opfcUow.BookMarkRepository.UpdateBookMark(bookMark);
+                _opfcUow.Commit();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
 
@@ -32,7 +60,7 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                var result = _opfcUow.BookMarkRepository.CreateBookMark(bookMark);
+                var result = _opfcUow.BookMarkRepository.RemoveBookMark(bookMark);
                 _opfcUow.Commit();
                 return true;
             }
@@ -41,5 +69,7 @@ namespace OPFC.Services.Implementations
                 throw new Exception(ex.Message);
             }
         }
+
+
     }
 }

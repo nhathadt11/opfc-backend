@@ -9,8 +9,18 @@ namespace OPFC.API.ServiceModel.BookMark
         public BookMarkDTO BookMark { get; set; }
     }
 
+    public class UpdateBookMarkRequest: IReturn<UpdateBookMarkResponse>
+    {
+        public BookMarkDTO BookMark { get; set; }
+    }
+
     public class RemoveBookMarkRequest : IReturn<RemoveBookMarkResponse>
     {
         public long BookMarkId { get; set; }
+    }
+
+    public class GetAllBookMarkRequest: IReturn<GetAllBookMarkResponse>
+    {
+
     }
 }

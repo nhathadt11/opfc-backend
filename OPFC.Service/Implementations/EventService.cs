@@ -41,26 +41,30 @@ namespace OPFC.Services.Implementations
 
         public List<Event> GettAllEvent()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result =  _opfcUow.EventRepository.GettAllEvent();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public bool SaveEvent(Event newEvent)
         {
-            var result = false;
-
             try
             {
                 _opfcUow.EventRepository.SaveEvent(newEvent);
                 _opfcUow.Commit();
 
-                result = true;
+                return true;
             }
             catch (Exception ex)
             {
-                result = false;
+                throw;
             }
-
-            return result;
         }
 
         public bool UpdateEvent(Event modifiedEvent)

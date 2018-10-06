@@ -3,6 +3,7 @@ using OPFC.Models;
 using OPFC.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Transactions;
 
@@ -37,6 +38,11 @@ namespace OPFC.Repositories.Implementations
             {
                 throw;
             }
+        }
+
+        public List<Brand> GetAllBrand()
+        {
+            return DbSet.Where(b => b.IsActive == true && b.IsDeleted == false).ToList();
         }
 
         public Brand UpdateBrand(Brand brand)

@@ -65,6 +65,11 @@ namespace OPFC.Models
         public string Ward { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
+        /// <summary>
         /// Gets or sets the menu list.
         /// </summary>
         [ForeignKey("BrandId")]

@@ -4,11 +4,9 @@ using OPFC.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 namespace OPFC.Repositories.Implementations
 {
-    public class MenuRepository :EFRepository<Menu>, IMenuRepository
+    public class MenuRepository : EFRepository<Menu>, IMenuRepository
     {
-        public MenuRepository(DbContext dbContext) : base(dbContext)
-        {
-        }
+        public MenuRepository(DbContext dbContext) : base(dbContext) { }
 
         public Menu CreateMenu(Menu menu)
         {

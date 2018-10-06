@@ -3,6 +3,8 @@ using OPFC.Models;
 using OPFC.Services.Interfaces;
 using OPFC.Repositories.UnitOfWork;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace OPFC.Services.Implementations
 {
     public class MealService : IMealService
@@ -33,13 +35,25 @@ namespace OPFC.Services.Implementations
             }
         }
 
+        public List<Meal> GetAllMeal()
+        {
+            try
+            {
+                return _opfcUow.MealRepository.GetAll().ToList();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public Meal GetMealById(long id)
         {
             try
             {
                 return _opfcUow.MealRepository.GetById(id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }

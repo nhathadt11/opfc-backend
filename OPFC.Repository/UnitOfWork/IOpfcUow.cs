@@ -47,7 +47,7 @@ namespace OPFC.Repositories.UnitOfWork
         IUserRepository UserRepository { get; }
 
         IBrandRepository BrandRepository { get; }
-  
+
         IPhotoRepository PhotoRepository { get; }
 
         IMealRepository MealRepository { get; }
@@ -63,6 +63,8 @@ namespace OPFC.Repositories.UnitOfWork
         IOrderRepository OrderRepository { get; }
 
         IEventRepository EventRepository { get; }
+
+        IEventTypeRepository EventTypeRepository { get; }
 
         /// <summary>
         /// Dispose

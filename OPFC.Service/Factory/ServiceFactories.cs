@@ -28,6 +28,7 @@ namespace OPFC.Services.Factory
                 {typeof(IMenuService), coreService => new MenuService(opfcUow)},
                 {typeof(IOrderService), coreService => new OrderService(opfcUow)},
                 {typeof(IUserService), coreService => new UserService(opfcUow)},
+                {typeof(IEventTypeService), coreService => new EventTypeService(opfcUow)},
             };
         }
 

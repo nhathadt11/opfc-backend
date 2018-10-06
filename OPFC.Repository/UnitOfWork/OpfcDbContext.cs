@@ -67,5 +67,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[Event]
         /// </summary>
         public DbSet<Event> Event { get; set; }
+
+        /// <summary>
+        /// [dbo].[EventType]
+        /// </summary>
+        public DbSet<EventType> EventType { get; set; }
     }
 }

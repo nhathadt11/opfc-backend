@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OPFC.Models;
 namespace OPFC.Repositories.Interfaces
 {
@@ -7,6 +8,8 @@ namespace OPFC.Repositories.Interfaces
         BookMark CreateBookMark(BookMark bookMark);
 
         BookMark RemoveBookMark(BookMark bookMark);
+
+        BookMark UpdateBookMark(BookMark bookMark);
 
     }
 }

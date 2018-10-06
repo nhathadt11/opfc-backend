@@ -19,7 +19,6 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
-        
         [Route("/BookMark/CreateBookMark/")]
         public CreateBookMarkResponse Post(CreateBookMarkRequest request)
         {
@@ -28,6 +27,28 @@ namespace OPFC.API.Controllers
             return new CreateBookMarkResponse
             {
                 BookMark = Mapper.Map<BookMarkDTO>(_serviceUow.BookMarkService.CreateBookMark(bookMark))
+            };
+        }
+
+        [Route("/BookMark/GetAllBookMark/")]
+        public GetAllBookMarkResponse Get()
+        {
+            var bookMarks = Mapper.Map<List<BookMarkDTO>>(_serviceUow.BookMarkService.GetAllBookMark());
+
+            return new GetAllBookMarkResponse
+            {
+                BookMarks = bookMarks
+            };
+        }
+
+        [Route("/BookMark/UpdateBookMark/")]
+        public UpdateBookMarkResponse Post(UpdateBookMarkRequest request)
+        {
+            var bookMark = Mapper.Map<BookMark>(request.BookMark);
+
+            return new UpdateBookMarkResponse
+            {
+                BookMark = Mapper.Map<BookMarkDTO>(_serviceUow.BookMarkService.UpdateBookMark(bookMark))
             };
         }
 
