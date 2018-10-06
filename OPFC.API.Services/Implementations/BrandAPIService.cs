@@ -1,117 +1,117 @@
-﻿using AutoMapper;
-using OPFC.API.DTO;
-using OPFC.API.ServiceModel.Brand;
-using OPFC.API.ServiceModel.Tasks;
-using OPFC.API.Services.Implementations;
-using OPFC.API.Services.Interfaces;
-using OPFC.Models;
-using OPFC.Services.Interfaces;
-using ServiceStack;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿//using AutoMapper;
+//using OPFC.API.DTO;
+//using OPFC.API.ServiceModel.Brand;
+//using OPFC.API.ServiceModel.Tasks;
+//using OPFC.API.Services.Implementations;
+//using OPFC.API.Services.Interfaces;
+//using OPFC.Models;
+//using OPFC.Services.Interfaces;
+//using ServiceStack;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
 
-namespace OPFC.API.Services.Implementations
-{
-    public class BrandAPIService : Service, IBrandAPIService
-    {
-        private IBrandService _brandService = AppHostBase.Instance.Resolve<IBrandService>();
+//namespace OPFC.API.Services.Implementations
+//{
+//    public class BrandAPIService : Service, IBrandAPIService
+//    {
+//        //private IBrandService _brandService = AppHostBase.Instance.Resolve<IBrandService>();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public GetBrandByIdReponse Get(GetBrandByIdRequest request)
-        {
-            var brand = _brandService.GetBrandById(request.Id);
+//        /// <summary>
+//        /// 
+//        /// </summary>
+//        /// <param name="request"></param>
+//        /// <returns></returns>
+//        public GetBrandByIdReponse Get(GetBrandByIdRequest request)
+//        {
+//            var brand = _brandService.GetBrandById(request.Id);
 
-            return new GetBrandByIdReponse
-            {
-                Brand = Mapper.Map<BrandDTO>(brand)
-            };
-        }
+//            return new GetBrandByIdReponse
+//            {
+//                Brand = Mapper.Map<BrandDTO>(brand)
+//            };
+//        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public CreateBrandResponse Post(CreateBrandRequest request)
-        {
-            var brand = Mapper.Map<Brand>(request);
+//        /// <summary>
+//        /// 
+//        /// </summary>
+//        /// <param name="request"></param>
+//        /// <returns></returns>
+//        public CreateBrandResponse Post(CreateBrandRequest request)
+//        {
+//            var brand = Mapper.Map<Brand>(request);
 
-            return new CreateBrandResponse
-            {
-                Brand = Mapper.Map<BrandDTO>(_brandService.CreateBrand(brand))
-            };
-        }
+//            return new CreateBrandResponse
+//            {
+//                Brand = Mapper.Map<BrandDTO>(_brandService.CreateBrand(brand))
+//            };
+//        }
 
-        public CreateCatererResponse Post(CreateCatererRequest request)
-        {
-            var caterer = Mapper.Map<Caterer>(request);
+//        public CreateCatererResponse Post(CreateCatererRequest request)
+//        {
+//            var caterer = Mapper.Map<Caterer>(request);
 
-            return new CreateCatererResponse
-            {
-                Caterer = Mapper.Map<CatererDTO>(_brandService.CreateCaterer(caterer))
-            };
-        }
+//            return new CreateCatererResponse
+//            {
+//                Caterer = Mapper.Map<CatererDTO>(_brandService.CreateCaterer(caterer))
+//            };
+//        }
 
-        public UpdateBrandResponse Post(UpdateBrandRequest request)
-        {
-            var brand = Mapper.Map<Brand>(request.Brand);
+//        public UpdateBrandResponse Post(UpdateBrandRequest request)
+//        {
+//            var brand = Mapper.Map<Brand>(request.Brand);
 
-            return new UpdateBrandResponse
-            {
-                Brand = Mapper.Map<BrandDTO>(_brandService.UpdateBrand(brand))
-            };
-        }
+//            return new UpdateBrandResponse
+//            {
+//                Brand = Mapper.Map<BrandDTO>(_brandService.UpdateBrand(brand))
+//            };
+//        }
 
-        public ChangeBrandStatusResponse Post(ChangeBrandStatusRequest request)
-        {
-            var brandId = request.Id;
-            var isActive = request.IsActive;
+//        public ChangeBrandStatusResponse Post(ChangeBrandStatusRequest request)
+//        {
+//            var brandId = request.Id;
+//            var isActive = request.IsActive;
 
-            return new ChangeBrandStatusResponse
-            {
-                IsSuccess = _brandService.ChangeBrandStatus(brandId, isActive)
-            };
-        }
+//            return new ChangeBrandStatusResponse
+//            {
+//                IsSuccess = _brandService.ChangeBrandStatus(brandId, isActive)
+//            };
+//        }
 
-        public SavePhotoResponse Post(SavePhotoRequest request)
-        {
-            try
-            {
-                var photoRequest = Mapper.Map<PhotoDTO>(request.Photo);
+//        public SavePhotoResponse Post(SavePhotoRequest request)
+//        {
+//            try
+//            {
+//                var photoRequest = Mapper.Map<PhotoDTO>(request.Photo);
 
-                var photoLinks = "";
-                foreach (var link in photoRequest.PhotoRef.ToList())
-                {
-                    photoLinks += link + ";";
-                }
+//                var photoLinks = "";
+//                foreach (var link in photoRequest.PhotoRef.ToList())
+//                {
+//                    photoLinks += link + ";";
+//                }
 
-                var photo = new Photo
-                {
-                    BrandId = photoRequest.BrandId,
-                    MenuId = photoRequest.MenuId,
-                    PhotoRef = photoLinks
-                };
+//                var photo = new Photo
+//                {
+//                    BrandId = photoRequest.BrandId,
+//                    MenuId = photoRequest.MenuId,
+//                    PhotoRef = photoLinks
+//                };
 
-                _brandService.SavePhoto(photo);
+//                _brandService.SavePhoto(photo);
 
-                return new SavePhotoResponse
-                {
-                    ResponseStatus = new ResponseStatus()
-                };
-            }
-            catch (Exception ex)
-            {
-                return new SavePhotoResponse
-                {
-                    ResponseStatus = new ResponseStatus("", "Error")
-                };
-            }
-        }
-    }
-}
+//                return new SavePhotoResponse
+//                {
+//                    ResponseStatus = new ResponseStatus()
+//                };
+//            }
+//            catch (Exception ex)
+//            {
+//                return new SavePhotoResponse
+//                {
+//                    ResponseStatus = new ResponseStatus("", "Error")
+//                };
+//            }
+//        }
+//    }
+//}

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OPFC.API.ServiceModel.Tasks;
 using OPFC.Repositories.UnitOfWork;
+using OPFC.Services.UnitOfWork;
 using ServiceStack;
 
 namespace OPFC.API
@@ -25,6 +26,8 @@ namespace OPFC.API
             services.AddCors();
             // OPFC unit of work
             services.AddSingleton<IOpfcUow, OpfcUow>();
+            services.AddSingleton<IServiceUow, ServiceUow>();
+
             services.AddMvc();
         }
 

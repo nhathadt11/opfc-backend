@@ -15,6 +15,11 @@ namespace OPFC.Services.Implementations
         /// </summary>
         private readonly IOpfcUow _opfcUow;
 
+        public BrandService()
+        {
+
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>

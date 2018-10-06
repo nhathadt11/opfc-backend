@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ServiceStack" Version="5.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\OPFC.API.DTO\OPFC.API.DTO.csproj" />
   </ItemGroup>
 
@@ -17,5 +13,9 @@
     <Folder Include="Menu\" />
     <Folder Include="Order\" />
     <Folder Include="BookMark\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ServiceStack" Version="5.4.0" />
   </ItemGroup>
 </Project>
