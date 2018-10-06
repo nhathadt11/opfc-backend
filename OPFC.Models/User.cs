@@ -95,5 +95,8 @@ namespace OPFC.Models
 
         [ForeignKey("UserId")]
         public List<Order> OrderList { get; set; }
+
+        [ForeignKey("UserId")]
+        public List<BookMark> BookMarkList { get; set; }
     }
 }

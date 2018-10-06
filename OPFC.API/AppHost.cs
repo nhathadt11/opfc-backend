@@ -36,10 +36,12 @@ namespace OPFC.API
             container.Register<ITask>(t => new CompositeTask(new AutoMapperConfigTask()));
             container.Resolve<ITask>().Execute();
 
-            //container.Register<IOrderService>(c => new OrderService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
-            //container.Register<IUserService>(c => new UserService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
-            //container.Register<IBrandService>(c => new BrandService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
-            //container.Register<IEventService>(c => new EventService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+
+            container.Register<IBookMarkService>(c => new BookMarkService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IOrderService>(c => new OrderService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IUserService>(c => new UserService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IBrandService>(c => new BrandService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
+            container.Register<IEventService>(c => new EventService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
 
             //container.Register<IPhotoService>(c => new PhotoService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);
             //container.Register<IUserRoleService>(c => new UserRoleService(c.TryResolve<IOpfcUow>())).ReusedWithin(ReuseScope.None);

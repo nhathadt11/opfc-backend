@@ -31,6 +31,7 @@ namespace OPFC.Repositories.UnitOfWork
             RepositoryProvider = repositoryProvider;
         }
 
+        public IBookMarkRepository BookMarkRepository { get { return GetRepo<IBookMarkRepository>(); }}
         public ITransactionRepository TransactionRepository { get { return GetRepo<ITransactionRepository>(); }}
         public IOrderRepository OrderRepository { get { return GetRepo<IOrderRepository>(); } }
         public ITransactionDetailRepository TransactionDetailRepository { get { return GetRepo<ITransactionDetailRepository>(); } }
