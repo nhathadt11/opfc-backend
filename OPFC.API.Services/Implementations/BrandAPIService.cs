@@ -9,6 +9,7 @@ using OPFC.Services.Interfaces;
 using ServiceStack;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace OPFC.API.Services.Implementations
@@ -76,6 +77,41 @@ namespace OPFC.API.Services.Implementations
             {
                 IsSuccess = _brandService.ChangeBrandStatus(brandId, isActive)
             };
+        }
+
+        public SavePhotoResponse Post(SavePhotoRequest request)
+        {
+            try
+            {
+                var photoRequest = Mapper.Map<PhotoDTO>(request.Photo);
+
+                var photoLinks = "";
+                foreach (var link in photoRequest.PhotoRef.ToList())
+                {
+                    photoLinks += link + ";";
+                }
+
+                var photo = new Photo
+                {
+                    BrandId = photoRequest.BrandId,
+                    MenuId = photoRequest.MenuId,
+                    PhotoRef = photoLinks
+                };
+
+                _brandService.SavePhoto(photo);
+
+                return new SavePhotoResponse
+                {
+                    ResponseStatus = new ResponseStatus()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SavePhotoResponse
+                {
+                    ResponseStatus = new ResponseStatus("", "Error")
+                };
+            }
         }
     }
 }

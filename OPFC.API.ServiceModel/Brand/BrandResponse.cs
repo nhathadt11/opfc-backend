@@ -39,4 +39,9 @@ namespace OPFC.API.ServiceModel.Brand
     {
         public bool IsSuccess { get; set; }
     }
+
+    public class SavePhotoResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+    }
 }

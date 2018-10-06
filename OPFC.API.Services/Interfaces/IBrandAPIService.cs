@@ -16,6 +16,8 @@ namespace OPFC.API.Services.Interfaces
         UpdateBrandResponse Post(UpdateBrandRequest request);
 
         ChangeBrandStatusResponse Post(ChangeBrandStatusRequest request);
+
+        SavePhotoResponse Post(SavePhotoRequest request);
     }
     
 }

@@ -53,4 +53,11 @@ namespace OPFC.API.ServiceModel.Brand
         public long Id { get; set; }
         public bool IsActive { get; set; }
     }
+
+    [EnableCors("*", "*")]
+    [Route("/Photo/SavePhoto/", "POST")]
+    public class SavePhotoRequest : IReturn<SavePhotoResponse>
+    {
+        public PhotoDTO Photo { get; set; }
+    }
 }

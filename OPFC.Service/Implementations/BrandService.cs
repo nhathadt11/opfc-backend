@@ -106,5 +106,20 @@ namespace OPFC.Services.Implementations
                 return false;
             }
         }
+
+        public void SavePhoto(Photo photo)
+        {
+            try
+            {
+                if (photo.BrandId == null && photo.MenuId == null) throw new Exception("Invalid data.");
+
+                _opfcUow.PhotoRepository.SavePhoto(photo);
+                _opfcUow.Commit();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
