@@ -4,6 +4,7 @@ using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Meal;
 using OPFC.Models;
 using OPFC.Services.UnitOfWork;
+using System;
 
 namespace OPFC.API.Controllers
 {
@@ -17,7 +18,7 @@ namespace OPFC.API.Controllers
         [Route("/Meal/CreatMeal/")]
         public CreateMealResponse Post(CreateMealRequest request)
         {
-            var meal = Mapper.Map<Meal>(request);
+            var meal = Mapper.Map<Meal>(request.Meal);
 
             return new CreateMealResponse
             {

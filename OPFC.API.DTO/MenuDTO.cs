@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace OPFC.API.DTO
 {
     public class MenuDTO
@@ -16,5 +18,9 @@ namespace OPFC.API.DTO
         public bool IsDeleted { get; set; }
 
         public long BrandId { get; set; }
+
+        public List<MealDTO> MealList { get; set; }
+
+        public List<BookMarkDTO> BookMarkList { get; set; }
     }
 }

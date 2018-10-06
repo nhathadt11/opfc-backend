@@ -22,6 +22,12 @@ namespace OPFC.Services.Factory
             return new Dictionary<Type, Func<object, object>>
                 {
                 {typeof(IBrandService), coreService => new BrandService(opfcUow)},
+                {typeof(IBookMarkService), coreService => new BookMarkService(opfcUow)},
+                {typeof(IEventService), coreService => new EventService(opfcUow)},
+                {typeof(IMealService), coreService => new MealService(opfcUow)},
+                {typeof(IMenuService), coreService => new MenuService(opfcUow)},
+                {typeof(IOrderService), coreService => new OrderService(opfcUow)},
+                {typeof(IUserService), coreService => new UserService(opfcUow)},
             };
         }
 

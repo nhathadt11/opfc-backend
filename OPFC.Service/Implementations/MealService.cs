@@ -21,6 +21,8 @@ namespace OPFC.Services.Implementations
         {
             try
             {
+                meal.LastUpdated = DateTime.UtcNow;
+
                 var result = _opfcUow.MealRepository.CreateMeal(meal);
                 _opfcUow.Commit();
                 return result;

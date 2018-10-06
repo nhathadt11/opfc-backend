@@ -9,20 +9,12 @@ namespace OPFC.API.DTO
 
         public string Description { get; set; }
 
-        public long BranchId { get; set; }
+        public long BrandId { get; set; }
 
         public long MenuId { get; set; }
 
-        public string MealImage { get; set; }
+        public bool? IsDeleted { get; set; }
 
-        public bool IsSpecial { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime LastUpdated { get; set; }
-
-        public decimal UnitCost { get; set; }
-
-        public int Quantity { get; set; }
+        public DateTime? LastUpdated { get; set; }
     }
 }

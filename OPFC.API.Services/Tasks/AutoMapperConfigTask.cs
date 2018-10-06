@@ -32,6 +32,21 @@ namespace OPFC.API.ServiceModel.Tasks
             CreateMap<OPFC.Models.Event, EventDTO>();
             CreateMap<EventDTO, OPFC.Models.Event>();
 
+            CreateMap<OPFC.Models.Menu, MenuDTO>();
+            CreateMap<MenuDTO, OPFC.Models.Menu>();
+
+            CreateMap<OPFC.Models.Meal, MealDTO>();
+            CreateMap<MealDTO, OPFC.Models.Meal>();
+
+            CreateMap<OPFC.Models.Order, OrderDTO>();
+            CreateMap<OrderDTO, OPFC.Models.Order>();
+
+            CreateMap<OPFC.Models.BookMark, BookMarkDTO>();
+            CreateMap<BookMarkDTO, OPFC.Models.BookMark>();
+
+            CreateMap<OPFC.Models.Transaction, TransactionDTO>();
+            CreateMap<TransactionDTO, OPFC.Models.Transaction>();
+
             Mapper.Initialize(x => x.AddProfile<AutoMapperConfigTask>());
         }
     }

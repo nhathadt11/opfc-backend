@@ -13,5 +13,6 @@ namespace OPFC.Services.UnitOfWork
         IMealService MealService { get; }
         IMenuService MenuService { get; }
         IOrderService OrderService { get; }
+        IBookMarkService BookMarkService { get; }
     }
 }

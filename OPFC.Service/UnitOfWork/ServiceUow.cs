@@ -23,6 +23,7 @@ namespace OPFC.Services.UnitOfWork
         public IMealService MealService { get { return GetRepoService<IMealService>(); } }
         public IMenuService MenuService { get { return GetRepoService<IMenuService>(); } }
         public IOrderService OrderService { get { return GetRepoService<IOrderService>(); } }
+        public IBookMarkService BookMarkService { get { return GetRepoService<IBookMarkService>(); } }
 
         private T GetRepoService<T>() where T : class
         {

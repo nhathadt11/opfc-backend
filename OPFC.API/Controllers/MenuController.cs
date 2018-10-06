@@ -33,7 +33,7 @@ namespace OPFC.API.Controllers
         [Route("/Menu/CreateMenu/")]
         public CreateMenuResponse Post(CreateMenuRequest request)
         {
-            var menu = Mapper.Map<Menu>(request);
+            var menu = Mapper.Map<Menu>(request.Menu);
 
             return new CreateMenuResponse
             {

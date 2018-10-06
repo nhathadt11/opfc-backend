@@ -9,8 +9,10 @@ namespace OPFC.Models
         [Key]
         public long BookMarkId { get; set; }
 
+        [ForeignKey("Id")]
         public long UserId { get; set; }
 
+        [ForeignKey("Id")]
         public long MenuId { get; set; }
     }
 }
