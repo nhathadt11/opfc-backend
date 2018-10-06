@@ -46,8 +46,8 @@ namespace OPFC.API.ServiceModel.Brand
        public BrandDTO Brand { get; set; }
     }
 
-    [EnableCors("*", "*")]
-    [Route("/Brand/ChangeBrandStatus/", "POST")]
+    //[EnableCors("*", "*")]
+    //[Route("/Brand/ChangeBrandStatus/", "POST")]
     public class ChangeBrandStatusRequest : IReturn<ChangeBrandStatusResponse>
     {
         public long Id { get; set; }
