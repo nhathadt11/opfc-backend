@@ -7,6 +7,7 @@ using OPFC.API.ServiceModel.Tasks;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.UnitOfWork;
 using ServiceStack;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace OPFC.API
 {
@@ -27,6 +28,12 @@ namespace OPFC.API
             // OPFC unit of work
             services.AddSingleton<IOpfcUow, OpfcUow>();
             services.AddSingleton<IServiceUow, ServiceUow>();
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
 
             services.AddMvc();
         }
@@ -49,7 +56,12 @@ namespace OPFC.API
             app.UseCors(builder => builder.WithOrigins("*")
                                           .AllowAnyHeader()
                                           .AllowAnyMethod());
-            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "OPFC API V1");
+                c.RoutePrefix = string.Empty;
+            });
             app.UseMvc();
         }
     }

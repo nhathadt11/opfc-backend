@@ -19,6 +19,7 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
+        [HttpGet]
         [Route("/Menu/GetMenuById/{id}")]
         public GetMenuByIdResponse Get(GetMenuByIdRequest request)
         {
@@ -30,6 +31,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpPost]
         [Route("/Menu/CreateMenu/")]
         public CreateMenuResponse Post(CreateMenuRequest request)
         {
@@ -41,6 +43,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpPut]
         [Route("/Menu/UpdateMenu/")]
         public UpdateMenuResponse Post(UpdateMenuRequest request)
         {

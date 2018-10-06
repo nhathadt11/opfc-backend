@@ -22,6 +22,7 @@ namespace OPFC.API.Controllers
         // Dependency Injection. We should communicate with interface only
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
+        [HttpPost]
         [Route("/User/CreateEventPlanner/")]
         public CreateEventPlannerResponse Post(CreateEventPlannerRequest request)
         {

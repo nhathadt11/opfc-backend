@@ -19,6 +19,7 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
+        [HttpPost]
         [Route("/Event/CreateEvent/")]
         public CreateEventResponse Post(CreateEventRequest request)
         {
@@ -39,6 +40,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [HttpGet]
         [Route("/Event/GetAllEvent/")]
         public GetAllEventResponse GetAllEvent()
         {
@@ -56,6 +58,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [HttpPut]
         [Route("/Event/UpdateEvent/")]
         public UpdateEventResponse Post(UpdateEventRequest request)
         {
@@ -76,6 +79,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [HttpDelete]
         [Route("/Event/DeleteEvent/")]
         public DeleteEventResponse Post(DeleteEventRequest request)
         {
@@ -97,6 +101,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [HttpGet]
         [Route("/Event/GetAllEventType/")]
         public GetAllEventTypeResponse GetAllEventType()
         {

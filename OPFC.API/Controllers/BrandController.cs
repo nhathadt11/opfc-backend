@@ -22,7 +22,7 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
-
+        [HttpPost]
         [Route("/Brand/ChangeBrandStatus/")]
         public ChangeBrandStatusResponse Post(ChangeBrandStatusRequest request)
         {
@@ -41,6 +41,7 @@ namespace OPFC.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
 
+        [HttpGet]
         [Route("/Brand/GetBrandById/{id}")]
         public GetBrandByIdReponse Get(GetBrandByIdRequest request)
         {
@@ -58,6 +59,7 @@ namespace OPFC.API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
 
+        [HttpPost]
         [Route("/Brand/CreateBrand/")]
         public CreateBrandResponse Post(CreateBrandRequest request)
         {
@@ -69,6 +71,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpPost]
         [Route("/Brand/CreateCaterer/")]
         public CreateCatererResponse Post(CreateCatererRequest request)
         {
@@ -80,6 +83,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpPut]
         [Route("/Brand/UpdateBrand/")]
         public UpdateBrandResponse Post(UpdateBrandRequest request)
         {
@@ -91,6 +95,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpPost]
         [Route("/Photo/SavePhoto/")]
         public SavePhotoResponse Post(SavePhotoRequest request)
         {

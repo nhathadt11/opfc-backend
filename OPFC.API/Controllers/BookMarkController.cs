@@ -19,6 +19,7 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
+        [HttpPost]
         [Route("/BookMark/CreateBookMark/")]
         public CreateBookMarkResponse Post(CreateBookMarkRequest request)
         {
@@ -30,6 +31,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpGet]
         [Route("/BookMark/GetAllBookMark/")]
         public GetAllBookMarkResponse Get()
         {
@@ -41,6 +43,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpPut]
         [Route("/BookMark/UpdateBookMark/")]
         public UpdateBookMarkResponse Post(UpdateBookMarkRequest request)
         {
@@ -52,6 +55,7 @@ namespace OPFC.API.Controllers
             };
         }
 
+        [HttpDelete]
         [Route("/BookMark/RemoveBookMark/{id}")]
         public RemoveBookMarkResponse Post(RemoveBookMarkRequest request)
         {
