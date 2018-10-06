@@ -16,5 +16,6 @@
     <Folder Include="Meal\" />
     <Folder Include="Menu\" />
     <Folder Include="Order\" />
+    <Folder Include="BookMark\" />
   </ItemGroup>
 </Project>

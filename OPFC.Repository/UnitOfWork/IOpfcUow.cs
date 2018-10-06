@@ -54,6 +54,8 @@ namespace OPFC.Repositories.UnitOfWork
 
         IMenuRepository MenuRepository { get; }
 
+        IBookMarkRepository BookMarkRepository { get; }
+
         ITransactionRepository TransactionRepository { get; }
 
         ITransactionDetailRepository TransactionDetailRepository { get; }
