@@ -17,7 +17,7 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Add(brand).Entity;
         }
 
-        public Caterer CreateCatere(User user, Brand brand)
+        public Caterer CreateCaterer(User user, Brand brand)
         {
             try
             {
