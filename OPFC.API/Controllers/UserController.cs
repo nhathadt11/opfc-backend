@@ -42,14 +42,14 @@ namespace OPFC.API.Controllers
         [Route("/User/Authenticate/")]
         public IActionResult Authenticate(AuthenticationRequest request)
         {
-            var user = _serviceUow.UserService.GetUserById(request.User.Id);
+            var user = _serviceUow.UserService.Authenticate(request.Username, request.Password);
 
             if(user == null)
             {
                 return BadRequest(new { message = "User name and password is invalid." }); 
             }
 
-            return Ok(user);
+            return Ok(new AuthenticationResponse { Token = user.Token });
         }
     }
 }

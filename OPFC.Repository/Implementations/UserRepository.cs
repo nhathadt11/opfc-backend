@@ -36,5 +36,10 @@ namespace OPFC.Repositories.Implementations
                                 .Result;
             return userList;
         }
+
+        public bool IsUserExist(string userName)
+        {
+            return DbSet.Any(u => u.Username == userName);
+        }
     }
 }

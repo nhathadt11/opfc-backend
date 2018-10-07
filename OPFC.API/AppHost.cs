@@ -1,6 +1,7 @@
 ﻿using Funq;
 using OPFC.API.ServiceModel.Tasks;
 using OPFC.API.Services.Implementations;
+using OPFC.Constants;
 using OPFC.Repositories.Factory;
 using OPFC.Repositories.Providers;
 using OPFC.Repositories.UnitOfWork;
@@ -24,6 +25,7 @@ namespace OPFC.API
         // Configure your AppHost with the necessary configuration and dependencies your App needs
         public override void Configure(Funq.Container container)
         {
+
             //Register Redis Client Manager singleton in ServiceStack's built-in Func IOC
             container.Register(s => new RepositoryFactories());
             container.Register<IRepositoryProvider>(c => new RepositoryProvider(c.TryResolve<RepositoryFactories>())).ReusedWithin(ReuseScope.None);

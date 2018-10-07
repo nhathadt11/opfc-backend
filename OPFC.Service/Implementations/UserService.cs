@@ -1,8 +1,13 @@
-﻿using OPFC.Models;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using OPFC.Constants;
+using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace OPFC.Services.Implementations
@@ -30,12 +35,29 @@ namespace OPFC.Services.Implementations
         {
             try
             {
+                var secret = AppSettings.Secret;
+
                 var user = _opfcUow.UserRepository.GetUserLogin(username, password);
 
                 if (user == null) return null;
 
                 // authentication successful so generate jwt token
-                return null;
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[] {
+                        new Claim(ClaimTypes.Name, user.Id.ToString())
+                    }),
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                user.Token = tokenHandler.WriteToken(token);
+                user.Password = null;
+
+                return user;
             }
             catch (Exception ex)
             {
@@ -47,6 +69,10 @@ namespace OPFC.Services.Implementations
         {
             try
             {
+                var isUserExist =  _opfcUow.UserRepository.IsUserExist(user.Username);
+
+                if (isUserExist) throw new Exception($"{user.Username} is already exist!" );
+
                 user.IsActive = true;
                 user.IsDeleted = false;
 

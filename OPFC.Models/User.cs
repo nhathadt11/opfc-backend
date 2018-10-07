@@ -72,6 +72,13 @@ namespace OPFC.Models
         /// </summary>
         public string Avatar { get; set; }
 
+
+        /// <summary>
+        /// User authentication token
+        /// </summary>
+        [NotMapped]
+        public string Token { get; set; }
+
         /// <summary>
         /// Userr role belong to this user
         /// Mapping field "UserRoleId"
