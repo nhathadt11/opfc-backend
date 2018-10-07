@@ -34,6 +34,7 @@ namespace OPFC.API
             {
                 c.SwaggerDoc("v1", new Info { Title = "OPFC API", Version = "v1" });
                 c.MapType<System.Int64>(() => new Schema { Type = "long" });
+                c.MapType<System.Int32>(() => new Schema { Type = "int" });
             });
 
             services.AddMvc();

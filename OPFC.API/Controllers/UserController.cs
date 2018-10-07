@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ using OPFC.Services.UnitOfWork;
 namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
+    [Authorize]
     [Route("/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -33,6 +35,21 @@ namespace OPFC.API.Controllers
             {
                 User = Mapper.Map<UserDTO>(result)
             };
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("/User/Authenticate/")]
+        public IActionResult Authenticate(AuthenticationRequest request)
+        {
+            var user = _serviceUow.UserService.GetUserById(request.User.Id);
+
+            if(user == null)
+            {
+                return BadRequest(new { message = "User name and password is invalid." }); 
+            }
+
+            return Ok(user);
         }
     }
 }

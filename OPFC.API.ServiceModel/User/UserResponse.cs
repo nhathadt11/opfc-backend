@@ -6,6 +6,11 @@ using System.Text;
 
 namespace OPFC.API.ServiceModel.User
 {
+    public class AuthenticationResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+    }
+
     public class GetUserByIdResponse
     {
         ResponseStatus ResponseStatus { get; set; }

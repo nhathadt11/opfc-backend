@@ -6,15 +6,17 @@ using System.Text;
 
 namespace OPFC.API.ServiceModel.User
 {
-    [EnableCors("*", "*")]
-    [Route("/User/GetUserById/", "GET")]
+    public class AuthenticationRequest: IReturn<AuthenticationResponse>
+    {
+        public string Token { get; set; }
+        public UserDTO User { get; set; }
+    }
+
     public class GetUserByIdRequest : IReturn<GetUserByIdResponse>
     {
         public long Id { get; set; }
     }
 
-    [EnableCors("*", "*")]
-    [Route("/User/CreateEventPlanner/", "POST")]
     public class CreateEventPlannerRequest : IReturn<GetUserByIdResponse>
     {
         public UserDTO User;

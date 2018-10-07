@@ -10,6 +10,8 @@ namespace OPFC.Services.Interfaces
     /// </summary>
     public interface IUserService
     {
+        User Authenticate(string username, string password);
+
         /// <summary>
         /// Get user by id
         /// </summary>

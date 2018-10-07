@@ -26,6 +26,23 @@ namespace OPFC.Services.Implementations
             _opfcUow = opfcUow;
         }
 
+        public User Authenticate(string username, string password)
+        {
+            try
+            {
+                var user = _opfcUow.UserRepository.GetUserLogin(username, password);
+
+                if (user == null) return null;
+
+                // authentication successful so generate jwt token
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public User CreateUser(User user)
         {
             try

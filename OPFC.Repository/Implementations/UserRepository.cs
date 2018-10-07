@@ -3,6 +3,7 @@ using OPFC.Models;
 using OPFC.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace OPFC.Repositories.Implementations
@@ -10,6 +11,12 @@ namespace OPFC.Repositories.Implementations
     public class UserRepository : EFRepository<User>, IUserRepository
     {
         public UserRepository(DbContext dbContext): base(dbContext) { }
+
+        public User GetUserLogin(string username, string password)
+        {
+            return DbSet.SingleOrDefault(u => u.Username == username && u.Password == password
+                                           && u.IsActive == true && u.IsDeleted == false);
+        }
 
         public User CreateUser(User user)
         {

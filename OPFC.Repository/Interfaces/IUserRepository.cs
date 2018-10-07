@@ -17,6 +17,14 @@ namespace OPFC.Repositories.Interfaces
         List<User> GetAllUsers();
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        User GetUserLogin(string username, string password);
+
+        /// <summary>
         /// Create new user
         /// </summary>
         /// <param name="user"></param>
