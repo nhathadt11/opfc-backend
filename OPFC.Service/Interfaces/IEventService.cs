@@ -7,9 +7,9 @@ namespace OPFC.Services.Interfaces
 {
     public interface IEventService
     {
-        bool SaveEvent(Event newEvent);
+        Event SaveEvent(Event newEvent);
 
-        bool UpdateEvent(Event modifiedEvent);
+        Event UpdateEvent(Event modifiedEvent);
 
         bool DeleteEvent(long eventId, long userId);
 

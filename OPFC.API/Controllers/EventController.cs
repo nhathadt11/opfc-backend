@@ -88,7 +88,7 @@ namespace OPFC.API.Controllers
                 var eventIdReq = request.EventId;
                 var userIdReq = request.UserId;
 
-                var result = _serviceUow.EventService.DeleteEvent(1, 1);
+                var result = _serviceUow.EventService.DeleteEvent(eventIdReq, userIdReq);
 
                 return new DeleteEventResponse
                 {

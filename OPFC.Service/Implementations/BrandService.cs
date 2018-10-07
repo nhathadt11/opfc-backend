@@ -59,11 +59,11 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                return _opfcUow.BrandRepository.GetById(id);
+                return _opfcUow.BrandRepository.GetBrandById(id);
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                throw;
             }
         }
 
@@ -88,7 +88,7 @@ namespace OPFC.Services.Implementations
             {
                 var brand = GetBrandById(brandId);
 
-                if(brand != null)
+                if (brand != null)
                 {
                     brand.IsActive = isActive;
                     _opfcUow.BrandRepository.Update(brand);

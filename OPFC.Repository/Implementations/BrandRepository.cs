@@ -13,6 +13,11 @@ namespace OPFC.Repositories.Implementations
     {
         public BrandRepository(DbContext dbContext) : base(dbContext) { }
 
+        public Brand GetBrandById(long brandId)
+        {
+            return DbSet.SingleOrDefault(b => b.Id == brandId && b.IsActive == true && b.IsDeleted == false);
+        }
+
         public Brand CreateBrand(Brand brand)
         {
             return DbSet.Add(brand).Entity;

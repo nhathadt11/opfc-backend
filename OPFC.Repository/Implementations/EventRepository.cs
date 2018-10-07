@@ -22,14 +22,14 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Where(x => x.IsDeleted == false).ToList();
         }
 
-        public void SaveEvent(Event newEvent)
+        public Event SaveEvent(Event newEvent)
         {
-            DbSet.Add(newEvent);
+            return DbSet.Add(newEvent).Entity;
         }
 
-        public void UpdateEvent(Event modifiedEvent)
+        public Event UpdateEvent(Event modifiedEvent)
         {
-            DbSet.Update(modifiedEvent);
+            return DbSet.Update(modifiedEvent).Entity;
         }
     }
 }

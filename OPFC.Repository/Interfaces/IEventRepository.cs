@@ -7,9 +7,9 @@ namespace OPFC.Repositories.Interfaces
 {
     public interface IEventRepository
     {
-        void SaveEvent(Event newEvent);
+        Event SaveEvent(Event newEvent);
 
-        void UpdateEvent(Event modifiedEvent);
+        Event UpdateEvent(Event modifiedEvent);
 
         Event GetEventById(long eventId);
 

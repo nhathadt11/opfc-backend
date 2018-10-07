@@ -15,16 +15,20 @@ namespace OPFC.Services.Implementations
         {
             _opfcUow = opfcUow;
         }
+
         public bool DeleteEvent(long eventId, long userId)
         {
             var result = false;
 
             try
             {
-                //_opfcUow.EventRepository.DeleteEvent(null);
-                //_opfcUow.Commit();
+                var evn = GetEventById(eventId);
 
-                result = true;
+                if (evn != null)
+                {
+                    evn.IsDeleted = true;
+                    result = UpdateEvent(evn) != null;
+                }
             }
             catch (Exception ex)
             {
@@ -36,14 +40,21 @@ namespace OPFC.Services.Implementations
 
         public Event GetEventById(long eventId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _opfcUow.EventRepository.GetEventById(eventId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public List<Event> GettAllEvent()
         {
             try
             {
-                var result =  _opfcUow.EventRepository.GettAllEvent();
+                var result = _opfcUow.EventRepository.GettAllEvent();
                 return result;
             }
             catch (Exception ex)
@@ -52,14 +63,15 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public bool SaveEvent(Event newEvent)
+        public Event SaveEvent(Event newEvent)
         {
             try
             {
-                _opfcUow.EventRepository.SaveEvent(newEvent);
+                newEvent.IsDeleted = false;
+                var result = _opfcUow.EventRepository.SaveEvent(newEvent);
                 _opfcUow.Commit();
 
-                return true;
+                return result;
             }
             catch (Exception ex)
             {
@@ -67,23 +79,19 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public bool UpdateEvent(Event modifiedEvent)
+        public Event UpdateEvent(Event modifiedEvent)
         {
-            var result = false;
-
             try
             {
-                _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
+                var result = _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
                 _opfcUow.Commit();
 
-                result = true;
+                return result;
             }
             catch (Exception ex)
             {
-                result = false;
+                throw;
             }
-
-            return result;
         }
     }
 }
