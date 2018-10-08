@@ -34,7 +34,7 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                return _opfcUow.BookMarkRepository.GetAll().ToList();
+                return _opfcUow.BookMarkRepository.GetAllBookMark().ToList();
             }
             catch (Exception ex)
             {
@@ -70,6 +70,16 @@ namespace OPFC.Services.Implementations
             }
         }
 
-
+        public BookMark GetBookMarkbyId(long id)
+        {
+            try
+            {
+                return _opfcUow.BookMarkRepository.GetBookMarkById(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

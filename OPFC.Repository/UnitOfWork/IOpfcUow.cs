@@ -44,7 +44,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// <summary>
         /// The user Repository
         /// </summary>
+
         IUserRepository UserRepository { get; }
+
+        IRatingRepository RatingRepository { get; }
 
         IBrandRepository BrandRepository { get; }
 

@@ -43,7 +43,7 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -55,7 +55,7 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -69,7 +69,7 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
     }

@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using OPFC.API.ServiceModel.Tasks;
 using OPFC.Repositories.UnitOfWork;
+using OPFC.Services.Implementations;
+using OPFC.Services.Interfaces;
 using OPFC.Services.UnitOfWork;
 using ServiceStack;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Text;
 
 namespace OPFC.API
 {

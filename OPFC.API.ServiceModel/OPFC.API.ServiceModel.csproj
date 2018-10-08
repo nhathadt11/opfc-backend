@@ -13,6 +13,7 @@
     <Folder Include="Menu\" />
     <Folder Include="Order\" />
     <Folder Include="BookMark\" />
+    <Folder Include="Rating\" />
   </ItemGroup>
 
   <ItemGroup>

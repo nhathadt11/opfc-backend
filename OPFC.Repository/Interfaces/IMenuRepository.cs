@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OPFC.Models;
 namespace OPFC.Repositories.Interfaces
 {
@@ -7,5 +8,9 @@ namespace OPFC.Repositories.Interfaces
         Menu CreateMenu(Menu menu);
 
         Menu UpdateMenu(Menu menu);
+
+        Menu GetMenuById(long MenuId);
+
+        List<Menu> GetAllMenu();
     }
 }

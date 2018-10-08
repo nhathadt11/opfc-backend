@@ -22,5 +22,7 @@ namespace OPFC.API.DTO
         public List<MealDTO> MealList { get; set; }
 
         public List<BookMarkDTO> BookMarkList { get; set; }
+
+        public List<RatingDTO> RatingList { get; set; }
     }
 }

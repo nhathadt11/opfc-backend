@@ -54,5 +54,18 @@ namespace OPFC.API.Controllers
                 Menu = Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenu(menu))
             };
         }
+
+        [HttpGet]
+        [Route("/Menu/GetAllMenu/")]
+        public GetAllMenuResponse Get(GetAllMenuRequest request)
+        {
+            var menuList = _serviceUow.MenuService.GetAllMenu();
+
+            return new GetAllMenuResponse
+            {
+                Menues = Mapper.Map<List<MenuDTO>>(menuList)
+            };
+
+        }
     }
 }
