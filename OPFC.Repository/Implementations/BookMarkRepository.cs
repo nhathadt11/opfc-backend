@@ -23,8 +23,25 @@ namespace OPFC.Repositories.Implementations
 
         public bool RemoveBookMark(BookMark bookMark)
         {
-            // TODO: Do not deleted. Should change IsDeleted flag to "true"
-            return true; //DbSet.Remove(bookMark).Entity;
+            var bookmark = DbSet.SingleOrDefault();
+            if (bookmark != null)
+            {
+                DbSet.Remove(bookmark);
+                return true;
+            }
+            return false; 
+        }
+
+        public List<BookMark> GetAllBookMark()
+        {
+            return DbSet.DefaultIfEmpty().ToList();
+
+        }
+
+        public BookMark GetBookMarkById(long id)
+        {
+            return DbSet.SingleOrDefault(b => b.BookMarkId == id);
+
         }
     }
 }

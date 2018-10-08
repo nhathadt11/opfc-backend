@@ -11,5 +11,9 @@ namespace OPFC.Repositories.Interfaces
 
         BookMark UpdateBookMark(BookMark bookMark);
 
+        List<BookMark> GetAllBookMark();
+
+        BookMark GetBookMarkById(long id);
+
     }
 }

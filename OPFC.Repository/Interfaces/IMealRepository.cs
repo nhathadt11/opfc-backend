@@ -9,5 +9,9 @@ namespace OPFC.Repositories.Interfaces
         Meal CreateMeal(Meal meal);
 
         Meal UpdateMeal(Meal meal);
+
+        Meal GetMealById(long id);
+
+        List<Meal> GetAllMeal();
     }
 }

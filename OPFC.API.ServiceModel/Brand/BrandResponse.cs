@@ -44,4 +44,11 @@ namespace OPFC.API.ServiceModel.Brand
     {
         public ResponseStatus ResponseStatus { get; set; }
     }
+
+    public class GetAllBrandResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public List<BrandDTO> Brands { get; set; }
+    }
 }

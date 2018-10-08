@@ -1,26 +1,26 @@
 ﻿using System;
-using OPFC.Models;
-using OPFC.Services.Interfaces;
-using OPFC.Repositories.UnitOfWork;
 using System.Collections.Generic;
+using OPFC.Models;
+using OPFC.Repositories.UnitOfWork;
+using OPFC.Services.Interfaces;
 
 namespace OPFC.Services.Implementations
 {
-    public class MenuService : IMenuService
+    public class RatingService : IRatingService
     {
         private readonly IOpfcUow _opfcUow;
 
-        public MenuService(IOpfcUow opfcUow)
+        public RatingService(IOpfcUow opfcUow)
         {
             _opfcUow = opfcUow;
         }
 
-        public Menu CreateMenu(Menu menu)
+        public Rating CreateRating(Rating rating)
         {
             try
             {
-                var result = _opfcUow.MenuRepository.CreateMenu(menu);
-                _opfcUow.Commit();
+                var result = _opfcUow.RatingRepository.CreateRating(rating);
+
                 return result;
             }
             catch (Exception ex)
@@ -29,25 +29,11 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public List<Menu> GetAllMenu()
+        public List<Rating> GetAllRating()
         {
             try
             {
-                var result = _opfcUow.MenuRepository.GetAllMenu();
-
-                return result;
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public Menu GetMenuById(long id)
-        {
-            try
-            {
-                return _opfcUow.MenuRepository.GetMenuById(id);
+                return _opfcUow.RatingRepository.GetAllRating();
             }
             catch (Exception ex)
             {
@@ -55,12 +41,25 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public Menu UpdateMenu(Menu menu)
+        public Rating GetRatingById(long id)
         {
             try
             {
-                var result = _opfcUow.MenuRepository.UpdateMenu(menu);
+                return _opfcUow.RatingRepository.GetRatingById(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Rating UpdateRating(Rating rating)
+        {
+            try
+            {
+                var result = _opfcUow.RatingRepository.UpdateRating(rating);
                 _opfcUow.Commit();
+
                 return result;
             }
             catch (Exception ex)

@@ -51,7 +51,7 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -78,7 +78,7 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -118,7 +118,19 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<Brand> GetAllBrand()
+        {
+            try
+            {
+                return _opfcUow.BrandRepository.GetAllBrand();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

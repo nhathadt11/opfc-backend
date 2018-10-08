@@ -27,5 +27,8 @@ namespace OPFC.Models
         [ForeignKey("MenuId")]
         public List<BookMark> BookMarkList { get; set; }
 
+        [ForeignKey("MenuId")]
+        public List<Rating> RatingList { get; set; }
+
     }
 }
