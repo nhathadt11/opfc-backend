@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Meal;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
+    [Authorize]
     [Route("/[controller]")]
     [ApiController]
     public class MealController : ControllerBase
