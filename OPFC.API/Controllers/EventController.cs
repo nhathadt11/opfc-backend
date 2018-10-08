@@ -88,9 +88,9 @@ namespace OPFC.API.Controllers
             try
             {
                 var eventIdReq = request.EventId;
-                var userIdReq = request.UserId;
+                var userIdReq = HttpContext.User?.Identity?.Name;
 
-                var result = _serviceUow.EventService.DeleteEvent(eventIdReq, userIdReq);
+                var result = _serviceUow.EventService.DeleteEvent(eventIdReq, Int64.Parse(userIdReq));
 
                 return new DeleteEventResponse
                 {
@@ -107,6 +107,8 @@ namespace OPFC.API.Controllers
         [Route("/Event/GetAllEventType/")]
         public GetAllEventTypeResponse GetAllEventType()
         {
+            var userId = HttpContext.User?.Identity?.Name;
+
             try
             {
                 return new GetAllEventTypeResponse

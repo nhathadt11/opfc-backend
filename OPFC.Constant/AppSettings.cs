@@ -2,6 +2,6 @@
 {
     public class AppSettings
     {
-        public static string Secret { get { return "hallah opfc mother fucking shit"; } set { } }
+        public static string Secret { get { return "this is opfc api secret string"; } set { } }
     }
 }

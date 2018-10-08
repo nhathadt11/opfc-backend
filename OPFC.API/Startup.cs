@@ -48,10 +48,9 @@ namespace OPFC.API
             //                             .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
             //                             .AddJsonFile("appsettings.json")
             //                             .Build();
-            
 
             //// configure strongly typed settings objects
-            //var appSettingsSection = configuration.GetSection("AppSettings");
+            //var appSettingsSection = Configuration.GetSection("AppSettings");
 
             //services.Configure<OPFC.Constants.AppSettings.Secret>(appSettingsSection);
 
