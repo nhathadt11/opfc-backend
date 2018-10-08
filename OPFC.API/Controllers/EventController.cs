@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
@@ -13,6 +14,7 @@ using OPFC.Services.UnitOfWork;
 namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
+    [Authorize]
     [Route("/[controller]")]
     [ApiController]
     public class EventController : ControllerBase
@@ -86,9 +88,9 @@ namespace OPFC.API.Controllers
             try
             {
                 var eventIdReq = request.EventId;
-                var userIdReq = request.UserId;
+                var userIdReq = HttpContext.User?.Identity?.Name;
 
-                var result = _serviceUow.EventService.DeleteEvent(eventIdReq, userIdReq);
+                var result = _serviceUow.EventService.DeleteEvent(eventIdReq, Int64.Parse(userIdReq));
 
                 return new DeleteEventResponse
                 {
@@ -105,6 +107,8 @@ namespace OPFC.API.Controllers
         [Route("/Event/GetAllEventType/")]
         public GetAllEventTypeResponse GetAllEventType()
         {
+            var userId = HttpContext.User?.Identity?.Name;
+
             try
             {
                 return new GetAllEventTypeResponse

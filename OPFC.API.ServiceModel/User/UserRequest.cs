@@ -8,8 +8,9 @@ namespace OPFC.API.ServiceModel.User
 {
     public class AuthenticationRequest: IReturn<AuthenticationResponse>
     {
-        public string Token { get; set; }
-        public UserDTO User { get; set; }
+        public string Username { get; set; }
+
+        public string Password { get; set; }
     }
 
     public class GetUserByIdRequest : IReturn<GetUserByIdResponse>

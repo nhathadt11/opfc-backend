@@ -21,6 +21,7 @@
     <ProjectReference Include="..\OPFC.API.Services\OPFC.API.Services.csproj" />
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
     <ProjectReference Include="..\OPFC.Service\OPFC.Services.csproj" />
+    <ProjectReference Include="..\OPFC.Utility\OPFC.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

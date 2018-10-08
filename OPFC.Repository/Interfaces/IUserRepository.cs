@@ -30,5 +30,7 @@ namespace OPFC.Repositories.Interfaces
         /// <param name="user"></param>
         /// <returns></returns>
         User CreateUser(User user);
+
+        bool IsUserExist(string userName);
     }
 }

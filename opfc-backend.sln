@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPFC.API", "OPFC.API\OPFC.API.csproj", "{52E76B64-4BDF-4743-9A78-39954E179F6F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4109FB05-1DAE-4858-8592-A6D93A95207E}"
+	ProjectSection(SolutionItems) = preProject
+		OPFC.Repository\EFRepository.cs = OPFC.Repository\EFRepository.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{881E67C1-95E3-4440-B8BC-0D9226832769}"
 EndProject
@@ -31,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPFC.API.Services", "OPFC.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPFC.API.ServiceModel", "OPFC.API.ServiceModel\OPFC.API.ServiceModel.csproj", "{5F0F4DB8-943E-4010-83A0-EFF4F7867FF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPFC.Utility", "OPFC.Utility\OPFC.Utility.csproj", "{88B36E99-E141-411A-96AB-27A7D04F7571}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPFC.Utility", "OPFC.Utility\OPFC.Utility.csproj", "{88B36E99-E141-411A-96AB-27A7D04F7571}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

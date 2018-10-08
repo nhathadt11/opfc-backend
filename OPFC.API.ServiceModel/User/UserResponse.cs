@@ -8,7 +8,9 @@ namespace OPFC.API.ServiceModel.User
 {
     public class AuthenticationResponse
     {
-        public ResponseStatus ResponseStatus { get; set; }
+        public string Message { get; set; }
+
+        public string Token { get; set; }
     }
 
     public class GetUserByIdResponse
