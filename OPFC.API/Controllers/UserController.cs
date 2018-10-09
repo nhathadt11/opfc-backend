@@ -49,7 +49,7 @@ namespace OPFC.API.Controllers
                 return BadRequest(new { message = "User name and password is invalid." }); 
             }
 
-            return Ok(new AuthenticationResponse { Token = user.Token });
+            return Ok(new AuthenticationResponse { User = Mapper.Map<UserDTO>(user), Token = user.Token });
         }
     }
 }
