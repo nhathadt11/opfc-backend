@@ -62,5 +62,37 @@ namespace OPFC.API.Controllers
                 Token = user.Token
             });
         }
+
+        [HttpPut]
+        [Route("/User")]
+        public IActionResult Update(UpdateUserRequest request)
+        {
+            User found = _serviceUow.UserService.GetUserById(request.User.Id);
+            if (found == null) return NotFound(new { Messsage = "User could not be found." }); 
+
+            try
+            {
+                User mapped = Mapper.Map(request.User, found);
+                User updated = _serviceUow.UserService.Update(mapped);
+                UserDTO dto = Mapper.Map<UserDTO>(updated);
+                return Ok(dto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(long id)
+        {
+            User found = _serviceUow.UserService.GetUserById(id);
+            if (found == null)
+            {
+                return NotFound(new { Messsage = "User could not be found." });
+            }
+
+            return Ok(Mapper.Map<UserDTO>(found));
+        }
     }
 }

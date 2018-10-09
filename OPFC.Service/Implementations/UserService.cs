@@ -83,7 +83,19 @@ namespace OPFC.Services.Implementations
             }
             catch (Exception ex)
             {
-                return null;
+                throw ex;
+            }
+        }
+
+        public User Update(User user)
+        {
+            try
+            {
+                return _opfcUow.UserRepository.Update(user);
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 

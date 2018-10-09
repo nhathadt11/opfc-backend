@@ -41,5 +41,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Any(u => u.Username == userName);
         }
+
+        public User Update(User user)
+        {
+            return DbSet.Update(user).Entity;
+        }
     }
 }

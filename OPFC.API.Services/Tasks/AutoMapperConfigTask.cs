@@ -62,7 +62,11 @@ namespace OPFC.API.ServiceModel.Tasks
 
             #endregion
 
-            Mapper.Initialize(x => x.AddProfile<AutoMapperConfigTask>());
+            Mapper.Initialize(x =>
+            {
+                x.AddProfile<AutoMapperConfigTask>();
+                x.ForAllMaps((map, exp) => exp.ForAllOtherMembers(opt => opt.Ignore()));
+            });
         }
     }
 }

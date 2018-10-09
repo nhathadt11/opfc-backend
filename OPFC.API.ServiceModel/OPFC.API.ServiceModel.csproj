@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OPFC.API.DTO\OPFC.API.DTO.csproj" />
+    <ProjectReference Include="..\OPFC.Models\OPFC.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
