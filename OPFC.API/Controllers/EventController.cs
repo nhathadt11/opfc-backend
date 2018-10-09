@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Event;
@@ -22,8 +19,8 @@ namespace OPFC.API.Controllers
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
-        [Route("/Event/CreateEvent/")]
-        public CreateEventResponse Post(CreateEventRequest request)
+        [Route("/Event")]
+        public ActionResult Post(CreateEventRequest request)
         {
             try
             {
@@ -31,38 +28,26 @@ namespace OPFC.API.Controllers
 
                 var result = _serviceUow.EventService.SaveEvent(Mapper.Map<Event>(eventReq));
 
-                return new CreateEventResponse
-                {
-                    Event = Mapper.Map<EventDTO>(result)
-                };
+                return Created("/Event/CreateEvent", Mapper.Map<EventDTO>(result));
             }
             catch (Exception ex)
             {
-                return null;
+                return BadRequest(new { ex.Message });
             }
         }
 
         [HttpGet]
-        [Route("/Event/GetAllEvent/")]
-        public GetAllEventResponse GetAllEvent()
+        [Route("/Event")]
+        public ActionResult GetAllEvent()
         {
-            try
-            {
-                return new GetAllEventResponse
-                {
-                    Events = Mapper.Map<List<EventDTO>>(_serviceUow.EventService.GettAllEvent()),
-                    ResponseStatus = new ServiceStack.ResponseStatus("200 OK")
-                };
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var result = _serviceUow.EventService.GettAllEvent();
+
+            return Ok(Mapper.Map<List<EventDTO>>(result));
         }
 
         [HttpPut]
-        [Route("/Event/UpdateEvent/")]
-        public UpdateEventResponse Post(UpdateEventRequest request)
+        [Route("/Event")]
+        public ActionResult Post(UpdateEventRequest request)
         {
             try
             {
@@ -70,57 +55,53 @@ namespace OPFC.API.Controllers
 
                 var result = _serviceUow.EventService.UpdateEvent(Mapper.Map<Event>(eventReq));
 
-                return new UpdateEventResponse
-                {
-                    Event = Mapper.Map<EventDTO>(result)
-                };
+                return Ok(Mapper.Map<EventDTO>(result));
             }
             catch (Exception ex)
             {
-                return null;
+                return BadRequest(new { ex.Message });
             }
         }
 
         [HttpDelete]
-        [Route("/Event/DeleteEvent/")]
-        public DeleteEventResponse Post(DeleteEventRequest request)
+        [Route("/Event")]
+        public ActionResult Post(DeleteEventRequest request)
         {
             try
             {
                 var eventIdReq = request.EventId;
-                var userIdReq = HttpContext.User?.Identity?.Name;
+                var userIdReq = request.UserId;
 
-                var result = _serviceUow.EventService.DeleteEvent(eventIdReq, Int64.Parse(userIdReq));
-
-                return new DeleteEventResponse
+                var foundEvent = _serviceUow.EventService.GetEventById(eventIdReq);
+                if (foundEvent == null)
                 {
-                    IsSuccess = true
-                };
+                    return NotFound(new { Message = "Could not find event" });
+                }
+                
+                var foundUser = _serviceUow.UserService.GetUserById(userIdReq);
+                if (foundUser == null)
+                {
+                    return NotFound(new {Message = "Could not find user"});
+                }
+                
+                _serviceUow.EventService.DeleteEvent(eventIdReq, userIdReq);
+
+                return NoContent();
             }
             catch (Exception ex)
             {
-                return null;
+                return BadRequest(new { ex.Message });
             }
         }
 
         [HttpGet]
-        [Route("/Event/GetAllEventType/")]
-        public GetAllEventTypeResponse GetAllEventType()
+        [Route("/Event/GetAllEventType")]
+        public ActionResult GetAllEventType()
         {
             var userId = HttpContext.User?.Identity?.Name;
 
-            try
-            {
-                return new GetAllEventTypeResponse
-                {
-                    Event = Mapper.Map<List<EventTypeDTO>>(_serviceUow.EventTypeService.GetAllEventType()),
-                    ResponseStatus = new ServiceStack.ResponseStatus("200 OK")
-                };
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var eventTypes = Mapper.Map<List<EventTypeDTO>>(_serviceUow.EventTypeService.GetAllEventType());
+            return Ok(eventTypes);
         }
     }
 }
