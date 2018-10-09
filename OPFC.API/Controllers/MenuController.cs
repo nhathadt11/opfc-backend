@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -22,51 +23,63 @@ namespace OPFC.API.Controllers
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpGet]
-        [Route("/Menu/GetMenuById/{id}")]
-        public GetMenuByIdResponse Get(GetMenuByIdRequest request)
+        [Route("/Menu/{id}")]
+        public ActionResult GetById(string id)
         {
-            var menu = _serviceUow.MenuService.GetMenuById(request.Id);
+            if (string.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^\\d+$"))
+                return BadRequest(new { Message = "Invalid Id" });
 
-            return new GetMenuByIdResponse
-            {
-                Menu = Mapper.Map<MenuDTO>(menu)
-            };
+            var menu = _serviceUow.MenuService.GetMenuById(long.Parse(id));
+            if (menu == null)
+                return NotFound(new { Message = "could not find menu" });
+
+            return Ok(Mapper.Map<MenuDTO>(menu));
+
         }
 
         [HttpPost]
-        [Route("/Menu/CreateMenu/")]
-        public CreateMenuResponse Post(CreateMenuRequest request)
+        [Route("/Menu")]
+        public ActionResult Create(CreateMenuRequest request)
         {
-            var menu = Mapper.Map<Menu>(request.Menu);
-
-            return new CreateMenuResponse
+            try
             {
-                Menu = Mapper.Map<MenuDTO>(_serviceUow.MenuService.CreateMenu(menu))
-            };
+                var menu = Mapper.Map<MenuDTO>(request.Menu);
+
+                var result = _serviceUow.MenuService.CreateMenu(Mapper.Map<Menu>(menu));
+
+                return Created("/Menu", Mapper.Map<Menu>(result));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
         [HttpPut]
-        [Route("/Menu/UpdateMenu/")]
-        public UpdateMenuResponse Post(UpdateMenuRequest request)
+        [Route("/Menu")]
+        public ActionResult update(UpdateMenuRequest request)
         {
-            var menu = Mapper.Map<Menu>(request.Menu);
-
-            return new UpdateMenuResponse
+            try
             {
-                Menu = Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenu(menu))
-            };
+                var menu = Mapper.Map<MenuDTO>(request.Menu);
+
+                var result = _serviceUow.MenuService.UpdateMenu(Mapper.Map<Menu>(menu));
+
+                return Ok(Mapper.Map<MenuDTO>(result));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
         [HttpGet]
-        [Route("/Menu/GetAllMenu/")]
-        public GetAllMenuResponse Get(GetAllMenuRequest request)
+        [Route("/Menu")]
+        public ActionResult GetAll()
         {
-            var menuList = _serviceUow.MenuService.GetAllMenu();
+            var result = _serviceUow.MenuService.GetAllMenu();
 
-            return new GetAllMenuResponse
-            {
-                Menues = Mapper.Map<List<MenuDTO>>(menuList)
-            };
+            return Ok(Mapper.Map<List<MealDTO>>(result));
 
         }
     }

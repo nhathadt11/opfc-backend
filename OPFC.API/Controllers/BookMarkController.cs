@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -22,51 +23,72 @@ namespace OPFC.API.Controllers
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
-        [Route("/BookMark/CreateBookMark/")]
-        public CreateBookMarkResponse Post(CreateBookMarkRequest request)
+        [Route("/BookMark")]
+        public ActionResult Create(CreateBookMarkRequest request)
         {
-            var bookMark = Mapper.Map<BookMark>(request.BookMark);
-
-            return new CreateBookMarkResponse
+            try
             {
-                BookMark = Mapper.Map<BookMarkDTO>(_serviceUow.BookMarkService.CreateBookMark(bookMark))
-            };
+                var bookMark = Mapper.Map<BookMarkDTO>(request.BookMark);
+
+                var result = _serviceUow.BookMarkService.CreateBookMark(Mapper.Map<BookMark>(bookMark));
+
+                return Created("/BookMark", Mapper.Map<BookMarkDTO>(result));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
         [HttpGet]
-        [Route("/BookMark/GetAllBookMark/")]
-        public GetAllBookMarkResponse Get()
+        [Route("/BookMark")]
+        public ActionResult GetAll()
         {
-            var bookMarks = Mapper.Map<List<BookMarkDTO>>(_serviceUow.BookMarkService.GetAllBookMark());
+            var bookMarks = _serviceUow.BookMarkService.GetAllBookMark();
 
-            return new GetAllBookMarkResponse
-            {
-                BookMarks = bookMarks
-            };
+            return Ok(Mapper.Map<List<BookMarkDTO>>(bookMarks));
         }
 
         [HttpPut]
-        [Route("/BookMark/UpdateBookMark/")]
-        public UpdateBookMarkResponse Post(UpdateBookMarkRequest request)
+        [Route("/BookMark")]
+        public ActionResult Update(UpdateBookMarkRequest request)
         {
-            var bookMark = Mapper.Map<BookMark>(request.BookMark);
-
-            return new UpdateBookMarkResponse
+            try
             {
-                BookMark = Mapper.Map<BookMarkDTO>(_serviceUow.BookMarkService.UpdateBookMark(bookMark))
-            };
+                var bookMark = Mapper.Map<BookMark>(request.BookMark);
+
+                var result = _serviceUow.BookMarkService.UpdateBookMark(Mapper.Map<BookMark>(bookMark));
+
+                return Ok(Mapper.Map<BookMarkDTO>(result));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
         [HttpDelete]
-        [Route("/BookMark/RemoveBookMark/{id}")]
-        public RemoveBookMarkResponse Post(RemoveBookMarkRequest request)
+        [Route("/BookMark/{id}")]
+        public ActionResult Delete(String id)
         {
-            var bookMark = Mapper.Map<BookMark>(request);
+            if (string.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^\\d+$"))
+                return BadRequest(new { Message = "Invalid Id" });
 
-            return new RemoveBookMarkResponse
+            var bookMark = _serviceUow.BookMarkService.GetBookMarkbyId(long.Parse(id));
+
+            if (bookMark == null)
+                return NotFound(new { Message = "Could not find bookmark" });
+
+            try
             {
-                BookMark = Mapper.Map<BookMarkDTO>(_serviceUow.BookMarkService.RemoveBookMark(bookMark))
-            };
+                _serviceUow.BookMarkService.RemoveBookMark(bookMark);
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new {ex.Message});
+            }
+
         }
     }
 }

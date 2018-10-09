@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
@@ -17,51 +18,66 @@ namespace OPFC.API.Controllers
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
-        [Route("/Rating/CreateRating/")]
-        public CreateRatingResponse Post(CreateRatingRequest request)
+        [Route("/Rating")]
+        public ActionResult Create(CreateRatingRequest request)
         {
-            var rating = Mapper.Map<Rating>(request);
-
-            return new CreateRatingResponse
+            try
             {
-                Rating = Mapper.Map<RatingDTO>(_serviceUow.RatingService.CreateRating(rating))
-            };
+                var rating = Mapper.Map<MealDTO>(request.Rating);
+
+                var result = _serviceUow.RatingService.CreateRating(Mapper.Map<Rating>(rating));
+
+                return Created("/Rating", Mapper.Map<RatingDTO>(result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
 
         }
 
         [HttpGet]
-        [Route("/Rating/GetRatingById/{id}")]
-        public GetRatingByIdResponse Get(GetRatingByIdRequest request)
+        [Route("/Meal")]
+        public ActionResult GetAll()
         {
-            var rating = _serviceUow.RatingService.GetRatingById(request.Id);
-            return new GetRatingByIdResponse
+            var ratings = _serviceUow.RatingService.GetAllRating();
+
+            return Ok(Mapper.Map<List<RatingDTO>>(ratings));
+
+        }
+
+        [HttpGet]
+        [Route("/Rating/{id}")]
+        public ActionResult Get(string id)
+        {
+
+            if (string.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^\\d+$"))
+                return BadRequest(new { Message = "Invalid Id" });
+
+            var rating = _serviceUow.RatingService.GetRatingById(long.Parse(id));
+            if (rating == null)
             {
-                Rating = Mapper.Map<RatingDTO>(rating)
-            };
+                return NotFound(new { Message = "Could not find rating" });
+            }
+            return Ok(Mapper.Map<RatingDTO>(rating));
         }
 
         [HttpPut]
-        [Route("/Rating/UpdateRating/")]
-        public UpdateRatingResponse Post(UpdateRatingRequest request)
+        [Route("/Rating")]
+        public ActionResult Update(UpdateRatingRequest request)
         {
-            var rating = Mapper.Map<Rating>(request.Rating);
-
-            return new UpdateRatingResponse
+            try
             {
-                Rating = Mapper.Map<RatingDTO>(_serviceUow.RatingService.UpdateRating(rating))
-            };
-        }
+                var rating = Mapper.Map<RatingDTO>(request.Rating);
 
-        [HttpGet]
-        [Route("/Rating/GetAllRating/")]
-        public GetAllRatingResponse Get()
-        {
-            var ratingList = _serviceUow.RatingService.GetAllRating();
+                var result = _serviceUow.RatingService.UpdateRating(Mapper.Map<Rating>(rating));
 
-            return new GetAllRatingResponse
+                return Ok(Mapper.Map<RatingDTO>(result));
+            }
+            catch (Exception ex)
             {
-                Ratings = Mapper.Map<List<RatingDTO>>(ratingList)
-            };
+                return BadRequest(new { ex.Message });
+            }
 
         }
 

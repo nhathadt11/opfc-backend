@@ -7,6 +7,7 @@ using OPFC.Models;
 using OPFC.Services.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace OPFC.API.Controllers
 {
@@ -19,51 +20,67 @@ namespace OPFC.API.Controllers
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
-        [Route("/Meal/CreatMeal/")]
-        public CreateMealResponse Post(CreateMealRequest request)
+        [Route("/Meal")]
+        public ActionResult Create(CreateMealRequest request)
         {
-            var meal = Mapper.Map<Meal>(request.Meal);
-
-            return new CreateMealResponse
+            try
             {
-                Meal = Mapper.Map<MealDTO>(_serviceUow.MealService.CreateMeal(meal))
-            };
+                var meal = Mapper.Map<MealDTO>(request.Meal);
+
+                var result = _serviceUow.MealService.CreateMeal(Mapper.Map<Meal>(meal));
+
+                return Created("/Meal", Mapper.Map<MealDTO>(result));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+
         }
 
         [HttpGet]
-        [Route("/Meal/GetAllMeal/")]
-        public GetAllMealResponse Get()
+        [Route("/Meal")]
+        public ActionResult GetAll()
         {
             var meals = _serviceUow.MealService.GetAllMeal();
 
-            return new GetAllMealResponse
-            {
-                Meals = Mapper.Map<List<MealDTO>>(meals)
-            };
+            return Ok(Mapper.Map<List<MealDTO>>(meals));
+
         }
 
         [HttpGet]
-        [Route("/Meal/GetMealById/")]
-        public GetMealByIdResponse Get(GetMealByIdRequest request)
+        [Route("/Meal/{id}")]
+        public ActionResult Get(string id)
         {
-            var meal = _serviceUow.MealService.GetMealById(request.Id);
 
-            return new GetMealByIdResponse
+            if (string.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^\\d+$"))
+                return BadRequest(new { Message = "Invalid Id" });
+
+            var meal = _serviceUow.MealService.GetMealById(long.Parse(id));
+            if(meal == null)
             {
-                Meal = Mapper.Map<MealDTO>(meal)
-            };
+                return NotFound(new { Message = "Could not find Meal" });
+            }
+            return Ok(Mapper.Map<MealDTO>(meal));
         }
 
         [HttpPut]
-        [Route("/Meal/UpdateMeal/")]
-        public UpdateMealResponse Post(UpdateMealRequest request)
+        [Route("/Meal")]
+        public ActionResult Update(UpdateMealRequest request)
         {
-            var meal = Mapper.Map<Meal>(request.Meal);
-
-            return new UpdateMealResponse
+            try
             {
-                Meal = Mapper.Map<MealDTO>(_serviceUow.MealService.UpdateMeal(meal))
-            };
+                var meal = Mapper.Map<MealDTO>(request.Meal);
+
+                var result = _serviceUow.MealService.UpdateMeal(Mapper.Map<Meal>(meal));
+
+                return Ok(Mapper.Map<MealDTO>(result));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+
         }
     }
 }

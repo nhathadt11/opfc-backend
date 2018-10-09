@@ -20,7 +20,7 @@ namespace OPFC.API.Controllers
 
         [HttpPost]
         [Route("/Event")]
-        public ActionResult Post(CreateEventRequest request)
+        public ActionResult Create(CreateEventRequest request)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace OPFC.API.Controllers
 
                 var result = _serviceUow.EventService.SaveEvent(Mapper.Map<Event>(eventReq));
 
-                return Created("/Event/CreateEvent", Mapper.Map<EventDTO>(result));
+                return Created("/Event", Mapper.Map<EventDTO>(result));
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace OPFC.API.Controllers
 
         [HttpGet]
         [Route("/Event")]
-        public ActionResult GetAllEvent()
+        public ActionResult GetAll()
         {
             var result = _serviceUow.EventService.GettAllEvent();
 
@@ -47,7 +47,7 @@ namespace OPFC.API.Controllers
 
         [HttpPut]
         [Route("/Event")]
-        public ActionResult Post(UpdateEventRequest request)
+        public ActionResult Update(UpdateEventRequest request)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace OPFC.API.Controllers
 
         [HttpDelete]
         [Route("/Event")]
-        public ActionResult Post(DeleteEventRequest request)
+        public ActionResult Delete(DeleteEventRequest request)
         {
             try
             {
