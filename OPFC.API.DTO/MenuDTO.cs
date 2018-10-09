@@ -15,8 +15,6 @@ namespace OPFC.API.DTO
 
         public bool IsActive { get; set; }
 
-        public bool IsDeleted { get; set; }
-
         public long BrandId { get; set; }
 
         public List<MealDTO> MealList { get; set; }

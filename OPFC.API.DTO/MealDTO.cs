@@ -13,8 +13,6 @@ namespace OPFC.API.DTO
 
         public long MenuId { get; set; }
 
-        public bool? IsDeleted { get; set; }
-
         public DateTime? LastUpdated { get; set; }
     }
 }

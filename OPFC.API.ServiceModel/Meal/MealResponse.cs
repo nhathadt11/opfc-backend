@@ -32,4 +32,11 @@ namespace OPFC.API.ServiceModel.Meal
 
         public MealDTO Meal { get; set; }
     }
+
+    public class DeleteMealResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public MealDTO Meal { get; set; }
+    }
 }

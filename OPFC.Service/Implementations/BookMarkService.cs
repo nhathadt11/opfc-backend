@@ -56,11 +56,11 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public bool RemoveBookMark(BookMark bookMark)
+        public bool DeleteBookMark(BookMark bookMark)
         {
             try
             {
-                var result = _opfcUow.BookMarkRepository.RemoveBookMark(bookMark);
+                var result = _opfcUow.BookMarkRepository.DeleteBookMark(bookMark);
                 _opfcUow.Commit();
                 return true;
             }

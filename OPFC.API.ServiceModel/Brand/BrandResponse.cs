@@ -51,4 +51,11 @@ namespace OPFC.API.ServiceModel.Brand
 
         public List<BrandDTO> Brands { get; set; }
     }
+
+    public class DeleteBrandResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public BrandDTO Brand { get; set; }
+    }
 }

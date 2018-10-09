@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.BookMark;
 using OPFC.API.ServiceModel.Tasks;
@@ -24,7 +24,7 @@ namespace OPFC.API.Services.Implementations
             };
         }
 
-        public RemoveBookMarkResponse Post(RemoveBookMarkRequest request)
+        public DeleteBookMarkResponse Post(DeleteBookMarkRequest request)
         {
             var bookMark = Mapper.Map<BookMark>(request);
 
@@ -34,4 +34,4 @@ namespace OPFC.API.Services.Implementations
             };
         }
     }
-}
+}*/

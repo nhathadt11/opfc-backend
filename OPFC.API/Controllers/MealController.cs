@@ -82,5 +82,43 @@ namespace OPFC.API.Controllers
             }
 
         }
+
+        [HttpDelete]
+        [Route("/Meal")]
+        public ActionResult Delete(DeleteMealRequest request)
+        {
+            try
+            {
+                var meal = Mapper.Map<BrandDTO>(request.Meal);
+
+
+                if (string.IsNullOrEmpty(meal.Id.ToString()) || !Regex.IsMatch((meal.Id.ToString()), "^\\d+$"))
+                    return NotFound(new { Message = "Invalid Id" });
+
+
+                var foundMeal = _serviceUow.MealService.GetMealById(meal.Id);
+                if (foundMeal == null)
+                {
+                    return NotFound(new { Message = " could not find meal to delete" });
+                }
+
+                foundMeal.IsDeleted = true;
+
+                try
+                {
+                    _serviceUow.MealService.UpdateMeal(foundMeal);
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { ex.Message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace OPFC.Repositories.Interfaces
     {
         BookMark CreateBookMark(BookMark bookMark);
 
-        bool RemoveBookMark(BookMark bookMark);
+        bool DeleteBookMark(BookMark bookMark);
 
         BookMark UpdateBookMark(BookMark bookMark);
 

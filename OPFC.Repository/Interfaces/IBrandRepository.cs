@@ -16,6 +16,7 @@ namespace OPFC.Repositories.Interfaces
         Brand UpdateBrand(Brand brand);
 
         List<Brand> GetAllBrand();
+
     }
 
 }
