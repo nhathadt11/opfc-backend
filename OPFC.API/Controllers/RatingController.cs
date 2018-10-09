@@ -54,7 +54,7 @@ namespace OPFC.API.Controllers
 
         [HttpGet]
         [Route("/Rating/GetAllRating/")]
-        public GetAllRatingResponse Get(GetAllRatingRequest request)
+        public GetAllRatingResponse Get()
         {
             var ratingList = _serviceUow.RatingService.GetAllRating();
 
