@@ -72,6 +72,9 @@ namespace OPFC.API.Controllers
 
         [HttpPut("{id}")]
         public IActionResult Update(long id, UpdateMenuRequest request)
+                return Created("/Menu", Mapper.Map<Menu>(result));
+            }
+            catch(Exception ex)
         {
             try
             {
