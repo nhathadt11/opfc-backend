@@ -50,6 +50,11 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Where(b => b.IsActive == true && b.IsDeleted == false).ToList();
         }
 
+        public Brand GetBrandByUserId(long id)
+        {
+            return DbSet.FirstOrDefault(b => b.IsActive == true && b.IsDeleted == false && b.UserId == id);
+        }
+
         public Brand UpdateBrand(Brand brand)
         {
             return DbSet.Update(brand).Entity;

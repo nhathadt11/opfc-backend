@@ -55,7 +55,7 @@ namespace OPFC.Services.Implementations
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 user.Token = tokenHandler.WriteToken(token);
-                user.Password = null;
+//                user.Password = null;
 
                 return user;
             }

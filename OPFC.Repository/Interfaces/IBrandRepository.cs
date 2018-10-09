@@ -1,6 +1,7 @@
 ﻿using OPFC.Models;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Text;
 
 namespace OPFC.Repositories.Interfaces
@@ -16,6 +17,8 @@ namespace OPFC.Repositories.Interfaces
         Brand UpdateBrand(Brand brand);
 
         List<Brand> GetAllBrand();
+
+        Brand GetBrandByUserId(long id);
     }
 
 }

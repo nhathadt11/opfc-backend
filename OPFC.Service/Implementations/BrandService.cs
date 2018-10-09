@@ -122,6 +122,18 @@ namespace OPFC.Services.Implementations
             }
         }
 
+        public Brand GetBrandByUserId(long id)
+        {
+            try
+            {
+                return _opfcUow.BrandRepository.GetBrandByUserId(id);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public List<Brand> GetAllBrand()
         {
             try

@@ -8,6 +8,8 @@ namespace OPFC.API.ServiceModel.User
         public string Message { get; set; }
 
         public UserDTO User { get; set; }
+        
+        public BrandDTO Brand { get; set; }
 
         public string Token { get; set; }
     }
