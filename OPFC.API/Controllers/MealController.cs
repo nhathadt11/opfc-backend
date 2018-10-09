@@ -43,7 +43,7 @@ namespace OPFC.API.Controllers
         }
 
         [HttpGet]
-        [Route("/Meal/GetMealById/{id}")]
+        [Route("/Meal/GetMealById/")]
         public GetMealByIdResponse Get(GetMealByIdRequest request)
         {
             var meal = _serviceUow.MealService.GetMealById(request.Id);
