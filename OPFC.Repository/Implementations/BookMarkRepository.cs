@@ -34,8 +34,7 @@ namespace OPFC.Repositories.Implementations
 
         public List<BookMark> GetAllBookMark()
         {
-            return DbSet.DefaultIfEmpty().ToList();
-
+            return DbSet.ToList();
         }
 
         public BookMark GetBookMarkById(long id)

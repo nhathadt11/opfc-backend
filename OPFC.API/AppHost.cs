@@ -35,7 +35,11 @@ namespace OPFC.API
             container.Register<IServiceProvider>(c => new ServiceProvider(c.TryResolve<ServiceFactories>())).ReusedWithin(ReuseScope.None);
             container.Register<IServiceUow>(c => new ServiceUow(c.TryResolve<IServiceProvider>())).ReusedWithin(ReuseScope.None);
 
-            container.Register<ITask>(t => new CompositeTask(new AutoMapperConfigTask()));
+
+            var mapperConfig = new AutoMapperConfigTask();
+            mapperConfig.ForAllMaps((map, exp) => exp.ForAllOtherMembers(opt => opt.Ignore()));
+
+            container.Register<ITask>(t => new CompositeTask(mapperConfig));
             container.Resolve<ITask>().Execute();
         }
     }

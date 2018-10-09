@@ -42,7 +42,6 @@ namespace OPFC.API.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-
         [HttpGet]
         [Route("/Brand/GetBrandById/{id}")]
         public GetBrandByIdReponse Get(GetBrandByIdRequest request)
