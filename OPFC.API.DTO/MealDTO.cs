@@ -11,8 +11,6 @@ namespace OPFC.API.DTO
 
         public long BrandId { get; set; }
 
-        public bool? IsDeleted { get; set; }
-
         public DateTime? LastUpdated { get; set; }
     }
 }

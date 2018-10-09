@@ -15,6 +15,11 @@ namespace OPFC.API.ServiceModel.Order
     public class UpdateOrderRequest : IReturn<UpdateOrderResponse>
     {
         public OrderDTO order { get; set; }
+    }
 
+    [Route("/Order/DeleteOrder/", "POST")]
+    public class DeleteOrderRequest : IReturn<DeleteOrderResponse>
+    {
+        public OrderDTO order { get; set; }
     }
 }

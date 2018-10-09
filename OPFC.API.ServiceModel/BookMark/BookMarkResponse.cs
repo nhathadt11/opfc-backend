@@ -24,10 +24,12 @@ namespace OPFC.API.ServiceModel.BookMark
         public BookMarkDTO BookMark { get; set; }
     }
 
-    public class RemoveBookMarkResponse
+    public class DeleteBookMarkResponse
     {
         public ResponseStatus ResponseStatus { get; set; }
 
         public BookMarkDTO BookMark { get; set; }
     }
+
+
 }

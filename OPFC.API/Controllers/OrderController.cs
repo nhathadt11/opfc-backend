@@ -85,5 +85,42 @@ namespace OPFC.API.Controllers
             }
 
         }
+
+        [HttpDelete]
+        [Route("/Order")]
+        public ActionResult Delete(DeleteOrderRequest request)
+        {
+            try
+            {
+                var order = Mapper.Map<OrderDTO>(request.order);
+
+
+                if (string.IsNullOrEmpty(order.OrderId.ToString()) || !Regex.IsMatch((order.OrderId.ToString()), "^\\d+$"))
+                    return NotFound(new { Message = "Invalid Id" });
+
+
+                var foundOrder = _serviceUow.OrderService.GetOrderById(order.OrderId);
+                if (foundOrder == null)
+                {
+                    return NotFound(new { Message = " could not find Order to delete" });
+                }
+
+                foundOrder.IsDeleted = true;
+
+                try
+                {
+                    _serviceUow.OrderService.UpdateOrder(foundOrder);
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { ex.Message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
     }
 }

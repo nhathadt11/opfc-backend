@@ -103,7 +103,7 @@ namespace OPFC.API.Controllers
 
             try
             {
-                _serviceUow.BookMarkService.RemoveBookMark(bookMark);
+                _serviceUow.BookMarkService.DeleteBookMark(bookMark);
                 return NoContent();
             }
             catch(Exception ex)
@@ -111,6 +111,43 @@ namespace OPFC.API.Controllers
                 return BadRequest(new {ex.Message});
             }
 
+        }
+
+        [HttpDelete]
+        [Route("/BookMark")]
+        public ActionResult Delete(DeleteBookMarkRequest request)
+        {
+            try
+            {
+                var bookmark = Mapper.Map<BookMarkDTO>(request.BookMark);
+
+
+                if (string.IsNullOrEmpty(bookmark.BookMarkId.ToString()) || !Regex.IsMatch((bookmark.BookMarkId.ToString()), "^\\d+$"))
+                    return NotFound(new { Message = "Invalid Id" });
+
+
+                var foundBookMark = _serviceUow.BookMarkService.GetBookMarkbyId(bookmark.BookMarkId);
+                if (foundBookMark == null)
+                {
+                    return NotFound(new { Message = " could not find BookMark to delete" });
+                }
+
+                foundBookMark.IsDeleted = true;
+
+                try
+                {
+                    _serviceUow.BookMarkService.UpdateBookMark(foundBookMark);
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { ex.Message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
     }

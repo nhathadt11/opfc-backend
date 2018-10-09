@@ -16,4 +16,11 @@ namespace OPFC.API.ServiceModel.Order
 
         public OrderDTO Order { get; set; }
     }
+
+    public class DeleteOrderResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public OrderDTO Order { get; set; }
+    }
 }

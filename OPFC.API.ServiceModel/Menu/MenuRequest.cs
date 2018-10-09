@@ -30,4 +30,11 @@ namespace OPFC.API.ServiceModel.Menu
     public class GetAllMenuRequest : IReturn<GetAllMenuResponse>
     {
     }
+
+    [EnableCors("*", "*")]
+    [Route("/Menu/DeleteMenu/", "POST")]
+    public class DeleteMenuRequest : IReturn<DeleteMenuResponse>
+    {
+        public MenuDTO Menu { get; set; }
+    }
 }

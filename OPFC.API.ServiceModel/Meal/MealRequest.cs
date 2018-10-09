@@ -31,4 +31,11 @@ namespace OPFC.API.ServiceModel.Meal
     {
         public MealDTO Meal { get; set; }
     }
+
+    [EnableCors("*", "*")]
+    [Route("/Meal/DeleteMeal/", "POST")]
+    public class DeleteMealRequest : IReturn<UpdateMealResponse>
+    {
+        public MealDTO Meal { get; set; }
+    }
 }

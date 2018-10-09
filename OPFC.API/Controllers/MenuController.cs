@@ -133,5 +133,42 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("/Meal")]
+        public ActionResult Delete(DeleteMenuRequest request)
+        {
+            try
+            {
+                var menu = Mapper.Map<MenuDTO>(request.Menu);
+
+
+                if (string.IsNullOrEmpty(menu.Id.ToString()) || !Regex.IsMatch((menu.Id.ToString()), "^\\d+$"))
+                    return NotFound(new { Message = "Invalid Id" });
+
+
+                var foundMenu = _serviceUow.MenuService.GetMenuById(menu.Id);
+                if (foundMenu == null)
+                {
+                    return NotFound(new { Message = " could not find menu to delete" });
+                }
+
+                foundMenu.IsDeleted = true;
+
+                try
+                {
+                    _serviceUow.MenuService.UpdateMenu(foundMenu);
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { ex.Message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
     }
 }

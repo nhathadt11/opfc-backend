@@ -14,5 +14,7 @@ namespace OPFC.Models
 
         [ForeignKey("Id")]
         public long MenuId { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
