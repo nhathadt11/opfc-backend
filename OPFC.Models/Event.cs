@@ -35,7 +35,7 @@ namespace OPFC.Models
         public long EventTypeId { get; set;}
 
         [ForeignKey("OrderId")]
-        public long OrderId { get; set; }
+        public long? OrderId { get; set; }
 
         public long UserId { get; set; }
 

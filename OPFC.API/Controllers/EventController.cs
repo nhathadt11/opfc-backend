@@ -105,18 +105,18 @@ namespace OPFC.API.Controllers
             return Ok(eventTypes);
         }
 
-        [HttpGet("{userId}")]
-        public ActionResult<List<EventDTO>> GetAllByUserId(long id)
+        [HttpGet("User/{userId}")]
+        public ActionResult<List<EventDTO>> GetAllByUserId(long userId)
         {
             try
             {
-                var user = _serviceUow.UserService.GetUserById(id);
+                var user = _serviceUow.UserService.GetUserById(userId);
                 if (user == null)
                 {
                     return NotFound("User could not be found.");
                 }
 
-                var eventList = _serviceUow.EventService.GetAllEventByUserId(id);
+                var eventList = _serviceUow.EventService.GetAllEventByUserId(userId);
                 return Ok(Mapper.Map<List<EventDTO>>(eventList));
             }
             catch (Exception e)
