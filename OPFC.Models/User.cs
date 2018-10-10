@@ -30,7 +30,7 @@ namespace OPFC.Models
         /// <summary>
         /// Gets or set the user active flag
         /// </summary>
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets user last updated time
@@ -40,7 +40,7 @@ namespace OPFC.Models
         /// <summary>
         /// Gets or sets user gender
         /// </summary>
-        public bool Gender { get; set; }
+        public bool? Gender { get; set; }
 
         /// <summary>
         /// Gets or sets user phone number
@@ -60,12 +60,12 @@ namespace OPFC.Models
         /// <summary>
         /// Gets or set user is deleted status
         /// </summary>
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
 
         /// <summary>
         /// Foreign key to table UserRole
         /// </summary>
-        public long UserRoleId { get; set; }
+        public long? UserRoleId { get; set; }
 
         /// <summary>
         /// Gets or set user avatar image

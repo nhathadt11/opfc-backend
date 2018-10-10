@@ -33,5 +33,7 @@ namespace OPFC.Services.Interfaces
         User CreateUser(User user);
 
         User Update(User user);
+
+        bool IsUserExist(string userName);
     }
 }

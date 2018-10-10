@@ -67,15 +67,15 @@ namespace OPFC.API.Controllers
         [Route("/User")]
         public IActionResult Update(UpdateUserRequest request)
         {
-            User found = _serviceUow.UserService.GetUserById(request.User.Id);
-            if (found == null) return NotFound(new { Messsage = "User could not be found." }); 
+            var isUserExist = _serviceUow.UserService.IsUserExist(request.User.Username);
+            if (!isUserExist) return NotFound(new { Messsage = "User could not be found." }); 
 
             try
             {
-                User mapped = Mapper.Map(request.User, found);
-                User updated = _serviceUow.UserService.Update(mapped);
-                UserDTO dto = Mapper.Map<UserDTO>(updated);
-                return Ok(dto);
+                var userRequest = Mapper.Map<User>(request.User);
+                var userResult = _serviceUow.UserService.Update(userRequest);
+
+                return Ok(Mapper.Map<UserDTO>(userResult));
             }
             catch (Exception e)
             {

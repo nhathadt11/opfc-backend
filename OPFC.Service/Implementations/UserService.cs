@@ -55,7 +55,7 @@ namespace OPFC.Services.Implementations
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 user.Token = tokenHandler.WriteToken(token);
-//                user.Password = null;
+                //                user.Password = null;
 
                 return user;
             }
@@ -69,9 +69,9 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                var isUserExist =  _opfcUow.UserRepository.IsUserExist(user.Username);
+                var isUserExist = _opfcUow.UserRepository.IsUserExist(user.Username);
 
-                if (isUserExist) throw new Exception($"{user.Username} is already exist!" );
+                if (isUserExist) throw new Exception($"{user.Username} is already exist!");
 
                 user.IsActive = true;
                 user.IsDeleted = false;
@@ -91,11 +91,26 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                return _opfcUow.UserRepository.Update(user);
+                var result = _opfcUow.UserRepository.Update(user);
+                _opfcUow.Commit();
+
+                return result;
             }
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+
+        public bool IsUserExist(string userName)
+        {
+            try
+            {
+                return _opfcUow.UserRepository.IsUserExist(userName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
