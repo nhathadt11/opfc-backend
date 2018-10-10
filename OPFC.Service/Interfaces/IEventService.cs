@@ -11,7 +11,7 @@ namespace OPFC.Services.Interfaces
 
         Event UpdateEvent(Event modifiedEvent);
 
-        bool DeleteEvent(long eventId, long userId);
+        void DeleteEvent(long eventId, long userId);
 
         Event GetEventById(long eventId);
 

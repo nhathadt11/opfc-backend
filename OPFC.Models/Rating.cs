@@ -18,6 +18,6 @@ namespace OPFC.Models
 
         public string Comment { get; set; }
 
-
+        public bool IsDeleted { get; set; }
     }
 }

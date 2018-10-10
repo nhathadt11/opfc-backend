@@ -15,59 +15,97 @@ namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
     [Authorize]
-    [Route("/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MenuController : ControllerBase
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpGet]
-        [Route("/Menu/GetMenuById/{id}")]
-        public GetMenuByIdResponse Get(GetMenuByIdRequest request)
+        public IActionResult GetAll()
         {
-            var menu = _serviceUow.MenuService.GetMenuById(request.Id);
-
-            return new GetMenuByIdResponse
+            try
             {
-                Menu = Mapper.Map<MenuDTO>(menu)
-            };
+                var menuList = _serviceUow.MenuService.GetAllMenu();
+                return Ok(Mapper.Map<List<MenuDTO>>(menuList));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(long id)
+        {
+            try
+            {
+                var found = _serviceUow.MenuService.GetMenuById(id);
+                if (found == null)
+                {
+                    return NotFound("Menu could not be found.");
+                }
+                return Ok(Mapper.Map<MenuDTO>(found));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
-        [Route("/Menu/CreateMenu/")]
-        public CreateMenuResponse Post(CreateMenuRequest request)
+        public IActionResult Create(CreateMenuRequest request)
         {
-            var menu = Mapper.Map<Menu>(request.Menu);
-
-            return new CreateMenuResponse
+            try
             {
-                Menu = Mapper.Map<MenuDTO>(_serviceUow.MenuService.CreateMenu(menu))
-            };
+                var menu = Mapper.Map<Menu>(request.Menu);
+                var created = _serviceUow.MenuService.CreateMenu(menu);
+                return Created("/Menu", Mapper.Map<MenuDTO>(created));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        [HttpPut]
-        [Route("/Menu/UpdateMenu/")]
-        public UpdateMenuResponse Post(UpdateMenuRequest request)
+        [HttpPut("{id}")]
+        public IActionResult Update(long id, UpdateMenuRequest request)
         {
-            var menu = Mapper.Map<Menu>(request.Menu);
-
-            return new UpdateMenuResponse
+            try
             {
-                Menu = Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenu(menu))
-            };
+                var found = _serviceUow.MenuService.GetMenuById(id);
+                if (found == null)
+                {
+                    return NotFound("Menu could not be found.");
+                }
+
+                var updated = Mapper.Map<Menu>(request.Menu);
+                return Ok(Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenu(updated)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        [HttpGet]
-        [Route("/Menu/GetAllMenu/")]
-        public GetAllMenuResponse Get(GetAllMenuRequest request)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
         {
-            var menuList = _serviceUow.MenuService.GetAllMenu();
-
-            return new GetAllMenuResponse
+            try
             {
-                Menues = Mapper.Map<List<MenuDTO>>(menuList)
-            };
+                var found = _serviceUow.MenuService.GetMenuById(id);
+                if (found == null)
+                {
+                    return NotFound("Menu could not be found.");
+                }
 
+               _serviceUow.MenuService.DeleteMenuById(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

@@ -65,7 +65,7 @@ namespace OPFC.API.ServiceModel.Tasks
             Mapper.Initialize(x =>
             {
                 x.AddProfile<AutoMapperConfigTask>();
-                x.ForAllMaps((map, exp) => exp.ForAllOtherMembers(opt => opt.Ignore()));
+//                x.ForAllMaps((map, exp) => exp.ForAllOtherMembers(opt => opt.Ignore()));
             });
         }
     }

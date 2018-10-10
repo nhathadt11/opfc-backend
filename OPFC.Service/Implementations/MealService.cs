@@ -21,56 +21,39 @@ namespace OPFC.Services.Implementations
 
         public Meal CreateMeal(Meal meal)
         {
-            try
-            {
-                meal.LastUpdated = DateTime.UtcNow;
+            meal.LastUpdated = DateTime.UtcNow;
 
-                var result = _opfcUow.MealRepository.CreateMeal(meal);
-                _opfcUow.Commit();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var result = _opfcUow.MealRepository.CreateMeal(meal);
+            _opfcUow.Commit();
+            return result;
         }
 
         public List<Meal> GetAllMeal()
         {
-            try
+            return _opfcUow.MealRepository.GetAll().ToList();
+        }
+
+        public void DeleteMeal(Meal meal)
+        {   
+            meal.IsDeleted = true;
+            if (UpdateMeal(meal) == null)
             {
-                return _opfcUow.MealRepository.GetAll().ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
+                throw new Exception("Event could not be deleted.");
             }
         }
 
         public Meal GetMealById(long id)
         {
-            try
-            {
-                return _opfcUow.MealRepository.GetById(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return _opfcUow.MealRepository.GetById(id);
         }
 
         public Meal UpdateMeal(Meal meal)
         {
-            try
-            {
-                var result = _opfcUow.MealRepository.UpdateMeal(meal);
-                _opfcUow.Commit();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var result = _opfcUow.MealRepository.UpdateMeal(meal);
+            _opfcUow.Commit();
+            return result;
         }
+        
+        
     }
 }

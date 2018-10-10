@@ -11,6 +11,6 @@ namespace OPFC.Services.Interfaces
         Meal GetMealById(long id);
         Meal UpdateMeal(Meal meal);
         List<Meal> GetAllMeal();
-
+        void DeleteMeal(Meal meal);
     }
 }
