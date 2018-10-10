@@ -65,13 +65,18 @@ namespace OPFC.Services.Implementations
 
                 if (isUserExist) throw new Exception($"{user.Username} is already exist!");
 
-            user.IsActive = true;
-            user.IsDeleted = false;
+                user.IsActive = true;
+                user.IsDeleted = false;
 
-            var result = _opfcUow.UserRepository.CreateUser(user);
-            _opfcUow.Commit();
+                var result = _opfcUow.UserRepository.CreateUser(user);
+                _opfcUow.Commit();
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public User Update(User user)
