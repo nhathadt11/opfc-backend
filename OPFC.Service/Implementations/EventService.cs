@@ -3,6 +3,7 @@ using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace OPFC.Services.Implementations
@@ -37,9 +38,17 @@ namespace OPFC.Services.Implementations
             return _opfcUow.EventRepository.GetEventById(eventId);
         }
 
-        public List<Event> GettAllEvent()
+        public List<Event> GetAllEvent()
         {
             return _opfcUow.EventRepository.GettAllEvent();
+        }
+
+        public List<Event> GetAllEventByUserId(long userId)
+        {
+            return _opfcUow.EventRepository
+                .GettAllEvent()
+                .Where(e => e.UserId == userId)
+                .ToList();
         }
 
         public Event SaveEvent(Event newEvent)

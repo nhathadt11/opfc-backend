@@ -39,7 +39,7 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var result = _serviceUow.EventService.GettAllEvent();
+                var result = _serviceUow.EventService.GetAllEvent();
                 return Ok(Mapper.Map<List<EventDTO>>(result));
             }
             catch (Exception e)
@@ -103,6 +103,26 @@ namespace OPFC.API.Controllers
 
             var eventTypes = Mapper.Map<List<EventTypeDTO>>(_serviceUow.EventTypeService.GetAllEventType());
             return Ok(eventTypes);
+        }
+
+        [HttpGet("{userId}")]
+        public ActionResult<List<EventDTO>> GetAllByUserId(long id)
+        {
+            try
+            {
+                var user = _serviceUow.UserService.GetUserById(id);
+                if (user == null)
+                {
+                    return NotFound("User could not be found.");
+                }
+
+                var eventList = _serviceUow.EventService.GetAllEventByUserId(id);
+                return Ok(Mapper.Map<List<EventDTO>>(eventList));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

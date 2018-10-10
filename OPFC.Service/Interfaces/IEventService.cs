@@ -15,6 +15,8 @@ namespace OPFC.Services.Interfaces
 
         Event GetEventById(long eventId);
 
-        List<Event> GettAllEvent();
+        List<Event> GetAllEvent();
+
+        List<Event> GetAllEventByUserId(long userId);
     }
 }
