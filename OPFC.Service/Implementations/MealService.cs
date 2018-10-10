@@ -42,6 +42,14 @@ namespace OPFC.Services.Implementations
             }
         }
 
+        public List<Meal> GetAllByBrandId(long brandId)
+        {
+            return _opfcUow.MealRepository
+                .GetAll()
+                .Where(m => m.BrandId == brandId)
+                .ToList();
+        }
+
         public Meal GetMealById(long id)
         {
             return _opfcUow.MealRepository.GetById(id);

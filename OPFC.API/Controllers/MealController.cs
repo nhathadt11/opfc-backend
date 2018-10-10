@@ -106,5 +106,25 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet("Brand/{brandId}")]
+        public IActionResult GetAllByBrandId(long brandId)
+        {
+            try
+            {
+                var foundBrand = _serviceUow.BrandService.GetBrandById(brandId);
+                if (foundBrand == null)
+                {
+                    return NotFound("Brand could not be found.");
+                }
+
+                List<Meal> mealList = _serviceUow.MealService.GetAllByBrandId(brandId);
+                return Ok(Mapper.Map<List<MealDTO>>(mealList));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
