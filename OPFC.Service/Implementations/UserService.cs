@@ -33,36 +33,28 @@ namespace OPFC.Services.Implementations
 
         public User Authenticate(string username, string password)
         {
-            try
+            var secret = AppSettings.Secret;
+
+            var user = _opfcUow.UserRepository.GetUserLogin(username, password);
+
+            if (user == null) return null;
+
+            // authentication successful so generate jwt token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                var secret = AppSettings.Secret;
+                Subject = new ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddHours(1 * 24 * 10),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
 
-                var user = _opfcUow.UserRepository.GetUserLogin(username, password);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            user.Token = tokenHandler.WriteToken(token);
 
-                if (user == null) return null;
-
-                // authentication successful so generate jwt token
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(secret);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[] {
-                        new Claim(ClaimTypes.Name, user.Id.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                user.Token = tokenHandler.WriteToken(token);
-                //                user.Password = null;
-
-                return user;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return user;
         }
 
         public User CreateUser(User user)
@@ -73,18 +65,13 @@ namespace OPFC.Services.Implementations
 
                 if (isUserExist) throw new Exception($"{user.Username} is already exist!");
 
-                user.IsActive = true;
-                user.IsDeleted = false;
+            user.IsActive = true;
+            user.IsDeleted = false;
 
-                var result = _opfcUow.UserRepository.CreateUser(user);
-                _opfcUow.Commit();
+            var result = _opfcUow.UserRepository.CreateUser(user);
+            _opfcUow.Commit();
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return result;
         }
 
         public User Update(User user)
@@ -120,15 +107,8 @@ namespace OPFC.Services.Implementations
         /// <returns></returns>
         public List<User> GetAllUser()
         {
-            try
-            {
-                var userList = _opfcUow.UserRepository.GetAllUsers();
-                return userList;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            var userList = _opfcUow.UserRepository.GetAllUsers();
+            return userList;
         }
 
         /// <summary>
@@ -138,14 +118,7 @@ namespace OPFC.Services.Implementations
         /// <returns>User model</returns>
         public User GetUserById(long id)
         {
-            try
-            {
-                return _opfcUow.UserRepository.GetById(id);
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return _opfcUow.UserRepository.GetById(id);
         }
     }
 }

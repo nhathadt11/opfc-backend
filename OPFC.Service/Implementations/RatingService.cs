@@ -17,55 +17,40 @@ namespace OPFC.Services.Implementations
 
         public Rating CreateRating(Rating rating)
         {
-            try
-            {
-                var result = _opfcUow.RatingRepository.CreateRating(rating);
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return _opfcUow.RatingRepository.CreateRating(rating);
         }
 
         public List<Rating> GetAllRating()
         {
-            try
+            return _opfcUow.RatingRepository.GetAllRating();
+        }
+
+        public void DeleteRatingById(long id)
+        {
+            var found = GetRatingById(id);
+            if (found == null)
             {
-                return _opfcUow.RatingRepository.GetAllRating();
+                throw new Exception("Rating could not be found.");
             }
-            catch (Exception ex)
+
+            found.IsDeleted = true;
+            if (UpdateRating(found) == null)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Rating could not be updated.");
             }
         }
 
         public Rating GetRatingById(long id)
         {
-            try
-            {
-                return _opfcUow.RatingRepository.GetRatingById(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return _opfcUow.RatingRepository.GetRatingById(id);
         }
 
         public Rating UpdateRating(Rating rating)
         {
-            try
-            {
-                var result = _opfcUow.RatingRepository.UpdateRating(rating);
-                _opfcUow.Commit();
+            var result = _opfcUow.RatingRepository.UpdateRating(rating);
+            _opfcUow.Commit();
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return result;
         }
     }
 }

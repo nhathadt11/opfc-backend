@@ -3,6 +3,7 @@ using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace OPFC.Services.Implementations
@@ -16,82 +17,55 @@ namespace OPFC.Services.Implementations
             _opfcUow = opfcUow;
         }
 
-        public bool DeleteEvent(long eventId, long userId)
+        public void DeleteEvent(long eventId, long userId)
         {
-            var result = false;
-
-            try
+            var aEvent = GetEventById(eventId);
+    
+            if (aEvent == null)
             {
-                var evn = GetEventById(eventId);
-
-                if (evn != null)
-                {
-                    evn.IsDeleted = true;
-                    result = UpdateEvent(evn) != null;
-                }
+                throw new Exception("Event could not be found.");
             }
-            catch (Exception ex)
+            
+            aEvent.IsDeleted = true;
+            if (UpdateEvent(aEvent) == null)
             {
-                result = false;
+                throw new Exception("Event could not be deleted.");
             }
-
-            return result;
         }
 
         public Event GetEventById(long eventId)
         {
-            try
-            {
-                return _opfcUow.EventRepository.GetEventById(eventId);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return _opfcUow.EventRepository.GetEventById(eventId);
         }
 
-        public List<Event> GettAllEvent()
+        public List<Event> GetAllEvent()
         {
-            try
-            {
-                var result = _opfcUow.EventRepository.GettAllEvent();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return _opfcUow.EventRepository.GettAllEvent();
+        }
+
+        public List<Event> GetAllEventByUserId(long userId)
+        {
+            return _opfcUow.EventRepository
+                .GettAllEvent()
+                .Where(e => e.UserId == userId)
+                .ToList();
         }
 
         public Event SaveEvent(Event newEvent)
         {
-            try
-            {
-                newEvent.IsDeleted = false;
-                var result = _opfcUow.EventRepository.SaveEvent(newEvent);
-                _opfcUow.Commit();
+            newEvent.IsDeleted = false;
+            var result = _opfcUow.EventRepository.SaveEvent(newEvent);
+            _opfcUow.Commit();
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return result;
         }
 
         public Event UpdateEvent(Event modifiedEvent)
         {
-            try
-            {
-                var result = _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
-                _opfcUow.Commit();
+            var result = _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
+            _opfcUow.Commit();
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return result;
         }
     }
 }

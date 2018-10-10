@@ -18,7 +18,7 @@ namespace OPFC.Repositories.Implementations
 
         public List<Meal> GetAllMeal()
         {
-            return DbSet.DefaultIfEmpty().ToList();
+            return DbSet.Where(m => m.IsDeleted == false).ToList();
         }
 
         public Meal GetMealById(long id)

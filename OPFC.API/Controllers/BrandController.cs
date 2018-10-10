@@ -18,87 +18,127 @@ namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
     [Authorize]
-    [Route("/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class BrandController : ControllerBase
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
-        [HttpPost]
-        [Route("/Brand/ChangeBrandStatus/")]
-        public ChangeBrandStatusResponse Post(ChangeBrandStatusRequest request)
+        [HttpPost("ChangeStatus/{id}/status/{active}")]
+        public IActionResult ChangeStatus(long id, bool active)
         {
-            var brandId = request.Id;
-            var isActive = request.IsActive;
-
-            return new ChangeBrandStatusResponse
+            try
             {
-                IsSuccess = _serviceUow.BrandService.ChangeBrandStatus(brandId, isActive)
-            };
+                return Ok(Mapper.Map<BrandDTO>(_serviceUow.BrandService.ChangeBrandStatus(id, active)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         [HttpGet]
-        [Route("/Brand/GetBrandById/{id}")]
-        public GetBrandByIdReponse Get(GetBrandByIdRequest request)
+        public IActionResult GetAll()
         {
-            var brand = _serviceUow.BrandService.GetBrandById(request.Id);
-
-            return new GetBrandByIdReponse
+            try
             {
-                Brand = Mapper.Map<BrandDTO>(brand)
-            };
+                return Ok(Mapper.Map<List<BrandDTO>>(_serviceUow.BrandService.GetAllBrand()));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-
-        [HttpPost]
-        [Route("/Brand/CreateBrand/")]
-        public CreateBrandResponse Post(CreateBrandRequest request)
+        [HttpGet("{id}")]
+        public IActionResult Get(long id)
         {
-            var brand = Mapper.Map<Brand>(request);
-
-            return new CreateBrandResponse
+            try
             {
-                Brand = Mapper.Map<BrandDTO>(_serviceUow.BrandService.CreateBrand(brand))
-            };
-        }
+                var found = _serviceUow.BrandService.GetBrandById(id);
+                if (found == null)
+                {
+                    return NotFound("Brand could not be found.");
+                }
 
-        [HttpPost]
-        [Route("/Brand/CreateCaterer/")]
-        public CreateCatererResponse Post(CreateCatererRequest request)
-        {
-            var caterer = Mapper.Map<Caterer>(request);
-
-            return new CreateCatererResponse
+                return Ok(Mapper.Map<BrandDTO>(found));
+            }
+            catch (Exception e)
             {
-                Caterer = Mapper.Map<CatererDTO>(_serviceUow.BrandService.CreateCaterer(caterer))
-            };
-        }
-
-        [HttpPut]
-        [Route("/Brand/UpdateBrand/")]
-        public UpdateBrandResponse Post(UpdateBrandRequest request)
-        {
-            var brand = Mapper.Map<Brand>(request.Brand);
-
-            return new UpdateBrandResponse
-            {
-                Brand = Mapper.Map<BrandDTO>(_serviceUow.BrandService.UpdateBrand(brand))
-            };
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
-        [Route("/Photo/SavePhoto/")]
-        public SavePhotoResponse Post(SavePhotoRequest request)
+        public IActionResult Create(CreateBrandRequest request)
+        {
+            try
+            {
+                var brand = Mapper.Map<Brand>(request);
+                return Created("/Brand", Mapper.Map<BrandDTO>(_serviceUow.BrandService.CreateBrand(brand)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("CreateCaterer")]
+        public IActionResult CreateCaterer(CreateCatererRequest request)
+        {
+            try
+            {
+                var caterer = Mapper.Map<Caterer>(request);
+                return Ok(Mapper.Map<CatererDTO>(_serviceUow.BrandService.CreateCaterer(caterer)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(long id, UpdateBrandRequest request)
+        {
+            try
+            {
+                var found = _serviceUow.BrandService.GetBrandById(id);
+                if (found == null)
+                {
+                    return NotFound("Brand could not be found");
+                }
+
+                var brand = Mapper.Map<Brand>(request.Brand);
+                return Ok(Mapper.Map<BrandDTO>(_serviceUow.BrandService.UpdateBrand(brand)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            try
+            {
+                var found = _serviceUow.BrandService.GetBrandById(id);
+                if (found == null)
+                {
+                    return NotFound("Brand could not be found");
+                }
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("Photo/SavePhoto/")]
+        public SavePhotoResponse SavePhoto(SavePhotoRequest request)
         {
             try
             {
