@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using OPFC.API.DTO;
-using OPFC.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace OPFC.API.ServiceModel.Tasks
 {
@@ -72,21 +67,6 @@ namespace OPFC.API.ServiceModel.Tasks
             });
 
 
-        }
-    }
-    public static class Exstenssion
-    {
-        public static IMappingExpression<TSource, TDestination>
-            IgnoreAllNonExisting<TSource, TDestination>(this IMappingExpression<TSource, TDestination> expression)
-        {
-            var sourceType = typeof(TSource);
-            var destinationType = typeof(TDestination);
-            var existingMaps = Mapper.Configuration.GetAllTypeMaps().FirstOrDefault(x => x.SourceType.Equals(sourceType) && x.DestinationType.Equals(destinationType));
-            foreach (var property in existingMaps.GetUnmappedPropertyNames())
-            {
-                expression.ForMember(property, opt => opt.Ignore());
-            }
-            return expression;
         }
     }
 }
