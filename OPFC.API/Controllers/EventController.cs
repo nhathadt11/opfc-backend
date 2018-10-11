@@ -99,7 +99,6 @@ namespace OPFC.API.Controllers
         [Route("/Event/GetAllEventType")]
         public ActionResult GetAllEventType()
         {
-            var userId = HttpContext.User?.Identity?.Name;
 
             var eventTypes = Mapper.Map<List<EventTypeDTO>>(_serviceUow.EventTypeService.GetAllEventType());
             return Ok(eventTypes);
