@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OPFC.API.ServiceModel.Order;
 using OPFC.Models;
 using OPFC.Repositories.Interfaces;
 
@@ -7,7 +8,7 @@ namespace OPFC.Services.Interfaces
 {
     public interface IOrderService
     {
-        Order CreateOrder(Order order);
+        Order CreateOrder(CreateOrderRequest orderRequest);
         Order UpdateOrder(Order order);
         bool DeleteOrder(Order order);
         List<Order> GetAllOrder();

@@ -8,6 +8,7 @@ namespace OPFC.Models
     public class Order
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrderId { get; set; }
 
         public long UserId { get; set; }

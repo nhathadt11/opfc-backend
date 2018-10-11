@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Order;
+using OPFC.API.ServiceModel.Order;
+using OPFC.Models;
 using OPFC.Models;
 using OPFC.Services.UnitOfWork;
 
@@ -16,33 +18,27 @@ namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
     [Authorize]
-    [Route("/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
-        [Route("/Order")]
-        public ActionResult Create(CreateOrderRequest request)
+        public ActionResult Create(CreateOrderRequest orderRequest)
         {
             try
             {
-                var order = Mapper.Map<OrderDTO>(request.order);
-
-                var result = _serviceUow.OrderService.CreateOrder(Mapper.Map<Order>(order));
-
-                return Created("/Order", Mapper.Map<OrderDTO>(result));
+                Order created = _serviceUow.OrderService.CreateOrder(orderRequest);
+                return Created("/Order", created);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return BadRequest(new { ex.Message });
+                return BadRequest(e.Message);
             }
-
         }
 
-        [HttpGet]
-        [Route("/Order")]
+        [HttpGet("/Order")]
         public ActionResult GetAll()
         {
             var orders = _serviceUow.OrderService.GetAllOrder();
@@ -51,8 +47,7 @@ namespace OPFC.API.Controllers
 
         }
 
-        [HttpGet]
-        [Route("/Order/{id}")]
+        [HttpGet("/Order/{id}")]
         public ActionResult Get(string id)
         {
 
@@ -67,8 +62,7 @@ namespace OPFC.API.Controllers
             return Ok(Mapper.Map<OrderDTO>(order));
         }
 
-        [HttpPut]
-        [Route("/Order")]
+        [HttpPut("/Order")]
         public ActionResult Update(UpdateOrderRequest request)
         {
             try
@@ -86,8 +80,7 @@ namespace OPFC.API.Controllers
 
         }
 
-        [HttpDelete]
-        [Route("/Order")]
+        [HttpDelete("/Order")]
         public ActionResult Delete(DeleteOrderRequest request)
         {
             try

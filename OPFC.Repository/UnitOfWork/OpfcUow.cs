@@ -45,6 +45,7 @@ namespace OPFC.Repositories.UnitOfWork
         public IEventTypeRepository EventTypeRepository { get { return GetRepo<IEventTypeRepository>(); } }
         public IMenuMealRepository MenuMealRepository { get { return GetRepo<IMenuMealRepository>(); } }
         public IServiceLocationRepository ServiceLocationRepository { get { return GetRepo<IServiceLocationRepository>(); } }
+        public IOrderLineRepository OrderLineRepository { get{ return GetRepo<IOrderLineRepository>(); } }
         public IDistrictRepository DistrictRepository { get { return GetRepo<IDistrictRepository>(); } }
         public ICityRepository CityRepository { get { return GetRepo<ICityRepository>(); } }
 

@@ -22,7 +22,8 @@ namespace OPFC.Models
 
         public long BrandId { get; set; }
 
-//        [ForeignKey("MenuId")]
+        public decimal Price { get; set; }
+
         public List<Meal> MealList { get; set; }
 
 //        [ForeignKey("MenuId")]
