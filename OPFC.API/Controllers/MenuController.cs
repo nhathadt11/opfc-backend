@@ -21,6 +21,7 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -35,6 +36,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
@@ -108,6 +110,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("Brand/{brandId}")]
         public ActionResult GetAllMenuByBrandId(long brandId)
         {

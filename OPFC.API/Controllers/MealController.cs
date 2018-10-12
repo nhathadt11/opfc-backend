@@ -107,6 +107,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("Brand/{brandId}")]
         public IActionResult GetAllByBrandId(long brandId)
         {
