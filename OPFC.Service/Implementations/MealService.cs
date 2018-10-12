@@ -30,7 +30,7 @@ namespace OPFC.Services.Implementations
 
         public List<Meal> GetAllMeal()
         {
-            return _opfcUow.MealRepository.GetAll().ToList();
+            return _opfcUow.MealRepository.GetAllMeal();
         }
 
         public void DeleteMeal(Meal meal)
@@ -46,7 +46,7 @@ namespace OPFC.Services.Implementations
         public List<Meal> GetAllByBrandId(long brandId)
         {
             return _opfcUow.MealRepository
-                .GetAll()
+                .GetAllMeal()
                 .Where(m => m.BrandId == brandId)
                 .ToList();
         }
@@ -70,7 +70,7 @@ namespace OPFC.Services.Implementations
                 .Select(m => m.Id);
 
             var mealList = _opfcUow.MealRepository
-                .GetAll()
+                .GetAllMeal()
                 .Where(m => menuMealIdList.Contains(m.Id))
                 .ToList();
 
