@@ -37,6 +37,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -50,6 +51,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {

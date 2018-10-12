@@ -72,8 +72,8 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var found = _serviceUow.MealService.GetMealById(id);
-                if (found == null)
+                var found = _serviceUow.MealService.isExist(id);
+                if (!found)
                 {
                     return NotFound("Meal could not be found.");
                 }
@@ -92,13 +92,13 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var found = _serviceUow.MealService.GetMealById(id);
-                if (found == null)
+                var found = _serviceUow.MealService.isExist(id);
+                if (!found)
                 {
                     return NotFound("Meal could not be found.");
                 }
 
-                _serviceUow.MealService.DeleteMeal(found);
+                _serviceUow.MealService.DeleteMealById(id);
                 return NoContent();
             }
             catch (Exception e)
@@ -107,6 +107,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("Brand/{brandId}")]
         public IActionResult GetAllByBrandId(long brandId)
         {

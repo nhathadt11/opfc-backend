@@ -21,6 +21,7 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -35,6 +36,7 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
@@ -101,6 +103,27 @@ namespace OPFC.API.Controllers
 
                _serviceUow.MenuService.DeleteMenuById(id);
                 return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Brand/{brandId}")]
+        public ActionResult GetAllMenuByBrandId(long brandId)
+        {
+            try
+            {
+                var menuList = _serviceUow.MenuService.GetAllMenuByBrandId(brandId);
+                foreach (var menu in menuList)
+                {
+                    var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
+                    menu.MealList = mealList;
+                }
+
+                return Ok(menuList);
             }
             catch (Exception e)
             {

@@ -12,5 +12,7 @@ namespace OPFC.Repositories.Interfaces
         Menu GetMenuById(long MenuId);
 
         List<Menu> GetAllMenu();
+
+        List<Menu> GetAllByBrandId(long id);
     }
 }

@@ -16,8 +16,6 @@ namespace OPFC.Models
 
         public long BrandId { get; set; }
 
-        public long? MenuId { get; set; }
-
         public bool IsDeleted { get; set; }
 
         public DateTime LastUpdated { get; set; }

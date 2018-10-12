@@ -10,5 +10,6 @@ namespace OPFC.Services.Interfaces
         Menu UpdateMenu(Menu menu);
         List<Menu> GetAllMenu();
         void DeleteMenuById(long id);
+        List<Menu> GetAllMenuByBrandId(long id);
     }
 }
