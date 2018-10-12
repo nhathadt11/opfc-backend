@@ -37,7 +37,7 @@ namespace OPFC.API.Controllers
         }
 
         [HttpGet]
-        [Route("/Meal")]
+        [Route("/Rating")]
         public ActionResult GetAll()
         {
             var ratings = _serviceUow.RatingService.GetAllRating();

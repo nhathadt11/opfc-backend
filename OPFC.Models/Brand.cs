@@ -80,5 +80,8 @@ namespace OPFC.Models
 
         [ForeignKey("BrandId")]
         public List<Transaction> TransactionList { get; set; }
+
+        [ForeignKey("BrandId")]
+        public List<ServiceLocation> ServiceLocationList { get; set; }
     }
 }

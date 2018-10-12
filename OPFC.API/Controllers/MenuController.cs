@@ -79,7 +79,7 @@ namespace OPFC.API.Controllers
         {
             var result = _serviceUow.MenuService.GetAllMenu();
 
-            return Ok(Mapper.Map<List<MealDTO>>(result));
+            return Ok(Mapper.Map<List<MenuDTO>>(result));
 
         }
 
