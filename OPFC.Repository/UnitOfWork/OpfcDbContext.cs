@@ -72,5 +72,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[EventType]
         /// </summary>
         public DbSet<EventType> EventType { get; set; }
+        
+        /// <summary>
+        /// [dbo].[EventType]
+        /// </summary>
+        public DbSet<MenuMeal> MenuMeal { get; set; }
     }
 }

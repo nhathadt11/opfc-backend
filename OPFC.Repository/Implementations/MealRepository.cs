@@ -21,6 +21,11 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Where(m => m.IsDeleted == false).ToList();
         }
 
+        public bool isExist(long id)
+        {
+            return DbSet.Any(m => m.Id == id);
+        }
+
         public Meal GetMealById(long id)
         {
             return DbSet.SingleOrDefault(m => m.Id == id && m.IsDeleted == false);

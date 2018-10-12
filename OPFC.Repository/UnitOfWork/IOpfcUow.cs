@@ -68,6 +68,8 @@ namespace OPFC.Repositories.UnitOfWork
         IEventRepository EventRepository { get; }
 
         IEventTypeRepository EventTypeRepository { get; }
+        
+        IMenuMealRepository MenuMealRepository { get; }
 
         /// <summary>
         /// Dispose

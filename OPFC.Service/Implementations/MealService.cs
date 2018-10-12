@@ -40,6 +40,7 @@ namespace OPFC.Services.Implementations
             {
                 throw new Exception("Event could not be deleted.");
             }
+            _opfcUow.Commit();
         }
 
         public List<Meal> GetAllByBrandId(long brandId)
@@ -48,6 +49,32 @@ namespace OPFC.Services.Implementations
                 .GetAll()
                 .Where(m => m.BrandId == brandId)
                 .ToList();
+        }
+
+        public bool isExist(long id)
+        {
+            return _opfcUow.MealRepository.isExist(id);
+        }
+
+        public void DeleteMealById(long id)
+        {
+            var found = _opfcUow.MealRepository.GetMealById(id);
+            found.IsDeleted = true;
+            DeleteMeal(found);
+        }
+
+        public List<Meal> GetAllMealByMenuId(long id)
+        {
+            var menuMealIdList = _opfcUow.MenuMealRepository
+                .GetByMenuId(id)
+                .Select(m => m.Id);
+
+            var mealList = _opfcUow.MealRepository
+                .GetAll()
+                .Where(m => menuMealIdList.Contains(m.Id))
+                .ToList();
+
+            return mealList;
         }
 
         public Meal GetMealById(long id)
@@ -60,8 +87,6 @@ namespace OPFC.Services.Implementations
             var result = _opfcUow.MealRepository.UpdateMeal(meal);
             _opfcUow.Commit();
             return result;
-        }
-        
-        
+        }   
     }
 }

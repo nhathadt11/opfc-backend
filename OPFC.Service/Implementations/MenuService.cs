@@ -44,6 +44,11 @@ namespace OPFC.Services.Implementations
             }
         }
 
+        public List<Menu> GetAllMenuByBrandId(long id)
+        {
+            return _opfcUow.MenuRepository.GetAllByBrandId(id);
+        }
+
         public Menu GetMenuById(long id)
         {
             return _opfcUow.MenuRepository.GetMenuById(id);
