@@ -34,7 +34,7 @@ namespace OPFC.Repositories.UnitOfWork
         public IRatingRepository RatingRepository { get { return GetRepo<IRatingRepository>(); }}
         public IBookMarkRepository BookMarkRepository { get { return GetRepo<IBookMarkRepository>(); }}
         public ITransactionRepository TransactionRepository { get { return GetRepo<ITransactionRepository>(); }}
-        public IOrderRepository OrderRepository { get { return GetRepo<IOrderRepository>(); } }
+        public IOrderRepository OrderRepository { get { return GetRepo<IOrderRepository>(); }}
         public ITransactionDetailRepository TransactionDetailRepository { get { return GetRepo<ITransactionDetailRepository>(); } }
         public IMenuRepository MenuRepository { get { return GetRepo<IMenuRepository>(); }}
         public IMealRepository MealRepository { get { return GetRepo<IMealRepository>(); }}
@@ -44,6 +44,10 @@ namespace OPFC.Repositories.UnitOfWork
         public IEventRepository EventRepository { get { return GetRepo<IEventRepository>(); } }
         public IEventTypeRepository EventTypeRepository { get { return GetRepo<IEventTypeRepository>(); } }
         public IMenuMealRepository MenuMealRepository { get { return GetRepo<IMenuMealRepository>(); } }
+        public IServiceLocationRepository ServiceLocationRepository { get { return GetRepo<IServiceLocationRepository>(); } }
+        public IDistrictRepository DistrictRepository { get { return GetRepo<IDistrictRepository>(); } }
+        public ICityRepository CityRepository { get { return GetRepo<ICityRepository>(); } }
+
 
         /// <summary>
         /// Create new OpfcDbContext

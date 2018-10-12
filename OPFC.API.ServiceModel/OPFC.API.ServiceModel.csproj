@@ -15,6 +15,7 @@
     <Folder Include="Order\" />
     <Folder Include="BookMark\" />
     <Folder Include="Rating\" />
+    <Folder Include="CityDistrict\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -21,6 +21,9 @@ namespace OPFC.Repositories.Factory
             // TODO: Register repository here
             return new Dictionary<Type, Func<DbContext, object>>
                 {
+                {typeof(ICityRepository), dbContext => new CityRepository(dbContext)},
+                {typeof(IDistrictRepository), dbContext => new DistrictRepository(dbContext)},
+                {typeof(IServiceLocationRepository), dbContext => new ServiceLocationRepository(dbContext)},
                 {typeof(IRatingRepository), dbContext => new RatingRepository(dbContext)},
                 {typeof(IOrderRepository), dbContext => new OrderRepository(dbContext)},
                 {typeof(IMenuRepository), dbContext => new MenuRepository(dbContext)},
