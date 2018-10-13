@@ -7,17 +7,9 @@ namespace OPFC.API.ServiceModel.Order
     [Route("/Order/CreateOrder/","POST")]
     public class CreateOrderRequest : IReturn<CreateOrderResponse>
     {
-        public long OrderId { get; set; }
-
         public long UserId { get; set; }
-
-        public DateTime DateOrdered { get; set; }
-
-        public decimal TotalAmount { get; set; }
-
-        public string Status { get; set; }
-
-        public List<TransactionDTO> TransactionList { get; set; }
+        public long EventId { get; set; }
+        public List<long> MenuIds { get; set; }
 
     }
 

@@ -36,10 +36,11 @@ namespace OPFC.Services.Implementations
             return result;
         }
 
-        public void RemoveBookMark(BookMark bookMark)
+        public bool DeleteBookMark(BookMark bookMark)
         {
-            _opfcUow.BookMarkRepository.RemoveBookMark(bookMark);
+            var result = _opfcUow.BookMarkRepository.DeleteBookMark(bookMark);
             _opfcUow.Commit();
+            return result;
         }
 
         public BookMark GetBookMarkbyId(long id)

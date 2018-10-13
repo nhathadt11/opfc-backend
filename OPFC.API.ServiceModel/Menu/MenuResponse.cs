@@ -33,4 +33,11 @@ namespace OPFC.API.ServiceModel.Menu
 
         public MenuDTO Menu { get; set; }
     }
+
+    public class DeleteMenuResponse
+    {
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public MenuDTO Menu { get; set; }
+    }
 }

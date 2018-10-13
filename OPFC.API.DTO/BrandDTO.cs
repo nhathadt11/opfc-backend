@@ -60,5 +60,6 @@ namespace OPFC.API.DTO
         /// Gets or sets brand Ward
         /// </summary>
         public string Ward { get; set; }
+       
     }
 }

@@ -45,6 +45,13 @@ namespace OPFC.Repositories.UnitOfWork
         /// The user Repository
         /// </summary>
 
+
+        IServiceLocationRepository ServiceLocationRepository { get; }
+
+        IDistrictRepository DistrictRepository { get; }
+
+        ICityRepository CityRepository { get; }
+
         IUserRepository UserRepository { get; }
 
         IRatingRepository RatingRepository { get; }
@@ -70,6 +77,8 @@ namespace OPFC.Repositories.UnitOfWork
         IEventTypeRepository EventTypeRepository { get; }
         
         IMenuMealRepository MenuMealRepository { get; }
+
+        IOrderLineRepository OrderLineRepository { get; }
 
         /// <summary>
         /// Dispose
