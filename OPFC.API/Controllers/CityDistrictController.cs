@@ -12,8 +12,7 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
-        [HttpGet]
-        [Route("/District/{id}")]
+        [HttpGet("/District/{id}")]
         public ActionResult GetDistrictById(string id)
         {
 
@@ -36,8 +35,7 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("/District")]
+        [HttpGet("/District")]
         public ActionResult GetAllDistrict()
         {
             var districts = _serviceUow.DistrictService.GetAllDistrict();
@@ -45,8 +43,7 @@ namespace OPFC.API.Controllers
             return Ok(Mapper.Map<List<DistrictDTO>>(districts));
         }
 
-        [HttpGet]
-        [Route("/City/{id}")]
+        [HttpGet("/City/{id}")]
         public ActionResult GetCityById(string id)
         {
             
@@ -65,8 +62,7 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("/District/")]
+        [HttpGet("City")]
         public ActionResult GetAllCity()
         {
             var cities = _serviceUow.CityService.GetAllCity();

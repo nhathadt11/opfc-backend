@@ -17,53 +17,25 @@ namespace OPFC.Services.Implementations
 
         public City CreateDistrict(City city)
         {
-            try
-            {
-                var result = _opfcUow.CityRepository.CreateCity(city);
-                _opfcUow.Commit();
+            var result = _opfcUow.CityRepository.CreateCity(city);
+            _opfcUow.Commit();
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return result;
         }
 
         public List<City> GetAllCity()
-        {
-            try
-            {
-                return _opfcUow.CityRepository.GetAllCity();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+        {            
+            return _opfcUow.CityRepository.GetAllCity();
         }
 
         public City GetCityById(long id)
         {
-            try
-            {
-                return _opfcUow.CityRepository.GetCityById(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return _opfcUow.CityRepository.GetCityById(id);
         }
 
         public City UpdateDistrict(City city)
         {
-            try
-            {
-                return _opfcUow.CityRepository.UpdateCity(city);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return _opfcUow.CityRepository.UpdateCity(city);
         }
     }
 }

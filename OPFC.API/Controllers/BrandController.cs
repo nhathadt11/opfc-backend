@@ -170,42 +170,5 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpDelete]
-        [Route("/Brand")]
-        public ActionResult Delete(DeleteBrandRequest request)
-        {
-            try
-            {
-                var brand = Mapper.Map<BrandDTO>(request.Brand);
-
-
-                if (string.IsNullOrEmpty(brand.Id.ToString()) || !Regex.IsMatch((brand.Id.ToString()), "^\\d+$"))
-                    return BadRequest(new { Message = "Invalid Id" });
-
-
-                var foundBrand = _serviceUow.BrandService.GetBrandById(brand.Id);
-                if (foundBrand !=null)
-                {;
-                    return BadRequest(new { Message = " could not find brand to delete" });
-                }
-
-                foundBrand.IsDeleted = true;
-
-                try
-                {
-                    _serviceUow.BrandService.UpdateBrand(foundBrand);
-                    return NoContent();
-                }
-                catch(Exception ex)
-                {
-                    return BadRequest(new {ex.Message});
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-        }
     }
 }
