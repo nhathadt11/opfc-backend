@@ -6,6 +6,6 @@ namespace OPFC.API.Services.Interfaces
     {
         CreateBookMarkResponse Post(CreateBookMarkRequest request);
 
-        RemoveBookMarkResponse Post(RemoveBookMarkRequest request);
+        DeleteBookMarkResponse Post(DeleteBookMarkRequest request);
     }
 }

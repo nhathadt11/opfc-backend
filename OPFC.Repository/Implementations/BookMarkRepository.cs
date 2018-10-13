@@ -21,18 +21,22 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Update(bookMark).Entity;
         }
 
-        public void RemoveBookMark(BookMark bookMark)
+        public bool DeleteBookMark(BookMark bookMark)
         {
             var bookmark = DbSet.SingleOrDefault();
             if (bookmark != null)
             {
-                DbSet.Remove(bookmark);
+                bookmark.IsDeleted = true;
+                DbSet.Update(bookmark);
+                return true;
             }
+            return false; 
         }
 
         public List<BookMark> GetAllBookMark()
         {
-            return DbSet.ToList();
+            return DbSet.DefaultIfEmpty().ToList();
+
         }
 
         public BookMark GetBookMarkById(long id)

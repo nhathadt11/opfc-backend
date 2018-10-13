@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -20,9 +21,25 @@ namespace OPFC.API.Controllers
     public class BookMarkController : ControllerBase
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
-        
+
+        [HttpPost]
+        public ActionResult Create(CreateBookMarkRequest request)
+        {
+            try
+            {
+                var bookMark = Mapper.Map<BookMarkDTO>(request.BookMark);
+                var result = _serviceUow.BookMarkService.CreateBookMark(Mapper.Map<BookMark>(bookMark));
+
+                return Created("/BookMark", Mapper.Map<BookMarkDTO>(result));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult GetAll()
         {
             try
             {
@@ -34,7 +51,6 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {
@@ -53,59 +69,41 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult Create(CreateBookMarkRequest request)
+        [HttpPut("{id}")]
+        public ActionResult Update(long id, UpdateBookMarkRequest request)
         {
             try
             {
                 var bookMark = Mapper.Map<BookMark>(request.BookMark);
-                var created = _serviceUow.BookMarkService.CreateBookMark(bookMark);
-                return Created("/BookMark", Mapper.Map<BookMarkDTO>(created));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-        
-        [HttpPut("{id}")]
-        public IActionResult Update(long id, UpdateBookMarkRequest request)
-        {
-            try
-            {
-                var found = _serviceUow.BookMarkService.GetBookMarkbyId(id);
-                if (found == null)
-                {
-                    return NotFound("Bookmark could not be found.");
-                }
 
-                var bookMark = Mapper.Map<BookMark>(request.BookMark);                
-                return Ok(Mapper.Map<BookMarkDTO>(_serviceUow.BookMarkService.UpdateBookMark(bookMark)));
+                var result = _serviceUow.BookMarkService.UpdateBookMark(Mapper.Map<BookMark>(bookMark));
+
+                return Ok(Mapper.Map<BookMarkDTO>(result));
             }
-            catch (Exception e)
+            catch(Exception ex)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        public ActionResult Delete(long id)
         {
+            var bookMark = _serviceUow.BookMarkService.GetBookMarkbyId(id);
+
+            if (bookMark == null)
+                return NotFound(new { Message = "Could not find bookmark" });
+
             try
             {
-                var found = _serviceUow.BookMarkService.GetBookMarkbyId(id);
-                if (found == null)
-                {
-                    return NotFound("Bookmark could not be found.");
-                }
-
-                _serviceUow.BookMarkService.RemoveBookMark(found);
+                _serviceUow.BookMarkService.DeleteBookMark(bookMark);
                 return NoContent();
             }
-            catch (Exception e)
+            catch(Exception ex)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
+
         }
     }
 }

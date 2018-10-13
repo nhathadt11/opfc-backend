@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -139,8 +140,9 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpPost("Photo/SavePhoto/")]
-        public SavePhotoResponse SavePhoto(SavePhotoRequest request)
+        [HttpPost]
+        [Route("/Brand/Photo")]
+        public ActionResult CreatePhoto(SavePhotoRequest request)
         {
             try
             {
@@ -161,17 +163,11 @@ namespace OPFC.API.Controllers
 
                 _serviceUow.BrandService.SavePhoto(photo);
 
-                return new SavePhotoResponse
-                {
-                    ResponseStatus = new ServiceStack.ResponseStatus()
-                };
+                return NoContent();
             }
             catch (Exception ex)
             {
-                return new SavePhotoResponse
-                {
-                    ResponseStatus = new ServiceStack.ResponseStatus("", "Error")
-                };
+                return BadRequest(ex.Message);
             }
         }
     }

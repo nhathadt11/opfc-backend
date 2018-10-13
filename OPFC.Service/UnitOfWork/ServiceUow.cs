@@ -17,6 +17,9 @@ namespace OPFC.Services.UnitOfWork
             ServiceProvider = serviceProvider;
         }
 
+        public IServiceLocationService ServiceLocationService { get { return GetRepoService<IServiceLocationService>(); } }
+        public ICityService CityService { get { return GetRepoService<ICityService>(); } }
+        public IDistrictService DistrictService { get { return GetRepoService<IDistrictService>(); } }
         public IBrandService BrandService { get { return GetRepoService<IBrandService>(); } }
         public IUserService UserService { get { return GetRepoService<IUserService>(); } }
         public IEventService EventService { get { return GetRepoService<IEventService>(); } }

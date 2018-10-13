@@ -16,7 +16,9 @@ namespace OPFC.Models
 
         public decimal TotalAmount { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; set; } 
+
+        public bool IsDeleted { get; set; }
 
         [ForeignKey("OrderId")]
         public List<Transaction> TransactionList { get; set; }

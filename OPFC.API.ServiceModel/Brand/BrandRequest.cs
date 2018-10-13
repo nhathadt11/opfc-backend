@@ -10,17 +10,7 @@ namespace OPFC.API.ServiceModel.Brand
     [Route("/Brand/CreateBrand/", "POST")]
     public class CreateBrandRequest : IReturn<CreateBrandResponse>
     {
-        public long Id { get; set; }
-
-        public string BrandName { get; set; }
-
-        public string Description { get; set; }
-
-        public int ParticipantNumber { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public long UserId { get; set; }
+        public BrandDTO Brand { get; set; }
     }
 
     [EnableCors("*", "*")]
@@ -46,8 +36,8 @@ namespace OPFC.API.ServiceModel.Brand
        public BrandDTO Brand { get; set; }
     }
 
-    //[EnableCors("*", "*")]
-    //[Route("/Brand/ChangeBrandStatus/", "POST")]
+    [EnableCors("*", "*")]
+    [Route("/Brand/ChangeBrandStatus/", "POST")]
     public class ChangeBrandStatusRequest : IReturn<ChangeBrandStatusResponse>
     {
         public long Id { get; set; }
@@ -59,5 +49,12 @@ namespace OPFC.API.ServiceModel.Brand
     public class SavePhotoRequest : IReturn<SavePhotoResponse>
     {
         public PhotoDTO Photo { get; set; }
+    }
+
+    [EnableCors("*", "*")]
+    [Route("/Brand/DeleteBrand/", "POST")]
+    public class DeleteBrandRequest : IReturn<DeleteBrandResponse>
+    {
+        public BrandDTO Brand { get; set; }
     }
 }

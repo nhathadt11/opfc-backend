@@ -7,6 +7,9 @@ namespace OPFC.Services.UnitOfWork
 {
     public interface IServiceUow
     {
+        IServiceLocationService ServiceLocationService { get; }
+        ICityService CityService { get; }
+        IDistrictService DistrictService { get; }
         IRatingService RatingService { get; }
         IBrandService BrandService { get; }
         IUserService UserService { get; }

@@ -45,6 +45,13 @@ namespace OPFC.Repositories.UnitOfWork
         /// The user Repository
         /// </summary>
 
+
+        IServiceLocationRepository ServiceLocationRepository { get; }
+
+        IDistrictRepository DistrictRepository { get; }
+
+        ICityRepository CityRepository { get; }
+
         IUserRepository UserRepository { get; }
 
         IRatingRepository RatingRepository { get; }
