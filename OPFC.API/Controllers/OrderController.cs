@@ -38,7 +38,7 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpGet("/Order")]
+        [HttpGet]
         public ActionResult GetAll()
         {
             var orders = _serviceUow.OrderService.GetAllOrder();
@@ -47,7 +47,7 @@ namespace OPFC.API.Controllers
 
         }
 
-        [HttpGet("/Order/{id}")]
+        [HttpGet("{id}")]
         public ActionResult Get(string id)
         {
 
@@ -60,60 +60,6 @@ namespace OPFC.API.Controllers
                 return NotFound(new { Message = "Could not find Order" });
             }
             return Ok(Mapper.Map<OrderDTO>(order));
-        }
-
-        [HttpPut("/Order")]
-        public ActionResult Update(UpdateOrderRequest request)
-        {
-            try
-            {
-                var order = Mapper.Map<MealDTO>(request.order);
-
-                var result = _serviceUow.OrderService.UpdateOrder(Mapper.Map<Order>(order));
-
-                return Ok(Mapper.Map<OrderDTO>(result));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-
-        }
-
-        [HttpDelete("/Order")]
-        public ActionResult Delete(DeleteOrderRequest request)
-        {
-            try
-            {
-                var order = Mapper.Map<OrderDTO>(request.order);
-
-
-                if (string.IsNullOrEmpty(order.OrderId.ToString()) || !Regex.IsMatch((order.OrderId.ToString()), "^\\d+$"))
-                    return NotFound(new { Message = "Invalid Id" });
-
-
-                var foundOrder = _serviceUow.OrderService.GetOrderById(order.OrderId);
-                if (foundOrder == null)
-                {
-                    return NotFound(new { Message = " could not find Order to delete" });
-                }
-
-                foundOrder.IsDeleted = true;
-
-                try
-                {
-                    _serviceUow.OrderService.UpdateOrder(foundOrder);
-                    return NoContent();
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(new { ex.Message });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
         }
     }
 }
