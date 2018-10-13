@@ -78,6 +78,8 @@ namespace OPFC.Repositories.UnitOfWork
         
         IMenuMealRepository MenuMealRepository { get; }
 
+        IOrderLineRepository OrderLineRepository { get; }
+
         /// <summary>
         /// Dispose
         /// </summary>
