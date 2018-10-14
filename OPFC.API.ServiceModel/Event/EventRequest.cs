@@ -33,9 +33,9 @@ namespace OPFC.API.ServiceModel.Event
 
     public class FindMatchedEventRequest
     {
-        public long ServiceLocation { get; set; }
-        public int ServingNumber { get; set; }
-        public decimal Price { get; set; }
-        public long[] EventTypeIds { get; set; }
+        public long ServiceLocation { get; set; } = 1;
+        public int ServingNumber { get; set; } = 1;
+        public decimal Price { get; set; } = 0.0M;
+        public long[] EventTypeIds { get; set; } = { 1 };
     }
 }
