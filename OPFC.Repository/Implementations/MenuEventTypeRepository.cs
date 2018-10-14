@@ -22,5 +22,10 @@ namespace OPFC.Repositories.Implementations
         {
             DbSet.AddRange(menuEventTypeList);
         }
+
+        public void RemoveRange(List<MenuEventType> menuEventTypeList)
+        {
+            DbSet.RemoveRange(menuEventTypeList);
+        }
     }
 }

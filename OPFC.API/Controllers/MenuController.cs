@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -92,8 +93,33 @@ namespace OPFC.API.Controllers
                     return NotFound("Menu could not be found.");
                 }
 
-                var updated = Mapper.Map<Menu>(request.Menu);
+                var updated = Mapper.Map<Menu>(request);
                 return Ok(Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenu(updated)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("Brand/{brandId}/{menuId}")]
+        public IActionResult Update(long brandId, long menuId, UpdateMenuRequest request)
+        {
+            try
+            {
+                var foundBrand = _serviceUow.BrandService.GetBrandById(brandId);
+                if (foundBrand == null)
+                {
+                    return NotFound("Brand could not be found.");
+                }
+
+                var foundMenu = _serviceUow.MenuService.GetMenuById(menuId);
+                if (foundMenu == null)
+                {
+                    return NotFound("Menu could not be found.");
+                }
+
+                return Ok(Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenuByBrand(brandId, menuId, request)));
             }
             catch (Exception e)
             {
@@ -127,14 +153,20 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var menuList = _serviceUow.MenuService.GetAllMenuByBrandId(brandId);
-                foreach (var menu in menuList)
+                var foundMenuList = _serviceUow.MenuService.GetAllMenuByBrandId(brandId);
+                var returnMenuList = Mapper.Map<List<MenuDTO>>(foundMenuList);
+                foreach (var menu in returnMenuList)
                 {
                     var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
-                    menu.MealList = mealList;
-                }
+                    menu.MealIds = mealList.Select(m => m.Id).ToList();
+                    menu.MealNames = mealList.Select(m => m.MealName).ToList();
 
-                return Ok(menuList);
+                    var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
+                    menu.EventTypeIds = eventTypeList.Select(e => e.Id).ToList();
+                    menu.EventTypeNames = eventTypeList.Select(e => e.EventTypeName).ToList();
+                }
+                
+                return Ok(returnMenuList);
             }
             catch (Exception e)
             {

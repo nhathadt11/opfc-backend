@@ -28,7 +28,7 @@ namespace OPFC.Repositories.Implementations
 
         public Menu GetMenuById(long MenuId)
         {
-            return DbSet.SingleOrDefault(m => m.Id == MenuId && m.IsDeleted == false && m.IsActive == true);
+            return DbSet.SingleOrDefault(m => m.Id == MenuId && m.IsDeleted == false);
         }
 
         public Menu UpdateMenu(Menu menu)
