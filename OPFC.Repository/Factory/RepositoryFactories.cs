@@ -37,6 +37,7 @@ namespace OPFC.Repositories.Factory
                 {typeof(IEventRepository), dbContext => new EventRepository(dbContext)},
                 {typeof(IEventTypeRepository), dbContext => new EventTypeRepository(dbContext)},
                 {typeof(IMenuMealRepository), dbContext => new MenuMealRepository(dbContext)},
+                {typeof(IMenuEventTypeRepository), dbContext => new MenuEventTypeRepository(dbContext)},
                 {typeof(IOrderLineRepository), dbContext => new OrderLineRepository(dbContext)},
             };
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OPFC.API.ServiceModel.Menu;
 using OPFC.Models;
 namespace OPFC.Services.Interfaces
 {
@@ -11,5 +12,6 @@ namespace OPFC.Services.Interfaces
         List<Menu> GetAllMenu();
         void DeleteMenuById(long id);
         List<Menu> GetAllMenuByBrandId(long id);
+        Menu CreateMenuByBrand(long brandId, CreateMenuRequest menu);
     }
 }

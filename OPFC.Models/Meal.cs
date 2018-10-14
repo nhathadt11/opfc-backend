@@ -19,5 +19,7 @@ namespace OPFC.Models
         public bool IsDeleted { get; set; }
 
         public DateTime LastUpdated { get; set; }
+
+        public List<MenuMeal> MenuMealList { get; set; }
     }
 }
