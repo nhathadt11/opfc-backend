@@ -20,12 +20,12 @@ namespace OPFC.Services.Implementations
         public void DeleteEvent(long eventId, long userId)
         {
             var aEvent = GetEventById(eventId);
-    
+
             if (aEvent == null)
             {
                 throw new Exception("Event could not be found.");
             }
-            
+
             aEvent.IsDeleted = true;
             if (UpdateEvent(aEvent) == null)
             {
@@ -66,6 +66,19 @@ namespace OPFC.Services.Implementations
             _opfcUow.Commit();
 
             return result;
+        }
+
+        public List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds)
+        {
+            try
+            {
+
+                return _opfcUow.EventRepository.FindMatchedEvent(serviceLocation, servingNumber, price, eventTypeIds);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

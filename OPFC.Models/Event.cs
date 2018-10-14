@@ -23,11 +23,11 @@ namespace OPFC.Models
         
         public int ServingNumber { get; set; }
 
-        public string City { get; set; }
+        [ForeignKey("CityId")]
+        public long CityId { get; set; }
 
-        public string District { get; set ; }
-
-        public string Ward { get; set; }
+        [ForeignKey("DistrictId")]
+        public long DistrictId { get; set ; }
 
         public string Address { get; set; }
 
@@ -40,5 +40,9 @@ namespace OPFC.Models
         public long UserId { get; set; }
 
         public bool? IsDeleted { get; set; }
+
+        public District District { get; set; }
+
+        public City City { get; set; }
     }
 }

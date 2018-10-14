@@ -35,4 +35,9 @@ namespace OPFC.API.ServiceModel.Event
         public ResponseStatus ResponseStatus { get; set; }
         public List<EventTypeDTO> Event { get; set; }
     }
+
+    public class FindMatchedEventResponse
+    {
+        public List<EventDTO> Events { get; set; }
+    }
 }
