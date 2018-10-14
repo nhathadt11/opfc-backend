@@ -82,5 +82,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[OrderLine]
         /// </summary>
         public DbSet<OrderLine> OrderLine { get; set; }
+        
+        /// <summary>
+        /// [dbo].[MenuEventType]
+        /// </summary>
+        public DbSet<MenuEventType> MenuEventType { get; set; }
     }
 }

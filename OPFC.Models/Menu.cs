@@ -24,12 +24,19 @@ namespace OPFC.Models
 
         public decimal Price { get; set; }
 
+        public List<MenuMeal> MenuMealList { get; set; }
+
+        public List<MenuEventType> MenuEventTypeList { get; set; }
+
+        [NotMapped]
         public List<Meal> MealList { get; set; }
 
 //        [ForeignKey("MenuId")]
+        [NotMapped]
         public List<BookMark> BookMarkList { get; set; }
 
 //        [ForeignKey("MenuId")]
+        [NotMapped]
         public List<Rating> RatingList { get; set; }
 
     }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OPFC.API.DTO;
 using System.Collections.Generic;
+using OPFC.API.ServiceModel.Menu;
 
 namespace OPFC.API.ServiceModel.Tasks
 {
@@ -44,6 +45,8 @@ namespace OPFC.API.ServiceModel.Tasks
 
             CreateMap<OPFC.Models.Transaction, TransactionDTO>();
             CreateMap<TransactionDTO, OPFC.Models.Transaction>();
+
+            CreateMap<CreateMenuRequest, Models.Menu>().ReverseMap();
 
             #region List mapping
 

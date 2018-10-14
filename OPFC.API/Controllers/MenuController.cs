@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Menu;
@@ -60,8 +57,22 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var menu = Mapper.Map<Menu>(request.Menu);
+                var menu = Mapper.Map<Menu>(request);
                 var created = _serviceUow.MenuService.CreateMenu(menu);
+                return Created("/Menu", Mapper.Map<MenuDTO>(created));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("Brand/{brandId}")]
+        public IActionResult CreateMenuByBrand(long brandId, [FromBody] CreateMenuRequest request)
+        {
+            try
+            {
+                var created = _serviceUow.MenuService.CreateMenuByBrand(brandId, request);
                 return Created("/Menu", Mapper.Map<MenuDTO>(created));
             }
             catch (Exception e)
