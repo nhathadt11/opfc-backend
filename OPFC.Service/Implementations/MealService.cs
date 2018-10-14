@@ -28,6 +28,12 @@ namespace OPFC.Services.Implementations
             return result;
         }
 
+        public Meal CreateMealForBrand(Meal meal, long brandId)
+        {
+            meal.BrandId = brandId;
+            return CreateMeal(meal);
+        }
+
         public List<Meal> GetAllMeal()
         {
             return _opfcUow.MealRepository.GetAllMeal();

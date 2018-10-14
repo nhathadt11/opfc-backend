@@ -9,6 +9,7 @@ namespace OPFC.Services.Interfaces
     public interface IMealService
     {
         Meal CreateMeal(Meal meal);
+        Meal CreateMealForBrand(Meal meal, long brandId);
         Meal GetMealById(long id);
         Meal UpdateMeal(Meal meal);
         List<Meal> GetAllMeal();
