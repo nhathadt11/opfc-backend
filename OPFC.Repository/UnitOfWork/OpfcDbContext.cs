@@ -87,5 +87,15 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[MenuEventType]
         /// </summary>
         public DbSet<MenuEventType> MenuEventType { get; set; }
+
+        /// <summary>
+        /// [dbo].[District]
+        /// </summary>
+        public DbSet<District> District { get; set; }
+
+        /// <summary>
+        /// [dbo].[City]
+        /// </summary>
+        public DbSet<City> City { get; set; }
     }
 }
