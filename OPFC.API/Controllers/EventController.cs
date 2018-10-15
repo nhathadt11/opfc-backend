@@ -79,13 +79,13 @@ namespace OPFC.API.Controllers
                 {
                     return NotFound(new { Message = "Event could not be found." });
                 }
-                
+
                 var foundUser = _serviceUow.UserService.GetUserById(userId);
                 if (foundUser == null)
                 {
-                    return NotFound(new {Message = "User could not be found."});
+                    return NotFound(new { Message = "User could not be found." });
                 }
-                
+
                 _serviceUow.EventService.DeleteEvent(id, userId);
                 return NoContent();
             }
@@ -121,6 +121,21 @@ namespace OPFC.API.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("/Event/MatchedEvent")]
+        public ActionResult<List<EventDTO>> FindAllMatchedEvent(FindMatchedEventRequest request)
+        {
+            try
+            {
+                var result = _serviceUow.EventService.FindMatchedEvent(request.ServiceLocation, request.ServingNumber, request.Price, request.EventTypeIds);
+                return Ok(Mapper.Map<List<EventDTO>>(result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

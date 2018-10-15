@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OPFC.API.DTO;
 using ServiceStack;
 
@@ -8,7 +9,14 @@ namespace OPFC.API.ServiceModel.Menu
     [Route("/Menu/CreateMenu/", "POST")]
     public class CreateMenuRequest : IReturn<CreateMenuResponse>
     {
-        public MenuDTO Menu { get; set; } 
+        public string MenuName { get; set; }
+        public string Description { get; set; }
+        public int ServingNumber { get; set; }
+        public decimal Price { get; set; }
+        public List<string> Photos { get; set; }
+        public List<long> EventTypeIds { get; set; }
+        public List<long> MealIds { get; set; }
+        public List<string> Tags { get; set; }
     }
 
     [EnableCors("*", "*")]
@@ -22,7 +30,15 @@ namespace OPFC.API.ServiceModel.Menu
     [Route("/Menu/UpdateMenu/", "POST")]
     public class UpdateMenuRequest : IReturn<UpdateMenuResponse>
     {
-        public MenuDTO Menu { get; set; }
+        public long Id { get; set; }
+        public string MenuName { get; set; }
+        public string Description { get; set; }
+        public int ServingNumber { get; set; }
+        public decimal Price { get; set; }
+        public List<string> Photos { get; set; }
+        public List<long> EventTypeIds { get; set; }
+        public List<long> MealIds { get; set; }
+        public List<string> Tags { get; set; }
     }
 
     [EnableCors("*", "*")]

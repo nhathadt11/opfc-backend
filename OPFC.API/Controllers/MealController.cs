@@ -35,6 +35,22 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [HttpPost("Brand/{brandId}")]
+        public IActionResult Create(long brandId, CreateMealRequest request)
+        {
+            try
+            {
+                var meal = Mapper.Map<Meal>(request.Meal);
+                var created = Mapper.Map<MealDTO>(_serviceUow.MealService.CreateMealForBrand(meal, brandId));
+
+                return Created("/Meal", created);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {

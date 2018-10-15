@@ -30,4 +30,12 @@ namespace OPFC.API.ServiceModel.Event
     public class GetAllEventTypeRequest : IReturn<GetAllEventTypeResponse>
     {
     }
+
+    public class FindMatchedEventRequest
+    {
+        public long ServiceLocation { get; set; } = 1;
+        public int ServingNumber { get; set; } = 1;
+        public decimal Price { get; set; } = 0.0M;
+        public long[] EventTypeIds { get; set; } = { 1 };
+    }
 }

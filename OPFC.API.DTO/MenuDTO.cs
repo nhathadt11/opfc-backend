@@ -13,13 +13,19 @@ namespace OPFC.API.DTO
 
         public int ServingNumber { get; set; }
 
+        public decimal Price { get; set; }
+
         public bool IsActive { get; set; }
 
         public long BrandId { get; set; }
+        
+        public List<long> MealIds { get; set; }
 
-        public List<MealDTO> MealList { get; set; }
+        public List<string> MealNames { get; set; }
 
-        public List<BookMarkDTO> BookMarkList { get; set; }
+        public List<long> EventTypeIds { get; set; }
+
+        public List<string> EventTypeNames { get; set; }
 
         public List<RatingDTO> RatingList { get; set; }
     }

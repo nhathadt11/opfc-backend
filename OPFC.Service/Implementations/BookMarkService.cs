@@ -18,6 +18,7 @@ namespace OPFC.Services.Implementations
 
         public BookMark CreateBookMark(BookMark bookMark)
         {
+            bookMark.IsDeleted = false;
             var result = _opfcUow.BookMarkRepository.CreateBookMark(bookMark);
             _opfcUow.Commit();
             return result;
