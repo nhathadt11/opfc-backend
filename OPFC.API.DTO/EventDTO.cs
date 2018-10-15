@@ -21,6 +21,10 @@ namespace OPFC.API.DTO
 
         public int ServingNumber { get; set; }
 
+        public long CityId { get; set; }
+
+        public long DistrictId { get; set; }
+
         public CityDTO City { get; set; }
 
         public DistrictDTO District { get; set; }

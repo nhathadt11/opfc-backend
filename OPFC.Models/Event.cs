@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace OPFC.Models
 {
@@ -23,10 +22,10 @@ namespace OPFC.Models
         
         public int ServingNumber { get; set; }
 
-        [ForeignKey("CityId")]
+//        [ForeignKey("CityId")]
         public long CityId { get; set; }
 
-        [ForeignKey("DistrictId")]
+//        [ForeignKey("DistrictId")]
         public long DistrictId { get; set ; }
 
         public string Address { get; set; }

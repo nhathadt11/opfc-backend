@@ -33,6 +33,29 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpPost("User/{userId}")]
+        public ActionResult Post(long userId, CreateEventRequest request)
+        {
+            try
+            {
+                var foundUser = _serviceUow.UserService.GetUserById(userId);
+                if (foundUser == null)
+                {
+                    return NotFound("User could not be found.");
+                }
+                
+                var eventReq = Mapper.Map<EventDTO>(request.Event);
+                eventReq.UserId = userId;
+
+                var created = _serviceUow.EventService.SaveEvent(Mapper.Map<Event>(eventReq));
+                return Created("/Event", Mapper.Map<EventDTO>(created));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet]
         public ActionResult GetAll()
@@ -68,8 +91,37 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpPut("User/{userId}/{id}")]
+        public ActionResult Update(long userId, long id, UpdateEventRequest request)
+        {
+            try
+            {
+                var foundUser = _serviceUow.UserService.GetUserById(userId);
+                if (foundUser == null)
+                {
+                    return NotFound("User could not be found.");
+                }
 
-        [HttpDelete("{id}/User/{userId}")]
+                var foundEvent = _serviceUow.EventService.GetEventById(id);
+                if (foundEvent == null)
+                {
+                    return NotFound("Event could not be found.");
+                }
+
+                var eventReq = Mapper.Map(request.Event, foundEvent);
+                eventReq.IsDeleted = false;
+
+                var result = _serviceUow.EventService.UpdateEvent(Mapper.Map<Event>(eventReq));
+                return Ok(Mapper.Map<EventDTO>(result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("User/{userId}/{id}")]
         public ActionResult Post(long id, long userId)
         {
             try
