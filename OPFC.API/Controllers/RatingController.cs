@@ -17,69 +17,6 @@ namespace OPFC.API.Controllers
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
-<<<<<<< HEAD
-        [HttpPost]
-        [Route("/Rating")]
-        public ActionResult Create(CreateRatingRequest request)
-        {
-            try
-            {
-                var rating = Mapper.Map<MealDTO>(request.Rating);
-
-                var result = _serviceUow.RatingService.CreateRating(Mapper.Map<Rating>(rating));
-
-                return Created("/Rating", Mapper.Map<RatingDTO>(result));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-
-        }
-
-        [HttpGet]
-        [Route("/Rating")]
-        public ActionResult GetAll()
-        {
-            var ratings = _serviceUow.RatingService.GetAllRating();
-
-            return Ok(Mapper.Map<List<RatingDTO>>(ratings));
-
-        }
-
-        [HttpGet]
-        [Route("/Rating/{id}")]
-        public ActionResult Get(string id)
-        {
-
-            if (string.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^\\d+$"))
-                return BadRequest(new { Message = "Invalid Id" });
-
-            var rating = _serviceUow.RatingService.GetRatingById(long.Parse(id));
-            if (rating == null)
-            {
-                return NotFound(new { Message = "Could not find rating" });
-            }
-            return Ok(Mapper.Map<RatingDTO>(rating));
-        }
-
-        [HttpPut]
-        [Route("/Rating")]
-        public ActionResult Update(UpdateRatingRequest request)
-        {
-            try
-            {
-                var rating = Mapper.Map<RatingDTO>(request.Rating);
-
-                var result = _serviceUow.RatingService.UpdateRating(Mapper.Map<Rating>(rating));
-
-                return Ok(Mapper.Map<RatingDTO>(result));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
-=======
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -138,7 +75,6 @@ namespace OPFC.API.Controllers
                 {
                     return NotFound("Rating could not be found.");
                 }
->>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
 
                 var rating = Mapper.Map<Rating>(request.Rating);
                 return Ok(Mapper.Map<RatingDTO>(_serviceUow.RatingService.UpdateRating(rating)));

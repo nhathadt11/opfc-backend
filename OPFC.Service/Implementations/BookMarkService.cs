@@ -37,22 +37,9 @@ namespace OPFC.Services.Implementations
 
         public bool DeleteBookMark(BookMark bookMark)
         {
-<<<<<<< HEAD
-            try
-            {
-                var result = _opfcUow.BookMarkRepository.DeleteBookMark(bookMark);
-                _opfcUow.Commit();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-=======
             var result = _opfcUow.BookMarkRepository.DeleteBookMark(bookMark);
             _opfcUow.Commit();
             return result;
->>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         }
 
         public BookMark GetBookMarkbyId(long id)

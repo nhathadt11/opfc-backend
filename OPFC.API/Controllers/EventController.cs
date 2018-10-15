@@ -19,25 +19,14 @@ namespace OPFC.API.Controllers
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
-<<<<<<< HEAD
-        [Route("/Event")]
-        public ActionResult Create(CreateEventRequest request)
-=======
         public ActionResult Post(CreateEventRequest request)
->>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         {
             try
             {
                 var eventReq = Mapper.Map<EventDTO>(request.Event);
                 var created = _serviceUow.EventService.SaveEvent(Mapper.Map<Event>(eventReq));
 
-<<<<<<< HEAD
-                var result = _serviceUow.EventService.SaveEvent(Mapper.Map<Event>(eventReq));
-
-                return Created("/Event", Mapper.Map<EventDTO>(result));
-=======
                 return Created("/Event", Mapper.Map<EventDTO>(created));
->>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
             }
             catch (Exception ex)
             {
@@ -46,10 +35,6 @@ namespace OPFC.API.Controllers
         }
 
         [HttpGet]
-<<<<<<< HEAD
-        [Route("/Event")]
-=======
->>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         public ActionResult GetAll()
         {
             try
@@ -63,14 +48,8 @@ namespace OPFC.API.Controllers
             }
         }
 
-<<<<<<< HEAD
-        [HttpPut]
-        [Route("/Event")]
-        public ActionResult Update(UpdateEventRequest request)
-=======
         [HttpPut("{id}")]
         public ActionResult Update(long id, UpdateEventRequest request)
->>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         {
             try
             {
@@ -90,14 +69,8 @@ namespace OPFC.API.Controllers
             }
         }
 
-<<<<<<< HEAD
-        [HttpDelete]
-        [Route("/Event")]
-        public ActionResult Delete(DeleteEventRequest request)
-=======
         [HttpDelete("{id}/User/{userId}")]
         public ActionResult Post(long id, long userId)
->>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         {
             try
             {
