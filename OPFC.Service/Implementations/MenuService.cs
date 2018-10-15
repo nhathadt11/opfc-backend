@@ -17,56 +17,48 @@ namespace OPFC.Services.Implementations
 
         public Menu CreateMenu(Menu menu)
         {
-            try
-            {
-                var result = _opfcUow.MenuRepository.CreateMenu(menu);
-                _opfcUow.Commit();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var result = _opfcUow.MenuRepository.CreateMenu(menu);
+            _opfcUow.Commit();
+            return result;
         }
 
         public List<Menu> GetAllMenu()
         {
-            try
-            {
-                var result = _opfcUow.MenuRepository.GetAllMenu();
+            var result = _opfcUow.MenuRepository.GetAllMenu();
 
-                return result;
-            }
-            catch(Exception ex)
+            return result;
+        }
+
+        public void DeleteMenuById(long id)
+        {
+            var found = GetMenuById(id);
+            if (found == null)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Menu could not be found.");
             }
+
+            found.IsDeleted = true;
+            if (UpdateMenu(found) == null)
+            {
+                throw new Exception("Menu could not be updated.");   
+            }
+        }
+
+        public List<Menu> GetAllMenuByBrandId(long id)
+        {
+            return _opfcUow.MenuRepository.GetAllByBrandId(id);
         }
 
         public Menu GetMenuById(long id)
         {
-            try
-            {
-                return _opfcUow.MenuRepository.GetMenuById(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return _opfcUow.MenuRepository.GetMenuById(id);
         }
 
         public Menu UpdateMenu(Menu menu)
         {
-            try
-            {
-                var result = _opfcUow.MenuRepository.UpdateMenu(menu);
-                _opfcUow.Commit();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var result = _opfcUow.MenuRepository.UpdateMenu(menu);
+            _opfcUow.Commit();
+            return result;
         }
     }
 }

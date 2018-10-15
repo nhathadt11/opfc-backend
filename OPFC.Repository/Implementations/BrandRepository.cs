@@ -15,7 +15,7 @@ namespace OPFC.Repositories.Implementations
 
         public Brand GetBrandById(long brandId)
         {
-            return DbSet.SingleOrDefault(b => b.Id == brandId && b.IsActive == true && b.IsDeleted == false);
+            return DbSet.SingleOrDefault(b => b.Id == brandId && b.IsActive && b.IsDeleted == false);
         }
 
         public Brand CreateBrand(Brand brand)
@@ -25,29 +25,27 @@ namespace OPFC.Repositories.Implementations
 
         public Caterer CreateCaterer(User user, Brand brand)
         {
-            try
+            using (var scope = new TransactionScope())
             {
-                using (var scope = new TransactionScope())
-                {
-                    DbContext.Add<User>(user);
-                    brand.UserId = user.Id;
-                    DbContext.Add<Brand>(brand);
+                DbContext.Add<User>(user);
+                brand.UserId = user.Id;
+                DbContext.Add<Brand>(brand);
 
-                    DbContext.SaveChanges();
-                    scope.Complete();
-                }
+                DbContext.SaveChanges();
+                scope.Complete();
+            }
 
-                return new Caterer { User = user, Brand = brand };
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return new Caterer { User = user, Brand = brand };
         }
 
         public List<Brand> GetAllBrand()
         {
             return DbSet.Where(b => b.IsActive == true && b.IsDeleted == false).ToList();
+        }
+
+        public Brand GetBrandByUserId(long id)
+        {
+            return DbSet.FirstOrDefault(b => b.IsActive == true && b.IsDeleted == false && b.UserId == id);
         }
 
         public Brand UpdateBrand(Brand brand)

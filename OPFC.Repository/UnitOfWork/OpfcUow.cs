@@ -43,6 +43,10 @@ namespace OPFC.Repositories.UnitOfWork
         public IPhotoRepository PhotoRepository { get { return GetRepo<IPhotoRepository>(); } }
         public IEventRepository EventRepository { get { return GetRepo<IEventRepository>(); } }
         public IEventTypeRepository EventTypeRepository { get { return GetRepo<IEventTypeRepository>(); } }
+<<<<<<< HEAD
+=======
+        public IMenuMealRepository MenuMealRepository { get { return GetRepo<IMenuMealRepository>(); } }
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         public IServiceLocationRepository ServiceLocationRepository { get { return GetRepo<IServiceLocationRepository>(); } }
         public IDistrictRepository DistrictRepository { get { return GetRepo<IDistrictRepository>(); } }
         public ICityRepository CityRepository { get { return GetRepo<ICityRepository>(); } }

@@ -25,14 +25,7 @@ namespace OPFC.Services.Implementations
 
         public List<EventType> GetAllEventType()
         {
-            try
-            {
-                return _opfcUow.EventTypeRepository.GetAllEventType();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return _opfcUow.EventTypeRepository.GetAllEventType();
         }
     }
 }

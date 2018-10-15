@@ -14,5 +14,6 @@ namespace OPFC.Services.Interfaces
 
         List<Rating> GetAllRating();
 
+        void DeleteRatingById(long id);
     }
 }

@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using OPFC.API.DTO;
-using OPFC.Models;
 using System.Collections.Generic;
 
 namespace OPFC.API.ServiceModel.Tasks
@@ -52,17 +50,23 @@ namespace OPFC.API.ServiceModel.Tasks
             CreateMap<List<OPFC.Models.Event>, List<EventDTO>>();
             CreateMap<List<EventDTO>, List<OPFC.Models.Event>>();
 
-            CreateMap< List<OPFC.Models.BookMark>, List<BookMarkDTO>>();
-            CreateMap< List<BookMarkDTO>, List<OPFC.Models.BookMark>>();
+            CreateMap<List<OPFC.Models.BookMark>, List<BookMarkDTO>>();
+            CreateMap<List<BookMarkDTO>, List<OPFC.Models.BookMark>>();
 
 
             CreateMap<List<OPFC.Models.Meal>, List<MealDTO>>();
             CreateMap<List<MealDTO>, List<OPFC.Models.Meal>>();
-           
+
 
             #endregion
 
-            Mapper.Initialize(x => x.AddProfile<AutoMapperConfigTask>());
+            Mapper.Initialize(x =>
+            {
+                x.AddProfile<AutoMapperConfigTask>();
+                x.ValidateInlineMaps = false;
+            });
+
+
         }
     }
 }

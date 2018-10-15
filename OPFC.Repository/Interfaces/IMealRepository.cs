@@ -13,5 +13,7 @@ namespace OPFC.Repositories.Interfaces
         Meal GetMealById(long id);
 
         List<Meal> GetAllMeal();
+
+        bool isExist(long id);
     }
 }

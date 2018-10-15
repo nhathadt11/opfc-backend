@@ -14,7 +14,9 @@ namespace OPFC.Services.Interfaces
 
         Brand UpdateBrand(Brand brand);
 
-        bool ChangeBrandStatus(long brandId, bool isActive);
+        Brand ChangeBrandStatus(long brandId, bool isActive);
         void SavePhoto(Photo photo);
+
+        Brand GetBrandByUserId(long id);
     }
 }

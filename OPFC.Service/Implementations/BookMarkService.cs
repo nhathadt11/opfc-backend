@@ -18,46 +18,26 @@ namespace OPFC.Services.Implementations
 
         public BookMark CreateBookMark(BookMark bookMark)
         {
-            try
-            {
-                var result = _opfcUow.BookMarkRepository.CreateBookMark(bookMark);
-                _opfcUow.Commit();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var result = _opfcUow.BookMarkRepository.CreateBookMark(bookMark);
+            _opfcUow.Commit();
+            return result;
         }
 
         public List<BookMark> GetAllBookMark()
         {
-            try
-            {
-                return _opfcUow.BookMarkRepository.GetAllBookMark().ToList();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return _opfcUow.BookMarkRepository.GetAllBookMark().ToList();
         }
 
         public BookMark UpdateBookMark(BookMark bookMark)
         {
-            try
-            {
-                var result = _opfcUow.BookMarkRepository.UpdateBookMark(bookMark);
-                _opfcUow.Commit();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            var result = _opfcUow.BookMarkRepository.UpdateBookMark(bookMark);
+            _opfcUow.Commit();
+            return result;
         }
 
         public bool DeleteBookMark(BookMark bookMark)
         {
+<<<<<<< HEAD
             try
             {
                 var result = _opfcUow.BookMarkRepository.DeleteBookMark(bookMark);
@@ -68,18 +48,16 @@ namespace OPFC.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+=======
+            var result = _opfcUow.BookMarkRepository.DeleteBookMark(bookMark);
+            _opfcUow.Commit();
+            return result;
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         }
 
         public BookMark GetBookMarkbyId(long id)
         {
-            try
-            {
-                return _opfcUow.BookMarkRepository.GetBookMarkById(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return _opfcUow.BookMarkRepository.GetBookMarkById(id);
         }
     }
 }

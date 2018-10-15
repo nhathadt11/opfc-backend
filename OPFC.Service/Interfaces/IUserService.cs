@@ -31,5 +31,9 @@ namespace OPFC.Services.Interfaces
         /// <param name="user"></param>
         /// <returns></returns>
         User CreateUser(User user);
+
+        User Update(User user);
+
+        bool IsUserExist(string userName);
     }
 }

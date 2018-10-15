@@ -30,7 +30,7 @@ namespace OPFC.API.Services.Implementations
 
             return new RemoveBookMarkResponse
             {
-                BookMark = Mapper.Map<BookMarkDTO>(_bookMarkService.RemoveBookMark(bookMark))
+//                BookMark = Mapper.Map<BookMarkDTO>(_bookMarkService.RemoveBookMark(bookMark))
             };
         }
     }

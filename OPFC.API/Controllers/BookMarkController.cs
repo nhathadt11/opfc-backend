@@ -16,20 +16,26 @@ namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
     [Authorize]
-    [Route("/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class BookMarkController : ControllerBase
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
+<<<<<<< HEAD
         [Route("/BookMark")]
+=======
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         public ActionResult Create(CreateBookMarkRequest request)
         {
             try
             {
                 var bookMark = Mapper.Map<BookMarkDTO>(request.BookMark);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
                 var result = _serviceUow.BookMarkService.CreateBookMark(Mapper.Map<BookMark>(bookMark));
 
                 return Created("/BookMark", Mapper.Map<BookMarkDTO>(result));
@@ -41,6 +47,7 @@ namespace OPFC.API.Controllers
         }
 
         [HttpGet]
+<<<<<<< HEAD
         [Route("/BookMark")]
         public ActionResult GetAll()
         {
@@ -52,6 +59,40 @@ namespace OPFC.API.Controllers
         [HttpPut]
         [Route("/BookMark")]
         public ActionResult Update(UpdateBookMarkRequest request)
+=======
+        public ActionResult GetAll()
+        {
+            try
+            {
+                var bookMarks = Mapper.Map<List<BookMarkDTO>>(_serviceUow.BookMarkService.GetAllBookMark());
+                return Ok(bookMarks);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetById(long id)
+        {
+            try
+            {
+                var found = Mapper.Map<List<BookMarkDTO>>(_serviceUow.BookMarkService.GetBookMarkbyId(id));
+                if (found == null)
+                {
+                    return NotFound("Bookmark could not be found.");
+                }
+                return Ok(found);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult Update(long id, UpdateBookMarkRequest request)
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         {
             try
             {
@@ -63,6 +104,7 @@ namespace OPFC.API.Controllers
             }
             catch(Exception ex)
             {
+<<<<<<< HEAD
                 return BadRequest(new { ex.Message });
             }
         }
@@ -126,6 +168,30 @@ namespace OPFC.API.Controllers
             {
                 return BadRequest(new { ex.Message });
             }
+=======
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(long id)
+        {
+            var bookMark = _serviceUow.BookMarkService.GetBookMarkbyId(id);
+
+            if (bookMark == null)
+                return NotFound(new { Message = "Could not find bookmark" });
+
+            try
+            {
+                _serviceUow.BookMarkService.DeleteBookMark(bookMark);
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         }
     }
 }

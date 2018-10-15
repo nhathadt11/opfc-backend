@@ -36,6 +36,7 @@ namespace OPFC.Repositories.Factory
                 {typeof(IPhotoRepository), dbContext => new PhotoRepository(dbContext)},
                 {typeof(IEventRepository), dbContext => new EventRepository(dbContext)},
                 {typeof(IEventTypeRepository), dbContext => new EventTypeRepository(dbContext)},
+                {typeof(IMenuMealRepository), dbContext => new MenuMealRepository(dbContext)},
             };
         }
 

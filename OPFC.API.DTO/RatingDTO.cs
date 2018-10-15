@@ -14,5 +14,7 @@ namespace OPFC.API.DTO
         public DateTime RateTime { get; set; }
 
         public string Comment { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

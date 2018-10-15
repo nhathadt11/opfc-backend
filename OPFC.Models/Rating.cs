@@ -19,7 +19,10 @@ namespace OPFC.Models
         public string Comment { get; set; }
 
         public bool IsDeleted { get; set; }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
 
     }
 }

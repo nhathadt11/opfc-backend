@@ -22,4 +22,9 @@ namespace OPFC.API.ServiceModel.User
     {
         public UserDTO User;
     }
+
+    public class UpdateUserRequest : IReturn<GetUserByIdResponse>
+    {
+        public UserDTO User;
+    }
 }

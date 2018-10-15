@@ -17,6 +17,7 @@ namespace OPFC.Services.Implementations
 
         public City CreateDistrict(City city)
         {
+<<<<<<< HEAD
             try
             {
                 var result = _opfcUow.CityRepository.CreateCity(city);
@@ -40,10 +41,22 @@ namespace OPFC.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+=======
+            var result = _opfcUow.CityRepository.CreateCity(city);
+            _opfcUow.Commit();
+
+            return result;
+        }
+
+        public List<City> GetAllCity()
+        {            
+            return _opfcUow.CityRepository.GetAllCity();
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         }
 
         public City GetCityById(long id)
         {
+<<<<<<< HEAD
             try
             {
                 return _opfcUow.CityRepository.GetCityById(id);
@@ -52,10 +65,14 @@ namespace OPFC.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+=======
+            return _opfcUow.CityRepository.GetCityById(id);
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         }
 
         public City UpdateDistrict(City city)
         {
+<<<<<<< HEAD
             try
             {
                 return _opfcUow.CityRepository.UpdateCity(city);
@@ -64,6 +81,9 @@ namespace OPFC.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+=======
+            return _opfcUow.CityRepository.UpdateCity(city);
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         }
     }
 }

@@ -7,6 +7,7 @@ namespace OPFC.Models
 {
     public class Menu
     {
+        [Key]
         public long Id { get; set; }
 
         public string MenuName { get; set; }
@@ -21,13 +22,13 @@ namespace OPFC.Models
 
         public long BrandId { get; set; }
 
-        [ForeignKey("MenuId")]
+//        [ForeignKey("MenuId")]
         public List<Meal> MealList { get; set; }
 
-        [ForeignKey("MenuId")]
+//        [ForeignKey("MenuId")]
         public List<BookMark> BookMarkList { get; set; }
 
-        [ForeignKey("MenuId")]
+//        [ForeignKey("MenuId")]
         public List<Rating> RatingList { get; set; }
 
     }

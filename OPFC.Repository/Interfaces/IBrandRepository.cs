@@ -1,6 +1,7 @@
 ﻿using OPFC.Models;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Text;
 
 namespace OPFC.Repositories.Interfaces
@@ -17,6 +18,10 @@ namespace OPFC.Repositories.Interfaces
 
         List<Brand> GetAllBrand();
 
+<<<<<<< HEAD
+=======
+        Brand GetBrandByUserId(long id);
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
     }
 
 }

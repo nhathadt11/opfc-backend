@@ -13,13 +13,14 @@ namespace OPFC.API.Controllers
 {
     [ServiceStack.EnableCors("*", "*")]
     [Authorize]
-    [Route("/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MealController : ControllerBase
     {
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
 
         [HttpPost]
+<<<<<<< HEAD
         [Route("/Meal")]
         public ActionResult Create(CreateMealRequest request)
         {
@@ -41,9 +42,38 @@ namespace OPFC.API.Controllers
         [HttpGet]
         [Route("/Meal")]
         public ActionResult GetAll()
+=======
+        public IActionResult Create(CreateMealRequest request)
         {
-            var meals = _serviceUow.MealService.GetAllMeal();
+            try
+            {
+                var meal = Mapper.Map<Meal>(request.Meal);
+                var created = Mapper.Map<MealDTO>(_serviceUow.MealService.CreateMeal(meal));
 
+                return Created("/Meal", created);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
+        {
+            try
+            {
+                var meals = _serviceUow.MealService.GetAllMeal();
+                return Ok(Mapper.Map<List<MealDTO>>(meals));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+<<<<<<< HEAD
             return Ok(Mapper.Map<List<MealDTO>>(meals));
 
         }
@@ -81,6 +111,86 @@ namespace OPFC.API.Controllers
                 return BadRequest(new { ex.Message });
             }
 
+=======
+        [HttpGet("{id}")]
+        public IActionResult GetById(long id)
+        {
+            try
+            {
+                var found = _serviceUow.MealService.GetMealById(id);
+                if (found == null)
+                {
+                    return NotFound("Meal could not be found.");
+                }
+                
+                return Ok(Mapper.Map<MealDTO>(found));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(long id, UpdateMealRequest request)
+        {
+            try
+            {
+                var found = _serviceUow.MealService.isExist(id);
+                if (!found)
+                {
+                    return NotFound("Meal could not be found.");
+                }
+
+                var meal = Mapper.Map<Meal>(request.Meal);
+                return Ok(Mapper.Map<MealDTO>(_serviceUow.MealService.UpdateMeal(meal)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            try
+            {
+                var found = _serviceUow.MealService.isExist(id);
+                if (!found)
+                {
+                    return NotFound("Meal could not be found.");
+                }
+
+                _serviceUow.MealService.DeleteMealById(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Brand/{brandId}")]
+        public IActionResult GetAllByBrandId(long brandId)
+        {
+            try
+            {
+                var foundBrand = _serviceUow.BrandService.GetBrandById(brandId);
+                if (foundBrand == null)
+                {
+                    return NotFound("Brand could not be found.");
+                }
+
+                List<Meal> mealList = _serviceUow.MealService.GetAllByBrandId(brandId);
+                return Ok(Mapper.Map<List<MealDTO>>(mealList));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+>>>>>>> 42be1eec49ca3c2199a0e7b1efd191b1b654d298
         }
 
         [HttpDelete]
