@@ -13,10 +13,6 @@ All following commands must be performed under root of project
 
 - Install dependencies: `dotnet restore`
 
-### Building
-
-- Run: `msbuild`
-
 ### Running
 
 - Run: `dotnet run -p OPFC.API`
