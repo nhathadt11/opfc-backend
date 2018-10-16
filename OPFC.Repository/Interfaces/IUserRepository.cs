@@ -33,6 +33,8 @@ namespace OPFC.Repositories.Interfaces
 
         bool IsUserExist(string userName);
 
+        bool IsUserExist(long userId);
+
         User Update(User user);
     }
 }

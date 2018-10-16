@@ -46,5 +46,10 @@ namespace OPFC.Repositories.Implementations
 
             return result;
         }
+
+        public bool IsEventExist(long eventId)
+        {
+            return DbSet.Any(e => e.Id == eventId);
+        }
     }
 }

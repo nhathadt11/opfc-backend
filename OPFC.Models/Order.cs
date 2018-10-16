@@ -8,7 +8,6 @@ namespace OPFC.Models
     public class Order
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrderId { get; set; }
 
         public long UserId { get; set; }
@@ -21,7 +20,7 @@ namespace OPFC.Models
 
         public bool IsDeleted { get; set; }
 
-        [ForeignKey("OrderId")]
+        //[ForeignKey("OrderId")]
         public List<Transaction> TransactionList { get; set; }
 
     }

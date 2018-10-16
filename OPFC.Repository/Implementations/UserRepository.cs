@@ -42,6 +42,11 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Any(u => u.Username == userName);
         }
 
+        public bool IsUserExist(long userId)
+        {
+            return DbSet.Any(u => u.Id == userId);
+        }
+
         public User Update(User user)
         {
             return DbSet.Update(user).Entity;

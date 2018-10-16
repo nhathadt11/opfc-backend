@@ -9,7 +9,7 @@ namespace OPFC.Repositories.Implementations
 {
     public class OrderRepository : EFRepository<Order>, IOrderRepository
     {
-        public OrderRepository(DbContext dbContext) : base(dbContext){ }
+        public OrderRepository(DbContext dbContext) : base(dbContext) { }
 
         public Models.Order CreateOrder(Order order)
         {
@@ -18,7 +18,7 @@ namespace OPFC.Repositories.Implementations
 
         public bool DeleteOrder(Order order)
         {
-            if(DbSet.SingleOrDefault() != null)
+            if (DbSet.SingleOrDefault() != null)
             {
                 DbSet.Remove(order);
                 return true;
@@ -41,7 +41,5 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Update(order).Entity;
         }
-
-
     }
 }
