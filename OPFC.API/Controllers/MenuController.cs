@@ -33,6 +33,21 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
+        
+        [AllowAnonymous]
+        [HttpGet("Limit")]
+        public IActionResult GetLimit()
+        {
+            try
+            {
+                var menuList = _serviceUow.MenuService.GetAllMenu().Take(20);
+                return Ok(Mapper.Map<List<MenuDTO>>(menuList));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         [AllowAnonymous]
         [HttpGet("{id}")]
