@@ -30,10 +30,9 @@ namespace OPFC.Repositories.Implementations
         public List<User> GetAllUsers()
         {
             var userList = DbSet.Include(u => u.UserRole)
-                                .Include(u => u.EventAddressList)
-                                .Include(u => u.BrandList)
-                                .ToListAsync<User>()
-                                .Result;
+                .Include(u => u.EventAddressList)
+                .Include(u => u.BrandList)
+                .ToList<User>();
             return userList;
         }
 

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
+using Microsoft.Extensions.FileProviders;
 using OPFC.API.ServiceModel.Order;
+using OPFC.FirebaseService;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
@@ -62,6 +64,8 @@ namespace OPFC.Services.Implementations
                     _opfcUow.OrderLineRepository.CreateMany(orderLines);
                     _opfcUow.Commit();
 
+                    SendNotification(orderMenus, userId, orderRequest.EventId, createdOrdered.OrderId);
+                    
                     scope.Complete();
 
                     return createdOrdered;
@@ -123,6 +127,40 @@ namespace OPFC.Services.Implementations
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        private void SendNotification(Menu[] menuList, long userId, long eventId, long orderId)
+        {
+            menuList.Each(m =>
+            {           
+                var forEvent = _opfcUow.EventRepository.GetEventById(eventId);
+
+                FirebaseService.FirebaseService.Instance.SendNotification(new OrderPayload
+                {
+                    FromUserId = userId,
+                    ToUserId = GetUserByBrandId(m.BrandId).Id,
+                    Message = m.MenuName,
+                    CreatedAt = DateTime.Now,
+                    Data = new Dictionary<string, object>
+                    {
+                        { "OrderId", orderId },
+                        { "MenuId", m.Id },
+                        { "MenuName", m.MenuName },
+                        { "Event", forEvent }
+                    }
+                }); 
+            });
+        }
+
+        private User GetUserByBrandId(long brandId)
+        {
+            var foundBrand = _opfcUow.BrandRepository.GetBrandById(brandId);
+            if (foundBrand == null) throw new Exception("Brand could not be found.");
+
+            var foundUser = _opfcUow.UserRepository.GetAllUsers().Find(u => u.Id == foundBrand.UserId);
+            if (foundUser == null) throw new Exception("User could not be found.");
+
+            return foundUser;
         }
     }
 }
