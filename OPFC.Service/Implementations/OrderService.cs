@@ -134,11 +134,14 @@ namespace OPFC.Services.Implementations
             menuList.Each(m =>
             {           
                 var forEvent = _opfcUow.EventRepository.GetEventById(eventId);
+                var userByBrand = GetUserByBrandId(m.BrandId);
 
                 FirebaseService.FirebaseService.Instance.SendNotification(new OrderPayload
                 {
                     FromUserId = userId,
-                    ToUserId = GetUserByBrandId(m.BrandId).Id,
+                    FromUsername = _opfcUow.UserRepository.GetById(userId).Username,
+                    ToUserId = userByBrand.Id,
+                    ToUsername = _opfcUow.UserRepository.GetById(userByBrand.Id).Username,
                     Message = m.MenuName,
                     CreatedAt = DateTime.Now,
                     Data = new Dictionary<string, object>
