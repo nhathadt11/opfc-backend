@@ -40,6 +40,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{471693CD-2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPFC.Recommendation", "OPFC.Recommendation\OPFC.Recommendation.csproj", "{AE29C8B9-8A20-43DA-9479-3E1660F6DDD4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FirebaseService", "FirebaseService", "{8BC514E4-7CEB-4BB5-BFA7-D6F793E89FE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPFC.FirebaseService", "OPFC.FirebaseService\OPFC.FirebaseService.csproj", "{E76A3362-1B87-4C5D-B7BF-B24960D039CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +90,10 @@ Global
 		{AE29C8B9-8A20-43DA-9479-3E1660F6DDD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE29C8B9-8A20-43DA-9479-3E1660F6DDD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE29C8B9-8A20-43DA-9479-3E1660F6DDD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E76A3362-1B87-4C5D-B7BF-B24960D039CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E76A3362-1B87-4C5D-B7BF-B24960D039CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E76A3362-1B87-4C5D-B7BF-B24960D039CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E76A3362-1B87-4C5D-B7BF-B24960D039CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +109,7 @@ Global
 		{5F0F4DB8-943E-4010-83A0-EFF4F7867FF5} = {81574A8A-C50C-47C2-BECE-99B3709151BB}
 		{88B36E99-E141-411A-96AB-27A7D04F7571} = {1E604409-DD5C-4DFD-AB34-822677C89375}
 		{AE29C8B9-8A20-43DA-9479-3E1660F6DDD4} = {471693CD-259B-4666-BD82-A9B6F2188BA5}
+		{E76A3362-1B87-4C5D-B7BF-B24960D039CF} = {8BC514E4-7CEB-4BB5-BFA7-D6F793E89FE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D09DFC12-B29C-4182-BEE9-B3B10D46A8C3}
