@@ -48,6 +48,8 @@ namespace OPFC.API.ServiceModel.Tasks
 
             CreateMap<CreateMenuRequest, Models.Menu>().ReverseMap();
 
+            CreateMap<Models.Rating, RatingDTO>().ReverseMap();
+
             #region List mapping
 
             CreateMap<List<OPFC.Models.Event>, List<EventDTO>>();
@@ -59,6 +61,8 @@ namespace OPFC.API.ServiceModel.Tasks
 
             CreateMap<List<OPFC.Models.Meal>, List<MealDTO>>();
             CreateMap<List<MealDTO>, List<OPFC.Models.Meal>>();
+
+            CreateMap<List<OPFC.Models.Rating>, List<RatingDTO>>().ReverseMap();
 
 
             #endregion

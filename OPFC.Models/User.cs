@@ -105,5 +105,9 @@ namespace OPFC.Models
 
         [ForeignKey("UserId")]
         public List<BookMark> BookMarkList { get; set; }
+
+        public long CityId { get; set; }
+        
+        public long DistrictId { get; set; }
     }
 }

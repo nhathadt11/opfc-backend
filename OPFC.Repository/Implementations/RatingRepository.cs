@@ -18,8 +18,7 @@ namespace OPFC.Repositories.Implementations
 
         public List<Rating> GetAllRating()
         {
-            return DbSet.DefaultIfEmpty().ToList();
-
+            return DbSet.Where(r => !r.IsDeleted).ToList();
         }
 
         public Rating GetRatingById(long id)

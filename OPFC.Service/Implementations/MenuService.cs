@@ -132,6 +132,11 @@ namespace OPFC.Services.Implementations
             return updated;
         }
 
+        public bool Exists(long id)
+        {
+            return _opfcUow.MenuRepository.GetMenuById(id) != null;
+        }
+
         public Menu GetMenuById(long id)
         {
             return _opfcUow.MenuRepository.GetMenuById(id);

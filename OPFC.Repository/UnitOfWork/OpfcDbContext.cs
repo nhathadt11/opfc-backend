@@ -97,5 +97,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[City]
         /// </summary>
         public DbSet<City> City { get; set; }
+
+        /// <summary>
+        /// [dbo].[Rating]
+        /// </summary>
+        public DbSet<Rating> Rating { get; set; }
     }
 }

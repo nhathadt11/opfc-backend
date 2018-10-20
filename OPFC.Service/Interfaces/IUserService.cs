@@ -35,5 +35,7 @@ namespace OPFC.Services.Interfaces
         User Update(User user);
 
         bool IsUserExist(string userName);
+
+        string GetCityNameForUserId(long userId);
     }
 }

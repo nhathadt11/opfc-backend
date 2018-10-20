@@ -6,9 +6,9 @@ namespace OPFC.API.ServiceModel.Rating
 {
     [EnableCors("*", "*")]
     [Route("/Rating/CreateRating/", "POST")]
-    public class CreateRatingRequest : IReturn<CreateRatingResponse>
+    public class CreateRatingRequest : RatingDTO, IReturn<CreateRatingResponse>
     {
-        public RatingDTO Rating { get; set; }
+
     }
 
     [EnableCors("*", "*")]
