@@ -56,15 +56,16 @@ namespace OPFC.API.Controllers
             try
             {
                 if (!_serviceUow.MenuService.Exists(id)) throw new Exception("Menu could not be found.");
+
+                var retrieved = _serviceUow.RatingService.GetAllRating().Where(r => r.MenuId == id);
+                var returnRatingList = Mapper.Map<List<RatingDTO>>(retrieved);
                 
-                var ratingList = Mapper.Map<List<RatingDTO>>(_serviceUow.RatingService.GetAllRating());
-                
-                ratingList.ForEach(r =>
+                returnRatingList.ForEach(r =>
                 {
                     r.Author = _serviceUow.UserService.GetUserById(r.UserId).Username;
                     r.CityName = _serviceUow.UserService.GetCityNameForUserId(r.UserId);
                 });
-                return Ok(ratingList);
+                return Ok(returnRatingList);
             }
             catch (Exception e)
             {
