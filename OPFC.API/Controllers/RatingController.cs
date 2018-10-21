@@ -65,7 +65,7 @@ namespace OPFC.API.Controllers
                     r.Author = _serviceUow.UserService.GetUserById(r.UserId).Username;
                     r.CityName = _serviceUow.UserService.GetCityNameForUserId(r.UserId);
                 });
-                return Ok(returnRatingList);
+                return Ok(returnRatingList.OrderByDescending(rate => rate.RateTime));
             }
             catch (Exception e)
             {
