@@ -13,5 +13,7 @@ namespace OPFC.Repositories.Interfaces
         Rating GetRatingById(long id);
 
         List<Rating> GetAllRating();
+
+        List<Rating> GetAllRatingByMenuId(List<long> menuIds);
     }
 }

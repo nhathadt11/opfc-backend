@@ -42,21 +42,8 @@ namespace OPFC.API
             });
 
             services.AddMvc();
-            // Config connection string here
-            //IConfigurationRoot configuration = new ConfigurationBuilder()
-            //                             .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
-            //                             .AddJsonFile("appsettings.json")
-            //                             .Build();
 
-            //// configure strongly typed settings objects
-            //var appSettingsSection = Configuration.GetSection("AppSettings");
-
-            //services.Configure<OPFC.Constants.AppSettings.Secret>(appSettingsSection);
-
-            // configure jwt authentication
-            //var appSettings = appSettingsSection.Get<OPFC.Constants.AppSettings.Secret>();
             var key = Encoding.ASCII.GetBytes(OPFC.Constants.AppSettings.Secret);
-
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,10 +75,12 @@ namespace OPFC.API
             }
 
             // Register ServiceStack AppHost as a .NET Core module
+            var appsSettings = new NetCoreAppSettings(Configuration);
+
             app.UseServiceStack(new AppHost
             {
                 // Use **appsettings.json** and config sources
-                AppSettings = new NetCoreAppSettings(Configuration)
+                AppSettings = appsSettings
             });
 
             app.UseCors(builder => builder.WithOrigins("*")

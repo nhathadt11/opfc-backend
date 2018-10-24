@@ -30,5 +30,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Update(rating).Entity;
         }
+
+        public List<Rating> GetAllRatingByMenuId(List<long> menuIds)
+        {
+            return DbSet.Where(r => menuIds.Contains(r.MenuId)).ToList();
+        }
     }
 }

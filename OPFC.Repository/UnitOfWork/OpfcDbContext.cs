@@ -36,6 +36,9 @@ namespace OPFC.Repositories.UnitOfWork
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MenuTag>()
+            .HasKey(mt => new { mt.MenuId, mt.TagId });
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -102,5 +105,15 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[Rating]
         /// </summary>
         public DbSet<Rating> Rating { get; set; }
+
+        /// <summary>
+        /// [dbo].[Tag]
+        /// </summary>
+        public DbSet<Tag> Tag { get; set; }
+
+        /// <summary>
+        /// [dbo].[MenuTag]
+        /// </summary>
+        public DbSet<MenuTag> MenuTag { get; set; }
     }
 }

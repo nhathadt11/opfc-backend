@@ -80,5 +80,155 @@ namespace OPFC.Services.Implementations
                 throw;
             }
         }
+
+        public List<List<Menu>> GetSuggestion(Event basedEvent)
+        {
+            // Get all existed Menu
+            var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
+
+            // List out menu id which matched event type id
+            var listMenuIdMatchedEventType = _opfcUow.MenuEventTypeRepository.GetAll()
+                                                                 .Where(x => x.IsDeleted == false &&
+                                                                        x.EventTypeId == basedEvent.EventTypeId)
+                                                                 .Select(x => x.MenuId)
+                                                                 .ToList();
+
+            // List out list menu which matched event type
+            var matchedMenus = existingMenus.Where(m => listMenuIdMatchedEventType.Contains(m.Id)).ToList();
+
+            // Get all service location by event district Id
+            var listBrandIdMatchedDistrictId = _opfcUow.ServiceLocationRepository.GetServiceLocationByDistrictId(basedEvent.DistrictId)
+                                                                        .Select(sl => sl.BrandId)
+                                                                        .ToList();
+
+
+            matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+
+            matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
+
+            var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
+
+            var ratingsGroup = _opfcUow.RatingRepository.GetAllRatingByMenuId(groupMenuIds)
+                                                   .GroupBy(x => x.MenuId)
+                                                   .ToList();
+
+            var menuTags = _opfcUow.MenuTagRepository.GetAllByMenuIds(groupMenuIds)
+                                                     .GroupBy(t => t.MenuId).ToList();
+
+            var menuTypes = basedEvent.MenuTypes.Distinct().ToList();
+
+            var listWeight = new Dictionary<string, double>();
+
+            var count = 0;
+
+            menuTags.ForEach(mt =>
+            {
+                count = mt.Where(t => menuTypes.Contains(t.TagId)).Count();
+                double per = (count * 100) / menuTypes.Count;
+
+                listWeight.Add(mt.Key.ToString(), per);
+            });
+
+            // for testting
+            //var pairs = new Dictionary<string, string>();
+            //pairs.Add("39", "1,2");
+            //pairs.Add("603", "3,4");
+            //pairs.Add("79", "2,3");
+
+
+            // This code work with our system
+            var pairs = new Dictionary<string, string>();
+            foreach (var item in menuTags)
+            {
+                var arr = item.ToList().Select(x => x.TagId).ToArray();
+
+                var val = string.Join(",", arr);
+
+                pairs.Add(item.Key.ToString(), val);
+            }
+
+            var combinedMenu = GetCombine(pairs);
+
+            double percentForEachTag = 100.00 / menuTypes.Count;
+
+            var matchPercent = 0.0;
+
+            var matchedMenuWithPercent = new Dictionary<string, double>();
+
+            foreach (var item in combinedMenu)
+            {
+                var values = item.Value.Split(',').ToList();
+
+                values.ForEach(v =>
+                {
+                    if (menuTypes.Contains(Int64.Parse(v)))
+                    {
+                        matchPercent += percentForEachTag;
+                    }
+                });
+
+                matchedMenuWithPercent.Add(item.Key, matchPercent);
+                matchPercent = 0.0;
+            }
+
+            var listPairedKeys = matchedMenuWithPercent.Keys.ToList();
+
+            var finalResult = new List<List<Menu>>();
+
+            listPairedKeys.ForEach(v => {
+                var ids = v.Split(";").ToList();
+                var mn = matchedMenus.Where(m => ids.Contains(m.Id.ToString())).ToList();
+
+                finalResult.Add(mn);
+            });
+
+            return finalResult;
+        }
+
+        private Dictionary<string, string> Result = new Dictionary<string, string>();
+
+        private Dictionary<string, string> GetCombine(Dictionary<string, string> pairs)
+        {
+
+            for (int i = 0; i < pairs.Count; i++)
+            {
+                var newDic = new Dictionary<string, string>();
+
+                for (int j = i; j < pairs.Count; j++)
+                {
+                    var elementAtI = pairs.ElementAt(i);
+                    var elementAtJ = pairs.ElementAt(j);
+
+                    if (!elementAtI.Key.Equals(elementAtJ.Key))
+                    {
+                        var arrNewKeyPair = (elementAtI.Key + ";" + elementAtJ.Key).ToArray();
+                        var newKeyPair = new string(arrNewKeyPair);
+
+                        var distinctKey = newKeyPair.Split(';').Distinct().ToList();
+                        var cleanedNewKeyPair = string.Join(";", distinctKey).ToString();
+
+                        var newValue = (elementAtI.Value + "," + elementAtJ.Value).ToArray();
+                        var originNewValue = new string(newValue);
+
+                        var cleanedNewValue = originNewValue.Split(',').Distinct().ToList();
+
+                        if (!newDic.Keys.Contains(cleanedNewKeyPair))
+                        {
+                            newDic.Add(cleanedNewKeyPair, string.Join(",", cleanedNewValue).ToString());
+                        }
+
+                        if (!Result.Keys.Contains(cleanedNewKeyPair))
+                        {
+                            Result.Add(cleanedNewKeyPair, string.Join(",", cleanedNewValue).ToString());
+                        }
+
+                    }
+                }
+
+                GetCombine(newDic);
+            }
+
+            return Result;
+        }
     }
 }

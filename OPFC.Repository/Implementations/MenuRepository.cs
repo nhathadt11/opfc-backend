@@ -21,6 +21,13 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false).ToList();
         }
 
+        public List<Menu> GetAllMenuWithCollaborative()
+        {
+            return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false)
+                        .Include(m => m.MenuEventTypeList)
+                        .ToList();
+        }
+
         public List<Menu> GetAllByBrandId(long id)
         {
             return DbSet.Where(m => m.BrandId == id).ToList();

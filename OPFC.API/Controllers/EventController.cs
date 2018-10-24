@@ -33,7 +33,7 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
         [HttpPost("User/{userId}")]
         public ActionResult Post(long userId, CreateEventRequest request)
         {
@@ -44,7 +44,7 @@ namespace OPFC.API.Controllers
                 {
                     return NotFound("User could not be found.");
                 }
-                
+
                 var eventReq = Mapper.Map<EventDTO>(request.Event);
                 eventReq.UserId = userId;
 
@@ -91,7 +91,7 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
         [HttpPut("User/{userId}/{id}")]
         public ActionResult Update(long userId, long id, UpdateEventRequest request)
         {
@@ -184,6 +184,20 @@ namespace OPFC.API.Controllers
             {
                 var result = _serviceUow.EventService.FindMatchedEvent(request.ServiceLocation, request.ServingNumber, request.Price, request.EventTypeIds);
                 return Ok(Mapper.Map<List<EventDTO>>(result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("/Event/GetSuggestion")]
+        public ActionResult<List<List<Menu>>> GetSuggestion(Event basedEvent)
+        {
+            try
+            {
+               var result =  _serviceUow.EventService.GetSuggestion(basedEvent);
+                return Ok(result);
             }
             catch (Exception ex)
             {

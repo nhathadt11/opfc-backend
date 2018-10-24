@@ -75,12 +75,16 @@ namespace OPFC.Repositories.UnitOfWork
         IEventRepository EventRepository { get; }
 
         IEventTypeRepository EventTypeRepository { get; }
-        
+
         IMenuMealRepository MenuMealRepository { get; }
 
         IOrderLineRepository OrderLineRepository { get; }
-        
+
         IMenuEventTypeRepository MenuEventTypeRepository { get; }
+
+        ITagRepository TagRepository { get; }
+
+        IMenuTagRepository MenuTagRepository { get; }
 
         /// <summary>
         /// Dispose

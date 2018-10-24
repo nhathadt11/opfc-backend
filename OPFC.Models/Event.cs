@@ -43,5 +43,8 @@ namespace OPFC.Models
         public District District { get; set; }
 
         public City City { get; set; }
+
+        [NotMapped]
+        public long[] MenuTypes { get; set; }
     }
 }
