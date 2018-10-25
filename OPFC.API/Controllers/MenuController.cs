@@ -60,7 +60,19 @@ namespace OPFC.API.Controllers
                 {
                     return NotFound("Menu could not be found.");
                 }
-                return Ok(Mapper.Map<MenuDTO>(found));
+
+                var returnMenu = Mapper.Map<MenuDTO>(found);
+
+                var mealList = _serviceUow.MealService.GetAllMealByMenuId(returnMenu.Id);
+                returnMenu.MealList = mealList;
+
+                var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(returnMenu.Id);
+                returnMenu.EventTypeList = eventTypeList;
+                
+                var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
+                returnMenu.BrandName = brand.BrandName;
+
+                return Ok(returnMenu);
             }
             catch (Exception e)
             {

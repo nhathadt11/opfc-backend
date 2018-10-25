@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OPFC.Models;
 
 namespace OPFC.API.DTO
 {
@@ -18,6 +19,8 @@ namespace OPFC.API.DTO
         public bool IsActive { get; set; }
 
         public long BrandId { get; set; }
+
+        public string BrandName { get; set; }
         
         public List<long> MealIds { get; set; }
 
@@ -26,6 +29,10 @@ namespace OPFC.API.DTO
         public List<long> EventTypeIds { get; set; }
 
         public List<string> EventTypeNames { get; set; }
+
+        public List<Meal> MealList { get; set; }
+        
+        public List<EventType> EventTypeList { get; set; }
 
         public List<RatingDTO> RatingList { get; set; }
     }
