@@ -9,20 +9,22 @@
     <ProjectReference Include="..\OPFC.FirebaseService\OPFC.FirebaseService.csproj" />
     <ProjectReference Include="..\OPFC.Models\OPFC.Models.csproj" />
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.IdentityModel.Tokens">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.identitymodel.tokens\5.2.0\lib\netstandard1.4\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IdentityModel.Tokens.Jwt">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\system.identitymodel.tokens.jwt\5.2.0\lib\netstandard1.4\System.IdentityModel.Tokens.Jwt.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\OPFC.API.DTO\OPFC.API.DTO.csproj" />
+    <ProjectReference Include="..\OPFC.Recommendation\OPFC.Recommendation.csproj" />
+    <ProjectReference Include="..\OPFC.Utility\OPFC.Utility.csproj" />
+    <ProjectReference Include="..\OPFC.Constant\OPFC.Constants.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.3.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.3.0" />
+    <PackageReference Include="PayPal.SDK.NETCore" Version="1.9.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Interfaces\IPaypalService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ConfigOptions\" />
+  </ItemGroup>
 </Project>
