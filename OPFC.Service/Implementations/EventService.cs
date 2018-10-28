@@ -18,6 +18,18 @@ namespace OPFC.Services.Implementations
             _opfcUow = opfcUow;
         }
 
+        public bool IsEventExist(long eventId)
+        {
+            try
+            {
+                return _opfcUow.EventRepository.IsEventExist(eventId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public void DeleteEvent(long eventId, long userId)
         {
             var aEvent = GetEventById(eventId);
@@ -88,15 +100,22 @@ namespace OPFC.Services.Implementations
 
                 var catIds = modifiedEvent.CategoryIds.ToList();
 
-                _opfcUow.EventCategoryRepository.Delete(modifiedEvent.Id);
+                var eventCategories = _opfcUow.EventCategoryRepository.GetAllByEventId(modifiedEvent.Id);
+
+                eventCategories.ForEach(ec =>
+                {
+                    _opfcUow.EventCategoryRepository.Delete(ec);
+                });
+
                 _opfcUow.Commit();
+
 
                 _opfcUow.EventCategoryRepository.AddMultiples(modifiedEvent.Id, catIds);
                 _opfcUow.Commit();
 
                 scope.Complete();
             }
-                
+
 
             return result;
         }

@@ -72,12 +72,13 @@ namespace OPFC.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update(long id, UpdateEventRequest request)
+        public ActionResult Update(UpdateEventRequest request)
         {
             try
             {
-                var found = _serviceUow.EventService.GetEventById(id);
-                if (found == null)
+                var id = request.Event.Id;
+                var found = _serviceUow.EventService.IsEventExist(id);
+                if (!found)
                 {
                     return NotFound("Event could not be found.");
                 }
