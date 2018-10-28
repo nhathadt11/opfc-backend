@@ -80,9 +80,10 @@ namespace OPFC.Services.Implementations
 
         public Event UpdateEvent(Event modifiedEvent)
         {
+            var result = new Event();
             using (var scope = new TransactionScope())
             {
-                var result = _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
+                result = _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
                 _opfcUow.Commit();
 
                 var catIds = modifiedEvent.CategoryIds.ToList();
