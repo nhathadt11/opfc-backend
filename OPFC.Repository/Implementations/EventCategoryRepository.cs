@@ -16,5 +16,17 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Where(ec => ec.EventId == eventId).ToList();
         }
+
+        public void AddMultiples(long eventId, List<long> categoryIds)
+        {
+            foreach(var catId in categoryIds)
+            {
+                var eventCategory = new EventCategory {
+                    EventId = eventId,
+                    CategoryId = catId
+                };
+                DbSet.Add(eventCategory);
+            }
+        }
     }
 }

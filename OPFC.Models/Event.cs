@@ -45,6 +45,6 @@ namespace OPFC.Models
         public City City { get; set; }
 
         [NotMapped]
-        public long[] EventType { get; set; }
+        public long[] CategoryIds { get; set; }
     }
 }

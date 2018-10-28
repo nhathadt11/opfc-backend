@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 
 namespace OPFC.Services.Implementations
 {
@@ -53,17 +54,48 @@ namespace OPFC.Services.Implementations
 
         public Event SaveEvent(Event newEvent)
         {
+            var result = new Event();
+
             newEvent.IsDeleted = false;
-            var result = _opfcUow.EventRepository.SaveEvent(newEvent);
-            _opfcUow.Commit();
+
+            using (var scope = new TransactionScope())
+            {
+                result = _opfcUow.EventRepository.SaveEvent(newEvent);
+                _opfcUow.Commit();
+
+                var categoryIds = newEvent.CategoryIds.ToList();
+
+                if (categoryIds != null && categoryIds.Count > 0)
+                {
+                    _opfcUow.EventCategoryRepository.AddMultiples(result.Id, categoryIds);
+                    _opfcUow.Commit();
+                }
+
+                scope.Complete();
+            }
+
 
             return result;
         }
 
         public Event UpdateEvent(Event modifiedEvent)
         {
-            var result = _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
-            _opfcUow.Commit();
+            using (var scope = new TransactionScope())
+            {
+                var result = _opfcUow.EventRepository.UpdateEvent(modifiedEvent);
+                _opfcUow.Commit();
+
+                var catIds = modifiedEvent.CategoryIds.ToList();
+
+                _opfcUow.EventCategoryRepository.Delete(modifiedEvent.Id);
+                _opfcUow.Commit();
+
+                _opfcUow.EventCategoryRepository.AddMultiples(modifiedEvent.Id, catIds);
+                _opfcUow.Commit();
+
+                scope.Complete();
+            }
+                
 
             return result;
         }

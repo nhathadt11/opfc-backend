@@ -36,5 +36,7 @@ namespace OPFC.API.DTO
         public long UserId { get; set; }
 
         public bool? IsDeleted { get; set; }
+
+        public long[] CategoryIds { get; set; }
     }
 }
