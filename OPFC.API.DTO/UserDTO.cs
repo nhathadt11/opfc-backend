@@ -58,5 +58,20 @@ namespace OPFC.API.DTO
         /// Gets or set user avatar image
         /// </summary>
         public string Avatar { get; set; }
+        
+        /// <summary>
+        /// Gets or set user city id
+        /// </summary>
+        public long CityId { get; set; }
+
+        /// <summary>
+        /// Gets or set user district id
+        /// </summary>
+        public long DistrictId { get; set; }
+        
+        /// <summary>
+        /// Gets or set user address
+        /// </summary>
+        public string Address { get; set; }
     }
 }
