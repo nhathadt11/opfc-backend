@@ -33,6 +33,7 @@ namespace OPFC.Services.Factory
                 {typeof(IOrderService), coreService => new OrderService(opfcUow)},
                 {typeof(IUserService), coreService => new UserService(opfcUow)},
                 {typeof(IEventTypeService), coreService => new EventTypeService(opfcUow)},
+                {typeof(ICategoryService), coreService => new CategoryService(opfcUow)},
             };
         }
 

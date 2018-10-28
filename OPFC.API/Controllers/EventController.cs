@@ -191,12 +191,12 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpPost("/Event/GetSuggestion")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(Event basedEvent)
+        [HttpGet("/Event/GetSuggestion/{eventId}")]
+        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId)
         {
             try
             {
-               var result =  _serviceUow.EventService.GetSuggestion(basedEvent);
+               var result =  _serviceUow.EventService.GetSuggestion(eventId);
                 return Ok(result);
             }
             catch (Exception ex)

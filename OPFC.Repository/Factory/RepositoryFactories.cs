@@ -41,6 +41,9 @@ namespace OPFC.Repositories.Factory
                 {typeof(IOrderLineRepository), dbContext => new OrderLineRepository(dbContext)},
                 {typeof(ITagRepository), dbContext => new TagRepository(dbContext)},
                 {typeof(IMenuTagRepository), dbContext => new MenuTagRepository(dbContext)},
+                {typeof(ICategoryRepository), dbContext => new CategoryRepository(dbContext)},
+                {typeof(IMenuCategoryRepository), dbContext => new MenuCategoryRepository(dbContext)},
+                {typeof(IEventCategoryRepository), dbContext => new EventCategoryRepository(dbContext)},
             };
         }
 

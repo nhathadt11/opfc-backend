@@ -39,6 +39,12 @@ namespace OPFC.Repositories.UnitOfWork
             modelBuilder.Entity<MenuTag>()
             .HasKey(mt => new { mt.MenuId, mt.TagId });
 
+            modelBuilder.Entity<MenuCategory>()
+            .HasKey(mt => new { mt.MenuId, mt.CategoryId });
+
+            modelBuilder.Entity<EventCategory>()
+            .HasKey(mt => new { mt.EventId, mt.CategoryId });
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -115,5 +121,20 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[MenuTag]
         /// </summary>
         public DbSet<MenuTag> MenuTag { get; set; }
+
+        /// <summary>
+        /// [dbo].[Category]
+        /// </summary>
+        public DbSet<Category> Category { get; set; } 
+
+        /// <summary>
+        /// [dbo].[MenuCategory]
+        /// </summary>
+        public DbSet<MenuCategory> MenuCategory { get; set; }
+
+        /// <summary>
+        /// [dbo].[EventCategory]
+        /// </summary>
+        public DbSet<EventCategory> EventCategory { get; set; }
     }
 }

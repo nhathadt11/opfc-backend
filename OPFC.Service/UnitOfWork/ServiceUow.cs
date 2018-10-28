@@ -29,6 +29,7 @@ namespace OPFC.Services.UnitOfWork
         public IBookMarkService BookMarkService { get { return GetRepoService<IBookMarkService>(); } }
         public IEventTypeService EventTypeService { get { return GetRepoService<IEventTypeService>(); } }
         public IRatingService RatingService { get { return GetRepoService<IRatingService>(); } }
+        public ICategoryService CategoryService { get { return GetRepoService<ICategoryService>(); } }
 
         private T GetRepoService<T>() where T : class
         {

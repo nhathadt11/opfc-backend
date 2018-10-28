@@ -51,6 +51,9 @@ namespace OPFC.Repositories.UnitOfWork
         public ICityRepository CityRepository { get { return GetRepo<ICityRepository>(); } }
         public ITagRepository TagRepository { get { return GetRepo<ITagRepository>(); } }
         public IMenuTagRepository MenuTagRepository { get { return GetRepo<IMenuTagRepository>(); } }
+        public ICategoryRepository CategoryRepository { get { return GetRepo<ICategoryRepository>(); } }
+        public IMenuCategoryRepository MenuCategoryRepository { get { return GetRepo<IMenuCategoryRepository>(); } }
+        public IEventCategoryRepository EventCategoryRepository { get { return GetRepo<IEventCategoryRepository>(); } }
 
 
         /// <summary>

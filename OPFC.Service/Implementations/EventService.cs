@@ -81,8 +81,13 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public List<List<Menu>> GetSuggestion(Event basedEvent)
+        public List<List<Menu>> GetSuggestion(long eventId)
         {
+
+            var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
+
+            if (basedEvent == null) throw new Exception("Event not found!");
+
             // Get all existed Menu
             var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
 
@@ -112,22 +117,13 @@ namespace OPFC.Services.Implementations
                                                    .GroupBy(x => x.MenuId)
                                                    .ToList();
 
-            var menuTags = _opfcUow.MenuTagRepository.GetAllByMenuIds(groupMenuIds)
-                                                     .GroupBy(t => t.MenuId).ToList();
+            var menuCategories = _opfcUow.MenuCategoryRepository.GetAllByMenuIds(groupMenuIds)
+                                                              .GroupBy(mt => mt.MenuId).ToList();
 
-            var menuTypes = basedEvent.MenuTypes.Distinct().ToList();
+            var eventCategories = _opfcUow.EventCategoryRepository.GetAllByEventId(basedEvent.Id)
+                                                                  .Select(x => x.CategoryId)
+                                                                  .Distinct().ToList();
 
-            var listWeight = new Dictionary<string, double>();
-
-            var count = 0;
-
-            menuTags.ForEach(mt =>
-            {
-                count = mt.Where(t => menuTypes.Contains(t.TagId)).Count();
-                double per = (count * 100) / menuTypes.Count;
-
-                listWeight.Add(mt.Key.ToString(), per);
-            });
 
             // for testting
             //var pairs = new Dictionary<string, string>();
@@ -138,9 +134,9 @@ namespace OPFC.Services.Implementations
 
             // This code work with our system
             var pairs = new Dictionary<string, string>();
-            foreach (var item in menuTags)
+            foreach (var item in menuCategories)
             {
-                var arr = item.ToList().Select(x => x.TagId).ToArray();
+                var arr = item.ToList().Select(x => x.CategoryId).ToArray();
 
                 var val = string.Join(",", arr);
 
@@ -149,7 +145,7 @@ namespace OPFC.Services.Implementations
 
             var combinedMenu = GetCombine(pairs);
 
-            double percentForEachTag = 100.00 / menuTypes.Count;
+            double percentForEachTag = 100.00 / eventCategories.Count;
 
             var matchPercent = 0.0;
 
@@ -161,7 +157,7 @@ namespace OPFC.Services.Implementations
 
                 values.ForEach(v =>
                 {
-                    if (menuTypes.Contains(Int64.Parse(v)))
+                    if (eventCategories.Contains(Int64.Parse(v)))
                     {
                         matchPercent += percentForEachTag;
                     }

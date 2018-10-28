@@ -45,6 +45,6 @@ namespace OPFC.Models
         public City City { get; set; }
 
         [NotMapped]
-        public long[] MenuTypes { get; set; }
+        public long[] EventType { get; set; }
     }
 }

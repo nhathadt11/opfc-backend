@@ -86,6 +86,12 @@ namespace OPFC.Repositories.UnitOfWork
 
         IMenuTagRepository MenuTagRepository { get; }
 
+        ICategoryRepository CategoryRepository { get; }
+
+        IMenuCategoryRepository MenuCategoryRepository { get; }
+
+        IEventCategoryRepository EventCategoryRepository { get; }
+
         /// <summary>
         /// Dispose
         /// </summary>
