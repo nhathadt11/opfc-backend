@@ -117,6 +117,18 @@ namespace OPFC.Services.Implementations
                                                    .GroupBy(x => x.MenuId)
                                                    .ToList();
 
+            var avgRateByMenuId = new Dictionary<long, double>();
+
+            foreach (var menu in ratingsGroup)
+            {
+                var vals = menu.Select(x => x.Rate).ToList();
+                var avgRate = vals.Average();
+
+                avgRate = avgRate * 0.4;
+
+                avgRateByMenuId.Add(menu.Key, avgRate);
+            }
+
             var menuCategories = _opfcUow.MenuCategoryRepository.GetAllByMenuIds(groupMenuIds)
                                                               .GroupBy(mt => mt.MenuId).ToList();
 
@@ -169,10 +181,30 @@ namespace OPFC.Services.Implementations
 
             var listPairedKeys = matchedMenuWithPercent.Keys.ToList();
 
+            var listComboWithWeight = new Dictionary<string, double>();
+
+            foreach (var item in matchedMenuWithPercent)
+            {
+                var matchedWeightValue = item.Value * 0.6;
+                var combinedIds = item.Key.Split(";").ToList();
+                var ratingWeight = 0.0;
+                foreach (var id in combinedIds)
+                {
+                    var ratingWeightValue = avgRateByMenuId.Where(x => x.Key == Int64.Parse(id)).SingleOrDefault().Value;
+
+                    ratingWeight = ratingWeightValue + matchedWeightValue;
+                }
+
+                listComboWithWeight.Add(item.Key, ratingWeight);
+            }
+
+            var sortComboWithWeight = listComboWithWeight.OrderByDescending(x => x.Value).ToList();
+
             var finalResult = new List<List<Menu>>();
 
-            listPairedKeys.ForEach(v => {
-                var ids = v.Split(";").ToList();
+            sortComboWithWeight.ForEach(v =>
+            {
+                var ids = v.Key.Split(";").ToList();
                 var mn = matchedMenus.Where(m => ids.Contains(m.Id.ToString())).ToList();
 
                 finalResult.Add(mn);
