@@ -72,10 +72,9 @@ namespace OPFC.Models
         /// </summary>
         public string Avatar { get; set; }
 
-
-        /// <summary>
-        /// User authentication token
-        /// </summary>
+		/// <summary>
+		/// User authentication token
+		/// </summary>
         [NotMapped]
         public string Token { get; set; }
 
@@ -109,5 +108,7 @@ namespace OPFC.Models
         public long CityId { get; set; }
         
         public long DistrictId { get; set; }
+        
+        public string Address { get; set; }
     }
 }
