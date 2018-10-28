@@ -28,6 +28,7 @@ namespace OPFC.Services.UnitOfWork
         public IOrderService OrderService { get { return GetRepoService<IOrderService>(); } }
         public IBookMarkService BookMarkService { get { return GetRepoService<IBookMarkService>(); } }
         public IEventTypeService EventTypeService { get { return GetRepoService<IEventTypeService>(); } }
+        public IPrivateRatingService PrivateRatingService { get { return GetRepoService<IPrivateRatingService>(); } }
         public IRatingService RatingService { get { return GetRepoService<IRatingService>(); } }
         public ICategoryService CategoryService { get { return GetRepoService<ICategoryService>(); } }
 

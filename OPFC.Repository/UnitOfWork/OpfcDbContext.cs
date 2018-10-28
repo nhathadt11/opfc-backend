@@ -122,6 +122,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// </summary>
         public DbSet<MenuTag> MenuTag { get; set; }
 
+        /// [dbo].[PrivateRating]
+        /// </summary>
+        public DbSet<PrivateRating> PrivateRating { get; set; }
+
         /// <summary>
         /// [dbo].[Category]
         /// </summary>

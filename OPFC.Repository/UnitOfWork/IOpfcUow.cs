@@ -54,6 +54,8 @@ namespace OPFC.Repositories.UnitOfWork
 
         IUserRepository UserRepository { get; }
 
+        IPrivateRatingRepository PrivateRatingRepository { get; }
+
         IRatingRepository RatingRepository { get; }
 
         IBrandRepository BrandRepository { get; }
