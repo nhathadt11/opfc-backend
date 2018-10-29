@@ -14,5 +14,6 @@ namespace OPFC.Services.Interfaces
         List<Order> GetAllOrder();
         Order GetOrderById(long id);
         List<BrandOrder> GetBrandOrderByBrandId(long brandId);
+        List<EventPlannerOrder> GetEventPlannerOrders(long userId);
     }
 }

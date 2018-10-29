@@ -278,5 +278,89 @@ namespace OPFC.Services.Implementations
                 .SingleOrDefault(m => m.Id == id)
                 ?.MenuName;
         }
+
+        public List<EventPlannerOrder> GetEventPlannerOrders(long userId)
+        {
+            var orderList = _opfcUow.OrderRepository
+                .GetAllOrder()
+                .Where(o => o.UserId == userId);
+
+            var eventPlannerOrderList = orderList.Select(o => {
+                var foundEvent = _opfcUow.EventRepository
+                    .GettAllEvent()
+                    .SingleOrDefault(e => e.OrderId == o.OrderId);
+                if (foundEvent == null)
+                {
+                    throw new Exception($"Event could not be found for orderId {o.OrderId}");
+                }
+
+                var eventPlannerOrderLineList = _opfcUow.OrderLineRepository
+                    .GetAll()
+                    .Where(ol => ol.OrderId == o.OrderId).AsEnumerable()
+                    .Select(ToEventPlannerOrderLine)
+                    .ToList();
+
+                return new EventPlannerOrder
+                {
+                    OrderNo = o.OrderId,
+                    EventNo = foundEvent.Id,
+                    EventName = foundEvent.EventName,
+                    EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
+                    MenuNumber = eventPlannerOrderLineList.Count(),
+                    StartAt = foundEvent.StartAt,
+                    EndAt = foundEvent.EndAt,
+                    OrderAt = o.DateOrdered,
+                    Note = o.Note,
+                    OrderStatus = o.Status,
+                    ServingNumber = foundEvent.ServingNumber,
+                    TotalPrice = o.TotalAmount,
+                    OrderLineList = eventPlannerOrderLineList,
+                };
+            }).ToList();
+
+            return eventPlannerOrderList;
+        }
+        
+        private EventPlannerOrderLine ToEventPlannerOrderLine(OrderLine orderLine)
+        {
+            var mealList = GetAllMealByMenuId(orderLine.MenuId)
+                .Select(m => new IdNameValue { Id = m.Id, Name = m.MealName })
+                .ToList();
+
+            return new EventPlannerOrderLine
+            {
+                OrderLineId = orderLine.Id,
+                MenuId = orderLine.MenuId,
+                MenuName = GetMenuNameById(orderLine.MenuId),
+                BrandName = GetBrandNameById(orderLine.BrandId),
+                ImageUrl = null,
+                MealList = mealList,
+                Note = orderLine.Note,
+                Status = orderLine.Status,
+                Price = orderLine.Amount,
+                OtherFee = 0
+            };
+        }
+
+        private string GetBrandNameById(long brandId)
+        {
+            return _opfcUow.BrandRepository
+                .GetById(brandId)
+                ?.BrandName;
+        }
+        
+        private List<Meal> GetAllMealByMenuId(long id)
+        {
+            var mealIdList = _opfcUow.MenuMealRepository
+                .GetByMenuId(id)
+                .Select(m => m.MealId);
+
+            var mealList = _opfcUow.MealRepository
+                .GetAllMeal()
+                .Where(m => mealIdList.Contains(m.Id))
+                .ToList();
+
+            return mealList;
+        }
     }
 }
