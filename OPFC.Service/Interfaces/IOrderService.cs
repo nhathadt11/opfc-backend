@@ -13,5 +13,6 @@ namespace OPFC.Services.Interfaces
         bool DeleteOrder(Order order);
         List<Order> GetAllOrder();
         Order GetOrderById(long id);
+        List<BrandOrder> GetBrandOrderByBrandId(long brandId);
     }
 }

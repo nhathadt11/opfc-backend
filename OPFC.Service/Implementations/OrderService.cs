@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-using Microsoft.Extensions.FileProviders;
 using OPFC.API.ServiceModel.Order;
 using OPFC.FirebaseService;
 using OPFC.Models;
@@ -46,7 +45,9 @@ namespace OPFC.Services.Implementations
                     {
                         UserId = userId,
                         DateOrdered = DateTime.Now,
-                        TotalAmount = orderMenus.Aggregate((decimal)0, (acc, m) => acc + m.Price)
+                        TotalAmount = orderMenus.Aggregate((decimal)0, (acc, m) => acc + m.Price),
+                        Status = "Request Approval",
+                        PaypalRef = "PAY-***"
                     };
                     var createdOrdered = _opfcUow.OrderRepository.CreateOrder(order);
 
@@ -58,8 +59,15 @@ namespace OPFC.Services.Implementations
                     {
                         MenuId = m.Id,
                         OrderId = createdOrdered.OrderId,
-                        Amount = m.Price
+                        Amount = m.Price,
+                        BrandId = m.BrandId,
+                        PaypalSaleRef = "SAL-***"
                     });
+
+                    var forEvent = _opfcUow.EventRepository.GetEventById(orderRequest.EventId);
+                    forEvent.OrderId = createdOrdered.OrderId;
+                    _opfcUow.EventRepository.UpdateEvent(forEvent);
+                    _opfcUow.Commit();
 
                     _opfcUow.OrderLineRepository.CreateMany(orderLines);
                     _opfcUow.Commit();
@@ -74,7 +82,7 @@ namespace OPFC.Services.Implementations
             catch (Exception ex)
             {
                 // It will auto rollback if any exception, so wee do not need rollback manually here
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -164,6 +172,111 @@ namespace OPFC.Services.Implementations
             if (foundUser == null) throw new Exception("User could not be found.");
 
             return foundUser;
+        }
+
+        public List<BrandOrder> GetBrandOrderByBrandId(long brandId)
+        {
+            var orderLineList = _opfcUow.OrderLineRepository
+                .GetAll()
+                .Where(ol => ol.BrandId == brandId)
+                .ToList();
+
+            var orderLinesByOrderId = orderLineList
+                .GroupBy(
+                    ol => ol.OrderId,
+                    ol => ol,
+                    (key, ol) => new { OrderId = key, OrderLines = ol.ToList() }
+                ).ToList();
+
+            var brandOrder = orderLinesByOrderId.Select(o => {
+                var foundEvent = _opfcUow.EventRepository
+                    .GettAllEvent()
+                    .SingleOrDefault(e => e.OrderId == o.OrderId);
+
+                if (foundEvent == null)
+                {
+                    throw new Exception($"Event could not be found for {o.OrderId}");
+                }
+            
+                return new BrandOrder
+                {
+                    OrderNo = o.OrderId,
+                    EventNo = foundEvent.Id,
+                    EventName = foundEvent.EventName,
+                    EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
+                    StartAt = foundEvent.StartAt,
+                    EndAt = foundEvent.EndAt,
+                    EventStatus = foundEvent.Status,
+                    OrderStatus = GetOrderById(o.OrderId).Status,
+                    ServingNumber = foundEvent.ServingNumber,
+                    CityName = GetCityNameById(foundEvent.CityId),
+                    DistrictName = GetDistrictNameById(foundEvent.DistrictId),
+                    Address = foundEvent.Address,
+                    TotalPrice = SumOrderLineAmountByIds(o.OrderLines.Select(ol => ol.Id).ToArray()),
+                    BrandOderLineList = o.OrderLines.Map(ol => ol.Id).Select(OrderLineToBrandOrderLineById).ToList()
+                };
+            }).ToList();
+
+            return brandOrder;
+        }
+        
+        private string GetEventTypeNameById(long id)
+        {
+            return _opfcUow.EventTypeRepository
+                .GetAllEventType()
+                .FirstOrDefault(et => et.Id == id)
+                ?.EventTypeName;
+        }
+        
+        private string GetCityNameById(long id)
+        {
+            return _opfcUow.CityRepository
+                .GetAll()
+                .SingleOrDefault(c => c.Id == id)
+                ?.Name;
+        }
+        
+        private string GetDistrictNameById(long id)
+        {
+            return _opfcUow.DistrictRepository
+                .GetAll()
+                .SingleOrDefault(d => d.Id == id)
+                ?.Name;
+        }
+        
+        private decimal SumOrderLineAmountByIds(long[] ids)
+        {
+            var orderLines = _opfcUow.OrderLineRepository
+                .GetAll()
+                .Where(ol => ids.Contains(ol.Id)).ToList();
+                
+            var aggregate = orderLines.Aggregate((decimal)0, (acc, m) => acc + m.Amount);
+
+            return aggregate;
+        }
+        
+        private BrandOrderLine OrderLineToBrandOrderLineById(long orderLineId)
+        {
+            var foundOrderLine = _opfcUow.OrderLineRepository
+                .GetAll()
+                .SingleOrDefault(ol => ol.Id == orderLineId);
+
+            return new BrandOrderLine
+            {
+                MenuId = foundOrderLine.MenuId,
+                MenuName = GetMenuNameById(foundOrderLine.Id),
+                Note = foundOrderLine.Note,
+                Price = foundOrderLine.Amount,
+                Status = foundOrderLine.Status
+            };
+        }
+        
+        private string GetMenuNameById(long id)
+        {
+            return _opfcUow.MenuRepository
+                .GetAll()
+                .SingleOrDefault(m => m.Id == id)
+                ?.MenuName;
         }
     }
 }
