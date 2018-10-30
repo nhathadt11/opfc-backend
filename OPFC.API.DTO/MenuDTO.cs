@@ -41,5 +41,7 @@ namespace OPFC.API.DTO
         public List<EventType> EventTypeList { get; set; }
 
         public List<RatingDTO> RatingList { get; set; }
+
+        public List<Category> CategoryList { get; set; }
     }
 }

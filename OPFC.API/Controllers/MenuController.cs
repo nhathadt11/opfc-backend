@@ -68,7 +68,10 @@ namespace OPFC.API.Controllers
 
                 var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(returnMenu.Id);
                 returnMenu.EventTypeList = eventTypeList;
-                
+
+                var categoryList = _serviceUow.CategoryService.GetAllByMenuId(id);
+                returnMenu.CategoryList = categoryList;
+
                 var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
                 returnMenu.BrandName = brand.BrandName;
 

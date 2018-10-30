@@ -39,5 +39,6 @@ namespace OPFC.Models
         [NotMapped]
         public List<Rating> RatingList { get; set; }
 
+        public List<Category> CategoryList { get; set; }
     }
 }

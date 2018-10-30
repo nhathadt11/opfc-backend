@@ -8,5 +8,6 @@ namespace OPFC.Repositories.Interfaces
     public interface ICategoryRepository: IRepository<Category>
     {
         List<Category> GetAll();
+        List<Category> GetAllByIds(List<long> ids);
     }
 }
