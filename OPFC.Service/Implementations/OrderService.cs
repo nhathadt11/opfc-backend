@@ -278,6 +278,36 @@ namespace OPFC.Services.Implementations
                 .SingleOrDefault(m => m.Id == id)
                 ?.MenuName;
         }
+        
+        public EventPlannerOrder GetEventPlannerOrderById(long orderId)
+        {
+            var foundOrder = _opfcUow.OrderRepository
+                .GetOrderById(orderId);
+            var foundEvent = _opfcUow.EventRepository
+                .GettAllEvent()
+                .SingleOrDefault(e => e.OrderId == orderId);
+            var orderLineList = _opfcUow.OrderLineRepository
+                .GetAll()
+                .Where(ol => ol.OrderId == orderId)
+                .Map(ToEventPlannerOrderLine);
+
+            return new EventPlannerOrder
+            {
+                OrderNo = foundOrder.OrderId,
+                EventNo = foundEvent.Id,
+                EventName = foundEvent.EventName,
+                EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
+                MenuNumber = orderLineList.Count(),
+                StartAt = foundEvent.StartAt,
+                EndAt = foundEvent.EndAt,
+                OrderAt = foundOrder.DateOrdered,
+                Note = foundOrder.Note,
+                OrderStatus = foundOrder.Status,
+                ServingNumber = foundEvent.ServingNumber,
+                TotalPrice = foundOrder.TotalAmount,
+                OrderLineList = orderLineList,
+            };
+        }
 
         public List<EventPlannerOrder> GetEventPlannerOrders(long userId)
         {
@@ -361,6 +391,11 @@ namespace OPFC.Services.Implementations
                 .ToList();
 
             return mealList;
+        }
+
+        public bool Exits(long id)
+        {
+            return _opfcUow.OrderRepository.GetOrderById(id) != null;
         }
     }
 }

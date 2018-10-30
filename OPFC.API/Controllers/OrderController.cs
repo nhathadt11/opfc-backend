@@ -64,11 +64,25 @@ namespace OPFC.API.Controllers
             return Ok(brandOrderList);
         }
         
-        [HttpGet("EventPlanner/{userId}")]
+        [HttpGet("EventPlanner/User/{userId}")]
         public ActionResult GetEventPlannerOrders(long userId)
         {
             var eventPlannerOrderList = _serviceUow.OrderService.GetEventPlannerOrders(userId);
             return Ok(eventPlannerOrderList);
+        }
+
+        [HttpGet("EventPlanner/{orderId}")]
+        public ActionResult GetEventPlannerOrder(long orderId)
+        {
+            var orderExists = _serviceUow.OrderService.Exits(orderId);
+            if (!orderExists)
+            {
+                return NotFound("Order could be found.");
+            }
+
+            var eventPlannerOrder = _serviceUow.OrderService.GetEventPlannerOrderById(orderId);
+
+            return Ok(eventPlannerOrder);
         }
     }
 }

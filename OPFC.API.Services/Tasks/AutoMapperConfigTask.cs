@@ -55,6 +55,10 @@ namespace OPFC.API.ServiceModel.Tasks
             
             CreateMap<BrandOrderLine, BrandOrderLineDTO>().ReverseMap();
 
+            CreateMap<EventPlannerOrder, EventPlannerOrderDTO>().ReverseMap();
+
+            CreateMap<EventPlannerOrderLine, EventPlannerOrderLineDTO>().ReverseMap();
+
             #region List mapping
 
             CreateMap<List<OPFC.Models.Event>, List<EventDTO>>();
@@ -72,6 +76,8 @@ namespace OPFC.API.ServiceModel.Tasks
             CreateMap<List<BrandOrder>, List<BrandOrderDTO>>().ReverseMap();
             
             CreateMap<List<BrandOrderLine>, List<BrandOrderLineDTO>>().ReverseMap();
+
+            CreateMap<List<EventPlannerOrder>, List<EventPlannerOrderDTO>>().ReverseMap();
 
             #endregion
 
