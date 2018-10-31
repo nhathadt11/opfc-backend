@@ -21,6 +21,12 @@ namespace OPFC.API.DTO
         public long BrandId { get; set; }
 
         public string BrandName { get; set; }
+
+        public string BrandPhone { get; set; }
+
+        public int BrandParticipantNumber { get; set; }
+
+        public string BrandEmail { get; set; }
         
         public List<long> MealIds { get; set; }
 
