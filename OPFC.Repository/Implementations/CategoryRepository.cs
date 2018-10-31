@@ -16,5 +16,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.ToList();
         }
+
+        public List<Category> GetAllByIds(List<long> ids)
+        {
+            return DbSet.Where(c => ids.Contains(c.Id)).ToList();
+        }
     }
 }
