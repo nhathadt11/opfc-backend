@@ -71,13 +71,13 @@ namespace OPFC.Services.Implementations
 
         public List<Meal> GetAllMealByMenuId(long id)
         {
-            var menuMealIdList = _opfcUow.MenuMealRepository
+            var mealIdList = _opfcUow.MenuMealRepository
                 .GetByMenuId(id)
-                .Select(m => m.Id);
+                .Select(m => m.MealId);
 
             var mealList = _opfcUow.MealRepository
                 .GetAllMeal()
-                .Where(m => menuMealIdList.Contains(m.Id))
+                .Where(m => mealIdList.Contains(m.Id))
                 .ToList();
 
             return mealList;

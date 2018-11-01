@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
@@ -47,12 +49,37 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        [HttpPost]
-        public IActionResult Create(CreateRatingRequest request)
+        
+        [HttpGet("Menu/{id}")]
+        public IActionResult GetByMenuId(long id)
         {
             try
             {
+                if (!_serviceUow.MenuService.Exists(id)) throw new Exception("Menu could not be found.");
+
+                var retrieved = _serviceUow.RatingService.GetAllRating().Where(r => r.MenuId == id);
+                var returnRatingList = Mapper.Map<List<RatingDTO>>(retrieved);
+                
+                returnRatingList.ForEach(r =>
+                {
+                    r.Author = _serviceUow.UserService.GetUserById(r.UserId).Username;
+                    r.CityName = _serviceUow.UserService.GetCityNameForUserId(r.UserId);
+                });
+                return Ok(returnRatingList.OrderByDescending(rate => rate.RateTime));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("Menu/{menuId}/User/{userId}")]
+        public IActionResult Create(long menuId, long userId, CreateRatingRequest request)
+        {
+            try
+            {
+                request.MenuId = menuId;
+                request.UserId = userId;
                 var rating = Mapper.Map<Rating>(request);
                 var created = Mapper.Map<RatingDTO>(_serviceUow.RatingService.CreateRating(rating));
 

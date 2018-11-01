@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OPFC.API.ServiceModel\OPFC.API.ServiceModel.csproj" />
+    <ProjectReference Include="..\OPFC.FirebaseService\OPFC.FirebaseService.csproj" />
     <ProjectReference Include="..\OPFC.Models\OPFC.Models.csproj" />
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
   </ItemGroup>

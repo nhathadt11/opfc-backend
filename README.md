@@ -13,13 +13,9 @@ All following commands must be performed under root of project
 
 - Install dependencies: `dotnet restore`
 
-### Building
-
-- Run: `msbuild`
-
 ### Running
 
-- Run: `dotnet OPFC.API/bin/Debug/netcoreapp2.1/OPFC.API.dll`
+- Run: `dotnet run -p OPFC.API`
 
 ### Stopping
 

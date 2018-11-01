@@ -17,7 +17,11 @@ namespace OPFC.Services.Implementations
 
         public Rating CreateRating(Rating rating)
         {
-            return _opfcUow.RatingRepository.CreateRating(rating);
+            rating.RateTime = DateTime.Now;
+            var created = _opfcUow.RatingRepository.CreateRating(rating);
+            _opfcUow.Commit();
+
+            return created;
         }
 
         public List<Rating> GetAllRating()

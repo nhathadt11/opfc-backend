@@ -14,5 +14,9 @@ namespace OPFC.Repositories.Interfaces
         Event GetEventById(long eventId);
 
         List<Event> GettAllEvent();
+
+        List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds);
+
+        bool IsEventExist(long eventId);
     }
 }

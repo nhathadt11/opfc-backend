@@ -19,5 +19,7 @@ namespace OPFC.Services.UnitOfWork
         IBookMarkService BookMarkService { get; }
         IEventService EventService { get; }
         IEventTypeService EventTypeService { get; }
+        ICategoryService CategoryService { get; }
+        IPrivateRatingService PrivateRatingService { get; }
     }
 }

@@ -18,5 +18,11 @@ namespace OPFC.Services.Interfaces
         List<Event> GetAllEvent();
 
         List<Event> GetAllEventByUserId(long userId);
+
+        List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds);
+
+        List<List<Menu>> GetSuggestion(long eventId);
+
+        bool IsEventExist(long eventId);
     }
 }

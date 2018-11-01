@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Order;
-using OPFC.API.ServiceModel.Order;
-using OPFC.Models;
 using OPFC.Models;
 using OPFC.Services.UnitOfWork;
 
@@ -60,6 +55,34 @@ namespace OPFC.API.Controllers
                 return NotFound(new { Message = "Could not find Order" });
             }
             return Ok(Mapper.Map<OrderDTO>(order));
+        }
+        
+        [HttpGet("Brand/{brandId}")]
+        public ActionResult GetBrandOrders(long brandId)
+        {
+            var brandOrderList = _serviceUow.OrderService.GetBrandOrderByBrandId(brandId);
+            return Ok(brandOrderList);
+        }
+        
+        [HttpGet("EventPlanner/User/{userId}")]
+        public ActionResult GetEventPlannerOrders(long userId)
+        {
+            var eventPlannerOrderList = _serviceUow.OrderService.GetEventPlannerOrders(userId);
+            return Ok(eventPlannerOrderList);
+        }
+
+        [HttpGet("EventPlanner/{orderId}")]
+        public ActionResult GetEventPlannerOrder(long orderId)
+        {
+            var orderExists = _serviceUow.OrderService.Exits(orderId);
+            if (!orderExists)
+            {
+                return NotFound("Order could be found.");
+            }
+
+            var eventPlannerOrder = _serviceUow.OrderService.GetEventPlannerOrderById(orderId);
+
+            return Ok(eventPlannerOrder);
         }
     }
 }

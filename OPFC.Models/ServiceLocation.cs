@@ -11,5 +11,7 @@ namespace OPFC.Models
         public long BrandId { get; set; }
 
         public long DistrictId { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

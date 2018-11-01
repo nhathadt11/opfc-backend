@@ -8,7 +8,6 @@ namespace OPFC.Models
     public class Order
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrderId { get; set; }
 
         public long UserId { get; set; }
@@ -20,8 +19,12 @@ namespace OPFC.Models
         public string Status { get; set; } 
 
         public bool IsDeleted { get; set; }
+        
+        public string PaypalRef { get; set; }
 
-        [ForeignKey("OrderId")]
+        public string Note { get; set; }
+
+        //[ForeignKey("OrderId")]
         public List<Transaction> TransactionList { get; set; }
 
     }

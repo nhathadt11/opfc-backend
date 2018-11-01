@@ -39,6 +39,12 @@ namespace OPFC.Repositories.Factory
                 {typeof(IMenuMealRepository), dbContext => new MenuMealRepository(dbContext)},
                 {typeof(IMenuEventTypeRepository), dbContext => new MenuEventTypeRepository(dbContext)},
                 {typeof(IOrderLineRepository), dbContext => new OrderLineRepository(dbContext)},
+                {typeof(ITagRepository), dbContext => new TagRepository(dbContext)},
+                {typeof(IMenuTagRepository), dbContext => new MenuTagRepository(dbContext)},
+                {typeof(ICategoryRepository), dbContext => new CategoryRepository(dbContext)},
+                {typeof(IPrivateRatingRepository), dbContext => new PrivateRatingRepository(dbContext)},
+                {typeof(IMenuCategoryRepository), dbContext => new MenuCategoryRepository(dbContext)},
+                {typeof(IEventCategoryRepository), dbContext => new EventCategoryRepository(dbContext)},
             };
         }
 

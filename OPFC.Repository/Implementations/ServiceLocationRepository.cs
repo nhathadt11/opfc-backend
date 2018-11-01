@@ -31,5 +31,10 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Update(serviceLocation).Entity;
 
         }
+
+        public List<ServiceLocation> GetServiceLocationByDistrictId(long districtId)
+        {
+            return DbSet.Where(sl => sl.DistrictId == districtId && sl.IsDeleted == false).ToList();
+        }
     }
 }

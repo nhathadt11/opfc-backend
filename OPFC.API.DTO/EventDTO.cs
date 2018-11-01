@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,11 +21,13 @@ namespace OPFC.API.DTO
 
         public int ServingNumber { get; set; }
 
-        public string City { get; set; }
+        public long CityId { get; set; }
 
-        public string District { get; set; }
+        public long DistrictId { get; set; }
 
-        public string Ward { get; set; }
+        public CityDTO City { get; set; }
+
+        public DistrictDTO District { get; set; }
 
         public string Address { get; set; }
 
@@ -33,5 +36,7 @@ namespace OPFC.API.DTO
         public long UserId { get; set; }
 
         public bool? IsDeleted { get; set; }
+
+        public long[] CategoryIds { get; set; }
     }
 }

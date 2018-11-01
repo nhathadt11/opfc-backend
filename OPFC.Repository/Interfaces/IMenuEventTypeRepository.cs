@@ -7,5 +7,6 @@ namespace OPFC.Repositories.Interfaces
     {
         List<MenuEventType> GetByMenuId(long id);
         void CreateRange(List<MenuEventType> menuEventTypeList);
+        void RemoveRange(List<MenuEventType> menuEventTypeList);
     }
 }

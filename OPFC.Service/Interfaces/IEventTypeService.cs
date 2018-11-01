@@ -8,5 +8,6 @@ namespace OPFC.Services.Interfaces
     public interface IEventTypeService
     {
         List<EventType> GetAllEventType();
+        List<EventType> GetAllEventTypeByMenuId(long menuId);
     }
 }

@@ -7,6 +7,7 @@ using OPFC.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -104,6 +105,16 @@ namespace OPFC.Services.Implementations
             {
                 throw ex;
             }
+        }
+
+        public string GetCityNameForUserId(long userId)
+        {
+            var cityId = _opfcUow.UserRepository
+                .GetAllUsers()
+                .Find(u => u.Id == userId)
+                .CityId;
+
+            return _opfcUow.CityRepository.GetCityById(cityId).Name;
         }
 
         /// <summary>

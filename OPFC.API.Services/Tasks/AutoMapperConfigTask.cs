@@ -2,6 +2,7 @@
 using OPFC.API.DTO;
 using System.Collections.Generic;
 using OPFC.API.ServiceModel.Menu;
+using OPFC.Models;
 
 namespace OPFC.API.ServiceModel.Tasks
 {
@@ -48,6 +49,16 @@ namespace OPFC.API.ServiceModel.Tasks
 
             CreateMap<CreateMenuRequest, Models.Menu>().ReverseMap();
 
+            CreateMap<Models.Rating, RatingDTO>().ReverseMap();
+
+            CreateMap<BrandOrder, BrandOrderDTO>().ReverseMap();
+            
+            CreateMap<BrandOrderLine, BrandOrderLineDTO>().ReverseMap();
+
+            CreateMap<EventPlannerOrder, EventPlannerOrderDTO>().ReverseMap();
+
+            CreateMap<EventPlannerOrderLine, EventPlannerOrderLineDTO>().ReverseMap();
+
             #region List mapping
 
             CreateMap<List<OPFC.Models.Event>, List<EventDTO>>();
@@ -60,6 +71,13 @@ namespace OPFC.API.ServiceModel.Tasks
             CreateMap<List<OPFC.Models.Meal>, List<MealDTO>>();
             CreateMap<List<MealDTO>, List<OPFC.Models.Meal>>();
 
+            CreateMap<List<OPFC.Models.Rating>, List<RatingDTO>>().ReverseMap();
+
+            CreateMap<List<BrandOrder>, List<BrandOrderDTO>>().ReverseMap();
+            
+            CreateMap<List<BrandOrderLine>, List<BrandOrderLineDTO>>().ReverseMap();
+
+            CreateMap<List<EventPlannerOrder>, List<EventPlannerOrderDTO>>().ReverseMap();
 
             #endregion
 

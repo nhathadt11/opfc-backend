@@ -15,12 +15,17 @@ namespace OPFC.Repositories.Implementations
 
         public List<MenuEventType> GetByMenuId(long id)
         {
-            return DbSet.Where(e => e.MenuId == id && e.IsDeleted == false).ToList();
+            return DbSet.Where(e => e.MenuId == id).ToList();
         }
 
         public void CreateRange(List<MenuEventType> menuEventTypeList)
         {
             DbSet.AddRange(menuEventTypeList);
+        }
+
+        public void RemoveRange(List<MenuEventType> menuEventTypeList)
+        {
+            DbSet.RemoveRange(menuEventTypeList);
         }
     }
 }

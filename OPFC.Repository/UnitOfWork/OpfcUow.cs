@@ -32,12 +32,14 @@ namespace OPFC.Repositories.UnitOfWork
         }
 
         public IRatingRepository RatingRepository { get { return GetRepo<IRatingRepository>(); }}
+
+        public IPrivateRatingRepository PrivateRatingRepository { get { return GetRepo<IPrivateRatingRepository>(); } }
         public IBookMarkRepository BookMarkRepository { get { return GetRepo<IBookMarkRepository>(); }}
         public ITransactionRepository TransactionRepository { get { return GetRepo<ITransactionRepository>(); }}
         public IOrderRepository OrderRepository { get { return GetRepo<IOrderRepository>(); }}
         public ITransactionDetailRepository TransactionDetailRepository { get { return GetRepo<ITransactionDetailRepository>(); } }
-        public IMenuRepository MenuRepository { get { return GetRepo<IMenuRepository>(); }}
-        public IMealRepository MealRepository { get { return GetRepo<IMealRepository>(); }}
+        public IMenuRepository MenuRepository { get { return GetRepo<IMenuRepository>(); } }
+        public IMealRepository MealRepository { get { return GetRepo<IMealRepository>(); } }
         public IUserRepository UserRepository { get { return GetRepo<IUserRepository>(); } }
         public IBrandRepository BrandRepository { get { return GetRepo<IBrandRepository>(); } }
         public IPhotoRepository PhotoRepository { get { return GetRepo<IPhotoRepository>(); } }
@@ -45,10 +47,15 @@ namespace OPFC.Repositories.UnitOfWork
         public IEventTypeRepository EventTypeRepository { get { return GetRepo<IEventTypeRepository>(); } }
         public IMenuMealRepository MenuMealRepository { get { return GetRepo<IMenuMealRepository>(); } }
         public IServiceLocationRepository ServiceLocationRepository { get { return GetRepo<IServiceLocationRepository>(); } }
-        public IOrderLineRepository OrderLineRepository { get{ return GetRepo<IOrderLineRepository>(); } }
+        public IOrderLineRepository OrderLineRepository { get { return GetRepo<IOrderLineRepository>(); } }
         public IMenuEventTypeRepository MenuEventTypeRepository { get { return GetRepo<IMenuEventTypeRepository>(); } }
         public IDistrictRepository DistrictRepository { get { return GetRepo<IDistrictRepository>(); } }
         public ICityRepository CityRepository { get { return GetRepo<ICityRepository>(); } }
+        public ITagRepository TagRepository { get { return GetRepo<ITagRepository>(); } }
+        public IMenuTagRepository MenuTagRepository { get { return GetRepo<IMenuTagRepository>(); } }
+        public ICategoryRepository CategoryRepository { get { return GetRepo<ICategoryRepository>(); } }
+        public IMenuCategoryRepository MenuCategoryRepository { get { return GetRepo<IMenuCategoryRepository>(); } }
+        public IEventCategoryRepository EventCategoryRepository { get { return GetRepo<IEventCategoryRepository>(); } }
 
 
         /// <summary>

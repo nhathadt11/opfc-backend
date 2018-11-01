@@ -10,13 +10,15 @@ namespace OPFC.Models
 
         public long Rate { get; set; }
 
-        public long BrandId { get; set; }
-
         public long MenuId { get; set; }
 
         public DateTime RateTime { get; set; }
 
+        public string Title { get; set; }
+
         public string Comment { get; set; }
+
+        public long UserId { get; set; }
 
         public bool IsDeleted { get; set; }
 

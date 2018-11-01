@@ -54,6 +54,8 @@ namespace OPFC.Repositories.UnitOfWork
 
         IUserRepository UserRepository { get; }
 
+        IPrivateRatingRepository PrivateRatingRepository { get; }
+
         IRatingRepository RatingRepository { get; }
 
         IBrandRepository BrandRepository { get; }
@@ -75,12 +77,22 @@ namespace OPFC.Repositories.UnitOfWork
         IEventRepository EventRepository { get; }
 
         IEventTypeRepository EventTypeRepository { get; }
-        
+
         IMenuMealRepository MenuMealRepository { get; }
 
         IOrderLineRepository OrderLineRepository { get; }
-        
+
         IMenuEventTypeRepository MenuEventTypeRepository { get; }
+
+        ITagRepository TagRepository { get; }
+
+        IMenuTagRepository MenuTagRepository { get; }
+
+        ICategoryRepository CategoryRepository { get; }
+
+        IMenuCategoryRepository MenuCategoryRepository { get; }
+
+        IEventCategoryRepository EventCategoryRepository { get; }
 
         /// <summary>
         /// Dispose

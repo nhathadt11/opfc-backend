@@ -30,16 +30,20 @@ namespace OPFC.Repositories.Implementations
         public List<User> GetAllUsers()
         {
             var userList = DbSet.Include(u => u.UserRole)
-                                .Include(u => u.EventAddressList)
-                                .Include(u => u.BrandList)
-                                .ToListAsync<User>()
-                                .Result;
+                .Include(u => u.EventAddressList)
+                .Include(u => u.BrandList)
+                .ToList<User>();
             return userList;
         }
 
         public bool IsUserExist(string userName)
         {
             return DbSet.Any(u => u.Username == userName);
+        }
+
+        public bool IsUserExist(long userId)
+        {
+            return DbSet.Any(u => u.Id == userId);
         }
 
         public User Update(User user)

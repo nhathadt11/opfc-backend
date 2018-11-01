@@ -31,5 +31,25 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Update(modifiedEvent).Entity;
         }
+
+        public List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds)
+        {
+            var availableEvents = DbSet.Where(e => e.IsDeleted == false && e.DistrictId == serviceLocation)
+                                        .Include(e => e.District)
+                                        .Include(e => e.City)
+                                        .ToList();
+
+            var result = availableEvents.Where(e => e.ServingNumber >= servingNumber &&
+                                               e.Budget <= price && 
+                                               eventTypeIds.Contains(e.EventTypeId))
+                                        .ToList();
+
+            return result;
+        }
+
+        public bool IsEventExist(long eventId)
+        {
+            return DbSet.Any(e => e.Id == eventId);
+        }
     }
 }

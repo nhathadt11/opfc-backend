@@ -14,5 +14,6 @@ namespace OPFC.Repositories.Interfaces
 
         List<ServiceLocation> GetAllServiceLocation();
 
+        List<ServiceLocation> GetServiceLocationByDistrictId(long districtId);
     }
 }
