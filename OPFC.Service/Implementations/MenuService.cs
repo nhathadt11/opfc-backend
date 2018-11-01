@@ -85,7 +85,6 @@ namespace OPFC.Services.Implementations
                 {
                     MenuId = menu.Id,
                     EventTypeId = e.Id,
-                    IsDeleted = false
                 })
                 .ToList();
 

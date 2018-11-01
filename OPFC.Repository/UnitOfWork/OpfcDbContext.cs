@@ -37,13 +37,16 @@ namespace OPFC.Repositories.UnitOfWork
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MenuTag>()
-            .HasKey(mt => new { mt.MenuId, mt.TagId });
+                .HasKey(mt => new { mt.MenuId, mt.TagId });
 
             modelBuilder.Entity<MenuCategory>()
-            .HasKey(mt => new { mt.MenuId, mt.CategoryId });
+                .HasKey(mt => new { mt.MenuId, mt.CategoryId });
 
             modelBuilder.Entity<EventCategory>()
-            .HasKey(mt => new { mt.EventId, mt.CategoryId });
+                .HasKey(mt => new { mt.EventId, mt.CategoryId });
+            
+            modelBuilder.Entity<MenuEventType>()
+                .HasKey(mt => new { mt.MenuId, mt.EventTypeId });
 
             base.OnModelCreating(modelBuilder);
         }

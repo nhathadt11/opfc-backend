@@ -145,8 +145,7 @@ namespace OPFC.Services.Implementations
 
             // List out menu id which matched event type id
             var listMenuIdMatchedEventType = _opfcUow.MenuEventTypeRepository.GetAll()
-                                                                 .Where(x => x.IsDeleted == false &&
-                                                                        x.EventTypeId == basedEvent.EventTypeId)
+                                                                 .Where(x => x.EventTypeId == basedEvent.EventTypeId)
                                                                  .Select(x => x.MenuId)
                                                                  .ToList();
 
