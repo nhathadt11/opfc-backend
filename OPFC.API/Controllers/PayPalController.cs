@@ -19,16 +19,16 @@ namespace OPFC.API.Controllers
 
         [HttpPost("CreatePayment")]
         [AllowAnonymous]
-        public IActionResult CreatePayment()
+        public IActionResult CreatePayment(CreatePaymentRequest request)
         {
             try
             {
-                var payment = _serviceUow.PaypalService.CreatePayment(100, "http://localhost:5000/Paypal/ExecutePayment", "http://localhost:5000/PayPal/Cancel", "sale");
+                var payment = _serviceUow.PaypalService.CreatePayment(request, "http://localhost:5000/Paypal/ExecutePayment", "http://localhost:5000/PayPal/Cancel", "sale");
 
                 //return new JsonResult(payment);
                 //RedirectResult redirect = new RedirectToPageResult();
 
-                return new JsonResult(payment);
+                return Redirect(payment.links[1].href);
             }
             catch(Exception ex)
             {
@@ -43,11 +43,18 @@ namespace OPFC.API.Controllers
                                             [FromQuery(Name = "paymentId")] string paymentId,
                                             [FromQuery(Name = "token")] string token)
         {
+			try
+			{
+                var payment = _serviceUow.PaypalService.ExecutePayment(paymentId, PayerID);
+                //_serviceUow.OrderService.CreateOrder();
+			}
+            catch
+			{
+                return Redirect("http://google.com.vn");
+			}
 
-            var payment = _serviceUow.PaypalService.ExecutePayment(paymentId, PayerID);
 
-
-            return new JsonResult(payment);
+			return Redirect("https://opfc-frontend.surge.sh/profile/event-planner/order/1");
         }
 
 

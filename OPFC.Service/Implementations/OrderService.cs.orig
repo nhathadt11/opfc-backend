@@ -92,11 +92,22 @@ namespace OPFC.Services.Implementations
                         _opfcUow.Commit(); 
                     });
 
+<<<<<<< HEAD
+=======
+                    var forEvent = _opfcUow.EventRepository.GetEventById(orderRequest.EventId);
+                    forEvent.OrderId = createdOrdered.OrderId;
+                    _opfcUow.EventRepository.UpdateEvent(forEvent);
+                    _opfcUow.Commit();
+
+                    _opfcUow.OrderLineRepository.CreateMany(orderLines);
+                    _opfcUow.Commit();
+
                     // payment
 
 
 
                     // notification
+>>>>>>> Checkout and redirect to paypal login
                     SendNotification(orderMenus, userId, orderRequest.EventId, createdOrdered.OrderId);
                     
                     scope.Complete();
