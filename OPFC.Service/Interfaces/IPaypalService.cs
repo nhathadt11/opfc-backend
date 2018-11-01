@@ -6,6 +6,6 @@ namespace OPFC.Services.Interfaces
     {
         Payment CreatePayment(decimal amount, string returnUrl, string cancelUrl, string intent);
 
-        Payment ExecutePayment(string paymentId, string payerId);
+        Payment ExecutePayment(string paymentId,string payerID);
     }
 }

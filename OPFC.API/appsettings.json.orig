@@ -1,0 +1,29 @@
+{
+  //THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING
+  "AppSettings": {
+    "Secret": "this is opfc api secret string"
+  },
+  // Config our connection here
+  "ConnectionStrings": {
+<<<<<<< HEAD
+//    "OpfcDbConnection": "Server=tcp:donglvdb.database.windows.net,1433;Initial Catalog=OPFC;Persist Security Info=False;User ID=dongluong;Password=kob3Bry@nt1978;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    //"OpfcDbConnection": "Data Source=.;Initial Catalog=OPFC;User ID=sa;Password=abc@12345;MultipleActiveResultSets=true;"
+    //"OpfcDbConnection": "Data Source=.;Initial Catalog=OPFC;User ID=sa;Password=Lorem123;MultipleActiveResultSets=true;Connection Timeout=30;"
+        "OpfcDbConnection": "Server=opfc.database.windows.net;Initial Catalog=OPFC;User ID=opfc;Password=Lorem123"
+=======
+    //"OpfcDbConnection": "Server=tcp:donglvdb.database.windows.net,1433;Initial Catalog=OPFC;Persist Security Info=False;User ID=dongluong;Password=kob3Bry@nt1978;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    //"OpfcDbConnection": "Data Source=.;Initial Catalog=OPFC;User ID=sa;Password=abc@12345;MultipleActiveResultSets=true;"
+    "OpfcDbConnection": "Server=tcp:opfc.database.windows.net,1433;Initial Catalog=OPFC;Persist Security Info=False;User ID=opfc@opfc;Password=Lorem123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+      
+>>>>>>> WIP
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "clientId": "Aaxoz6HfIQVkm_X09U0gtICiTCvrV_tbUjwtig3doeAzC27fJtbn77f-UglDxKMZy-DpKRYOLBDwsNCk",
+  "clientSecret": "EORe1azVVTNpHDQPbjCmP1GrgewEW3ATVwfH0Np044CuXQypiX_RqzQO0SWd48UuwMMhO8QOLiiDIuJn",
+
+  "AllowedHosts": "*"
+}

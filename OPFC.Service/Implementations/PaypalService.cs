@@ -69,11 +69,11 @@ namespace OPFC.Services.Implementations
 
         }
 
-        public Payment ExecutePayment(string paymentId, string payerId)
+        public Payment ExecutePayment(string paymentId, string payerID)
         {
             var apiContext = new APIContext(new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET).GetAccessToken());
 
-            var paymentExecution = new PaymentExecution() { payer_id = payerId };
+            var paymentExecution = new PaymentExecution() { payer_id = payerID };
 
             var executedPayment = new Payment() { id = paymentId }.Execute(apiContext, paymentExecution);
 

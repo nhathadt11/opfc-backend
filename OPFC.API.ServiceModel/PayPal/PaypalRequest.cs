@@ -5,17 +5,15 @@ using ServiceStack;
 namespace OPFC.API.ServiceModel.PayPal
 {
 
-        [EnableCors("*", "*")]
-        [Route("/Paypal/GetAccessToken", "GET")]
-        public class GetAccessTokenRequest : IReturn<GetAccessTokenResponse>
-        {
-        }
+    [EnableCors("*", "*")]
+    [Route("/Paypal/GetAccessToken", "GET")]
+    public class GetAccessTokenRequest : IReturn<GetAccessTokenResponse>
+    {
+    }
 
-        [EnableCors("*", "*")]
-        [Route("/Paypal/Trans", "POST")]
-        public class TransRequest : IReturn<TransResponse>
-        {
-            public RequestParameter Parameter { get; set; }
-        }
-
+    [EnableCors("*", "*")]
+    [Route("/Paypal/CreatePayment", "POST")]
+    public class CreatePaymentRequest : IReturn<CreatePaymentResponse>
+    { 
+    }
 }

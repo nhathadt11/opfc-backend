@@ -23,7 +23,10 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var payment = _serviceUow.PaypalService.CreatePayment(100, "http://localhost:5000/Paypal/ExecutePayment", "http://localhost:5000/Payment/Cancel", "sale");
+                var payment = _serviceUow.PaypalService.CreatePayment(100, "http://localhost:5000/Paypal/ExecutePayment", "http://localhost:5000/PayPal/Cancel", "sale");
+
+                //return new JsonResult(payment);
+                //RedirectResult redirect = new RedirectToPageResult();
 
                 return new JsonResult(payment);
             }
@@ -34,13 +37,17 @@ namespace OPFC.API.Controllers
 
         }
 
-        [HttpPost("ExecutePayment")]
+        [HttpGet("ExecutePayment")]
         [AllowAnonymous]
-        public IActionResult ExecutePayment(string paymentId, string token, string PayerID)
+        public IActionResult ExecutePayment([FromQuery(Name = "PayerID")] string PayerID,
+                                            [FromQuery(Name = "paymentId")] string paymentId,
+                                            [FromQuery(Name = "token")] string token)
         {
+
             var payment = _serviceUow.PaypalService.ExecutePayment(paymentId, PayerID);
 
-            return Ok();
+
+            return new JsonResult(payment);
         }
 
 
@@ -68,7 +75,7 @@ namespace OPFC.API.Controllers
         {
             PaypalTrans paypal = new PaypalTrans();
             var parameter = Mapper.Map<RequestParameter>(request.Parameter);
-            string token = "A21AAE_cNeEq7_vKhxIBTGn9lYFx9ixg_xaWb_EsXlDxWlq_QyXM5PVtUG7ET8Wqy5RdN7jGFItSzjMkaf3_KJh8P_43aGnGw";
+          //  string token = "A21AAE_cNeEq7_vKhxIBTGn9lYFx9ixg_xaWb_EsXlDxWlq_QyXM5PVtUG7ET8Wqy5RdN7jGFItSzjMkaf3_KJh8P_43aGnGw";
             try
             {
                 return Ok(paypal.PaypalTran(parameter).Result);
@@ -79,5 +86,20 @@ namespace OPFC.API.Controllers
             }
         }
 
+        [HttpPost("refund")]
+        [AllowAnonymous]
+        public IActionResult Refund()
+        {
+
+
+            try
+            {
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
