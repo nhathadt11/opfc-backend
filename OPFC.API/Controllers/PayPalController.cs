@@ -69,23 +69,6 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpPost("Trans")]
-        [AllowAnonymous]
-        public IActionResult Trans(TransRequest request)
-        {
-            PaypalTrans paypal = new PaypalTrans();
-            var parameter = Mapper.Map<RequestParameter>(request.Parameter);
-          //  string token = "A21AAE_cNeEq7_vKhxIBTGn9lYFx9ixg_xaWb_EsXlDxWlq_QyXM5PVtUG7ET8Wqy5RdN7jGFItSzjMkaf3_KJh8P_43aGnGw";
-            try
-            {
-                return Ok(paypal.PaypalTran(parameter).Result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [HttpPost("refund")]
         [AllowAnonymous]
         public IActionResult Refund()
