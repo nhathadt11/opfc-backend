@@ -143,5 +143,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[EventCategory]
         /// </summary>
         public DbSet<EventCategory> EventCategory { get; set; }
+        
+        /// <summary>
+        /// [dbo].[OrderLineDetail]
+        /// </summary>
+        public DbSet<OrderLineDetail> OrderLineDetail { get; set; }
     }
 }

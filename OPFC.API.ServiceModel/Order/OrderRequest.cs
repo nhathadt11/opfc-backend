@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OPFC.API.DTO;
+using OPFC.Models;
 using ServiceStack;
 namespace OPFC.API.ServiceModel.Order
 {
@@ -9,8 +10,7 @@ namespace OPFC.API.ServiceModel.Order
     {
         public long UserId { get; set; }
         public long EventId { get; set; }
-        public List<long> MenuIds { get; set; }
-
+        public List<RequestOrderItem> RequestMenuList { get; set; }
     }
 
     [Route("/Order/UpdateOrder/", "POST")]
