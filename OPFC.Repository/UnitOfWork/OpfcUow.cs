@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -56,6 +57,7 @@ namespace OPFC.Repositories.UnitOfWork
         public ICategoryRepository CategoryRepository { get { return GetRepo<ICategoryRepository>(); } }
         public IMenuCategoryRepository MenuCategoryRepository { get { return GetRepo<IMenuCategoryRepository>(); } }
         public IEventCategoryRepository EventCategoryRepository { get { return GetRepo<IEventCategoryRepository>(); } }
+        public IOrderLineDetailRepository OrderLineDetailRepository { get { return GetRepo<IOrderLineDetailRepository>(); } }
 
 
         /// <summary>

@@ -93,6 +93,8 @@ namespace OPFC.Repositories.UnitOfWork
         IMenuCategoryRepository MenuCategoryRepository { get; }
 
         IEventCategoryRepository EventCategoryRepository { get; }
+        
+        IOrderLineDetailRepository OrderLineDetailRepository { get; }
 
         /// <summary>
         /// Dispose
