@@ -27,9 +27,25 @@ namespace OPFC.Services.Implementations
 
         public List<Menu> GetAllMenu()
         {
-            var result = _opfcUow.MenuRepository.GetAllMenu();
+            var menus = _opfcUow.MenuRepository.GetAllMenu();
+            var menuCategories = _opfcUow.MenuCategoryRepository.GetAllByMenuIds(menus.Select(m => m.Id).ToList()).GroupBy(x => x.MenuId).ToList();
+            var categories = _opfcUow.CategoryRepository.GetAll();
+            foreach (var menu in menus)
+            {
+                var categoryIds = menuCategories.Where(x => x.Key == menu.Id)
+                    .Select(x => x.Select(c => c.CategoryId).ToList()).ToList();
 
-            return result;
+                if (categoryIds.Count > 0)
+                {
+                    menu.CategoryList = categories.Where(c => categoryIds.SingleOrDefault().Contains(c.Id)).ToList();
+                }
+                else
+                {
+                    menu.CategoryList = new List<Category>();
+                }
+
+            }
+            return menus;
         }
 
         public void DeleteMenuById(long id)
@@ -43,7 +59,7 @@ namespace OPFC.Services.Implementations
             found.IsDeleted = true;
             if (UpdateMenu(found) == null)
             {
-                throw new Exception("Menu could not be updated.");   
+                throw new Exception("Menu could not be updated.");
             }
         }
 
@@ -62,7 +78,7 @@ namespace OPFC.Services.Implementations
                 ServingNumber = request.ServingNumber,
                 BrandId = brandId
             };
-            
+
             var createdMenu = _opfcUow.MenuRepository.CreateMenu(menu);
 
             var mealIds = request.MealIds;
@@ -104,29 +120,29 @@ namespace OPFC.Services.Implementations
             menuToUpdate.ServingNumber = request.ServingNumber;
 
             var updated = _opfcUow.MenuRepository.UpdateMenu(menuToUpdate);
-            
+
             // MenuMeal
             var oldMenuMealList = _opfcUow.MenuMealRepository
                 .GetAll()
                 .Where(mm => mm.MenuId == updated.Id)
                 .ToList();
             _opfcUow.MenuMealRepository.RemoveRange(oldMenuMealList);
-            
+
             var mealIds = request.MealIds;
             var newMenuMealList = mealIds.Select(id => new MenuMeal { MealId = id, MenuId = updated.Id }).ToList();
             _opfcUow.MenuMealRepository.CreateRange(newMenuMealList);
-            
+
             //MenuEventType
             var oldMenuEventTypeList = _opfcUow.MenuEventTypeRepository
                 .GetAll()
                 .Where(mm => mm.MenuId == updated.Id)
                 .ToList();
             _opfcUow.MenuEventTypeRepository.RemoveRange(oldMenuEventTypeList);
-            
+
             var eventTypeIds = request.EventTypeIds;
             var newMenuEventTypeList = eventTypeIds.Select(id => new MenuEventType { EventTypeId = id, MenuId = updated.Id }).ToList();
             _opfcUow.MenuEventTypeRepository.CreateRange(newMenuEventTypeList);
-            
+
             _opfcUow.Commit();
             return updated;
         }

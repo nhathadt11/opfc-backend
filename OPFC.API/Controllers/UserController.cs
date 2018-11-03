@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.User;
 using OPFC.Models;
+using OPFC.Recommendation;
 using OPFC.Services.Interfaces;
 using OPFC.Services.UnitOfWork;
 
@@ -23,6 +24,37 @@ namespace OPFC.API.Controllers
     {
         // Dependency Injection. We should communicate with interface only
         private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
+
+        [AllowAnonymous]
+        [HttpGet("/User/GetSuggestion/{id}")]
+        public void GetSuggestion(long id)
+        {
+            try
+            {
+                var userId = id;
+
+                Class1 class1 = new Class1();
+                Recommendation.Objects.UserBehavior userBehavior = new Recommendation.Objects.UserBehavior();
+                userBehavior.Users = _serviceUow.UserService.GetAllUser();
+                userBehavior.Menus = _serviceUow.MenuService.GetAllMenu();
+                userBehavior.Categories = _serviceUow.CategoryService.GetAll();
+
+                foreach(var user in userBehavior.Users)
+                {
+                    foreach(var menu in userBehavior.Menus)
+                    {
+                        userBehavior.UserActions.Add(new Recommendation.Objects.UserAction(user.Id, "", menu.Id, menu.MenuName));
+                    }
+                }
+
+                var result = class1.GetSuggest(userBehavior);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
 
         [HttpPost("/User/CreateEventPlanner/")]
         public IActionResult Post(CreateEventPlannerRequest request)
@@ -47,9 +79,9 @@ namespace OPFC.API.Controllers
             {
                 var user = _serviceUow.UserService.Authenticate(request.Username, request.Password);
 
-                if(user == null)
+                if (user == null)
                 {
-                    return BadRequest(new { message = "User name and password is invalid." }); 
+                    return BadRequest(new { message = "User name and password is invalid." });
                 }
 
                 Brand brand = null;
@@ -75,7 +107,7 @@ namespace OPFC.API.Controllers
         public IActionResult Update(long id, UpdateUserRequest request)
         {
             var isUserExist = _serviceUow.UserService.IsUserExist(request.User.Username);
-            if (!isUserExist) return NotFound(new { Messsage = "User could not be found." }); 
+            if (!isUserExist) return NotFound(new { Messsage = "User could not be found." });
 
             try
             {

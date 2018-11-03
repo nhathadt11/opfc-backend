@@ -13,5 +13,11 @@ namespace OPFC.Models
 
         [Key, Column(Order = 1)]
         public long CategoryId { get; set; }
+
+        public MenuCategory(long menuId, long categoryId)
+        {
+            MenuId = menuId;
+            CategoryId = categoryId;
+        }
     }
 }
