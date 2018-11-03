@@ -86,12 +86,18 @@ namespace OPFC.Services.Implementations
                             OrderLineId = createdOrderLine.Id,
                             MenuId = m.Id,
                             Quantity = 1,
-                            Amount = m.Price
+                            Amount = m.Price,
+                             
                         }).ToList();
                         _opfcUow.OrderLineDetailRepository.CreateRange(orderLineDetails);
                         _opfcUow.Commit(); 
                     });
 
+                    // payment
+
+
+
+                    // notification
                     SendNotification(orderMenus, userId, orderRequest.EventId, createdOrdered.OrderId);
                     
                     scope.Complete();

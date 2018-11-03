@@ -16,6 +16,7 @@
     <Folder Include="BookMark\" />
     <Folder Include="Rating\" />
     <Folder Include="CityDistrict\" />
+    <Folder Include="PayPal\" />
   </ItemGroup>
 
   <ItemGroup>
