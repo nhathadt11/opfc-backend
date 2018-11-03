@@ -133,7 +133,7 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public List<List<Menu>> GetSuggestion(long eventId, List<long> menuIds)
+        public List<object> GetSuggestion(long eventId, List<long> menuIds)
         {
 
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
@@ -271,14 +271,18 @@ namespace OPFC.Services.Implementations
 
             var sortComboWithWeight = comboWithBudget.OrderByDescending(x => x.Value).ToList();
 
-            var finalResult = new List<List<Menu>>();
+            var finalResult = new List<object>();
 
             sortComboWithWeight.ForEach(v =>
             {
                 var ids = v.Key.Split(";").ToList();
                 var mn = matchedMenus.Where(m => ids.Contains(m.Id.ToString())).ToList();
 
-                finalResult.Add(mn);
+                var comboPrice = (double)mn.Select(x => x.Price).ToList().Sum();
+
+                var (Menus, ComboTotal) = (mn, comboPrice);
+
+                finalResult.Add(new { Menus, ComboTotal });
             });
 
             return finalResult;

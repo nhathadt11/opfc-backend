@@ -196,7 +196,7 @@ namespace OPFC.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("/User/{userId}/Event/{eventId}/GetSuggestion")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(long userId, long eventId)
+        public ActionResult<List<object>> GetSuggestion(long userId, long eventId)
         {
             try
             {
