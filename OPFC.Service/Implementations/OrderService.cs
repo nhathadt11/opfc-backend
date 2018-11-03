@@ -89,9 +89,8 @@ namespace OPFC.Services.Implementations
                             Amount = m.Price
                         }).ToList();
                         _opfcUow.OrderLineDetailRepository.CreateRange(orderLineDetails);
-                        
+                        _opfcUow.Commit(); 
                     });
-                    _opfcUow.Commit();
 
                     SendNotification(orderMenus, userId, orderRequest.EventId, createdOrdered.OrderId);
                     
