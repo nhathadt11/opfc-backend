@@ -9,11 +9,17 @@ using OPFC.Constants;
 using OPFC.API.ServiceModel.PayPal;
 using System.Linq;
 using System.Collections;
+using OPFC.API.ServiceModel.Order;
+using OPFC.Services.UnitOfWork;
+using OPFC.Models;
+using Transaction = PayPal.Api.Transaction;
 
 namespace OPFC.Services.Implementations
 {
     public class PaypalService : IPaypalService
     {
+        private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
+
         private readonly PayPalAuthOptions _options;
 
         private readonly IOpfcUow _opfcUow;
@@ -28,28 +34,32 @@ namespace OPFC.Services.Implementations
             _opfcUow = opfcUow;
         }
 
-        public Payment CreatePayment(CreatePaymentRequest request, string returnUrl, string cancelUrl, string intent)
+        public Payment CreatePayment(CreateOrderRequest request, string returnUrl, string cancelUrl, string intent)
         {
             var token = new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET).GetAccessToken();
             var apiContext = new APIContext(token);
 
             var menuList = _opfcUow.MenuRepository
                                    .GetAll()
-                                   .Where(m => request.MenuIds.Contains(m.Id));
+                                   .Where(m => request.RequestMenuList.Select(rm => rm.MenuId).Contains(m.Id))
+                                   .ToList();
 
             var total = (decimal)0;
             var items = new ItemList();
             items.items = new List<Item>();
-            foreach (var item in menuList)
+            for (int i = 0; i < menuList.Count; i++)
             {
-                items.items.Add(new Item{
+                items.items.Add(new Item
+                {
                     quantity = "1",
                     tax = "0",
-                    price = item.Price.ToString(),
-                    currency = "USD"
+                    price = menuList[i].Price.ToString(),
+                    description = request.RequestMenuList[i].Note,
+                    currency = "USD",
+                    sku = request.RequestMenuList[i].MenuId.ToString()
                 });
 
-                total += item.Price;
+                total += menuList[i].Price;
             }
 
             var payment = new Payment()
@@ -68,7 +78,8 @@ namespace OPFC.Services.Implementations
                             total = total.ToString(),
                             currency="USD"
                         },
-                        item_list = items
+                        item_list = items,
+                        description = request.UserId + "||" + request.EventId
                     },
                 }
         };
@@ -89,55 +100,51 @@ namespace OPFC.Services.Implementations
             return executedPayment;
         }
 
-        private List<Transaction> GetTransactionsList(decimal amount)
+        public Payment GetPaymentDetail(string paymentId)
         {
-            var transactionList = new List<Transaction>();
+            var apiContext = new APIContext(new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET).GetAccessToken());
 
-            transactionList.Add(new Transaction()
-            {
-                description = "Transaction description.",
-                invoice_number = GetRandomInvoiceNumber(),
-                amount = new Amount()
-                {
-                    currency = "USD",
-                    total = amount.ToString(),
-                    details = new Details()
-                    {
-                        tax = "0",
-                        shipping = "0",
-                        subtotal = amount.ToString()
-                    }
-                },
-                item_list = new ItemList()
-                {
-                    items = new List<Item>()
-                    {
-                        new Item()
-                        {
-                            name = "Payment",
-                            currency = "USD",
-                            price = amount.ToString(),
-                            quantity = "1",
-                            sku = "sku"
-                        }
-                    }
-                },
-                payee = new Payee
-                {
-                    // TODO.. Enter the payee email address here
-                    email = "nono",
+            var payment = Payment.Get(apiContext, paymentId);
 
-                    // TODO.. Enter the merchant id here
-                    merchant_id = "4321"
-                }
-            });
-
-            return transactionList;
+            return payment;
         }
 
-        private string GetRandomInvoiceNumber()
+
+       
+        public long SaveOrderAndExecutePayment(string paymentId, string payperID)
         {
-            return new Random().Next(999999999).ToString();
+            using (var scope = new System.Transactions.TransactionScope())
+            {
+                var paymentDetail = GetPaymentDetail(paymentId);
+
+                var des = paymentDetail.transactions[0].description;
+                List<String> userAndEventId = des.Split("||").ToList();
+                var userId = long.Parse(userAndEventId[0]);
+                var eventId = long.Parse(userAndEventId[1]);
+
+                var requestMenuList = paymentDetail.transactions[0].item_list.items
+                                                   .Select(item => new RequestOrderItem
+                {
+                    MenuId = long.Parse(item.sku),
+                    Note = item.description,
+                    Quantity = int.Parse(item.quantity)
+                }).ToList();
+
+                var orderRequest = new CreateOrderRequest
+                {
+                    EventId = eventId,
+                    UserId = userId,
+                    RequestMenuList = requestMenuList,
+                };
+                var createdOrder = _serviceUow.OrderService.CreateOrder(orderRequest);
+
+                ExecutePayment(paymentId, payperID);
+
+                scope.Complete();
+
+                return createdOrder.OrderId;
+            }
+
         }
     }
 }
