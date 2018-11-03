@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Event;
 using OPFC.Models;
+using OPFC.Recommendation;
 using OPFC.Services.UnitOfWork;
 
 namespace OPFC.API.Controllers
@@ -192,18 +194,53 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpGet("/Event/GetSuggestion/{eventId}")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId)
+        [AllowAnonymous]
+        [HttpGet("/User/{userId}/Event/{eventId}/GetSuggestion")]
+        public ActionResult<List<List<Menu>>> GetSuggestion(long userId, long eventId)
         {
             try
             {
-               var result =  _serviceUow.EventService.GetSuggestion(eventId);
-                return Ok(result);
+
+                Class1 class1 = new Class1();
+                Recommendation.Objects.UserBehavior userBehavior = new Recommendation.Objects.UserBehavior();
+                userBehavior.Users = _serviceUow.UserService.GetAllUser();
+                userBehavior.Menus = _serviceUow.MenuService.GetAllMenu();
+                userBehavior.Categories = _serviceUow.CategoryService.GetAll();
+
+                foreach (var user in userBehavior.Users)
+                {
+                    foreach (var menu in userBehavior.Menus)
+                    {
+                        userBehavior.UserActions.Add(new Recommendation.Objects.UserAction(user.Id, "", menu.Id, menu.MenuName));
+                    }
+                }
+
+                var result = class1.GetSuggest(userBehavior, userId);
+
+                var suggestedMenuIds = result.Select(x => x.MenuId).Distinct().ToList();
+
+                var rs = _serviceUow.EventService.GetSuggestion(eventId, suggestedMenuIds);
+
+                return rs;
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        //[HttpGet("/Event/GetSuggestion/{eventId}")]
+        //public ActionResult<List<List<Menu>>> GetSuggestion(long eventId)
+        //{
+        //    try
+        //    {
+        //       var result =  _serviceUow.EventService.GetSuggestion(eventId);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

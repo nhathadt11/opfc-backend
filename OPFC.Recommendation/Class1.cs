@@ -14,7 +14,7 @@ namespace OPFC.Recommendation
     {
         IRecommender recommender;
 
-        public List<Suggestion> GetSuggest(UserBehavior db)
+        public List<Suggestion> GetSuggest(UserBehavior db, long userId)
         {
             IRater rater = new SimpleRater();
             IComparer comparer = new CorrelationUserComparer();
@@ -22,7 +22,7 @@ namespace OPFC.Recommendation
             recommender = new ItemCollaborativeFilterRecommender(comparer, rater, 50);
             recommender.Train(db);
 
-            var suggestion = recommender.GetSuggestions(28, 50);
+            var suggestion = recommender.GetSuggestions(userId, 500);
 
             return suggestion;
         }

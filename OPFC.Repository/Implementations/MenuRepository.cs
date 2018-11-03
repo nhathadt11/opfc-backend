@@ -18,8 +18,7 @@ namespace OPFC.Repositories.Implementations
 
         public List<Menu> GetAllMenu()
         {
-            return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false)
-                .Include(m => m.CategoryList).ToList();
+            return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false).ToList();
         }
 
         public List<Menu> GetAllMenuWithCollaborative()
@@ -42,6 +41,14 @@ namespace OPFC.Repositories.Implementations
         public Menu UpdateMenu(Menu menu)
         {
             return DbSet.Update(menu).Entity;
+        }
+
+        public List<Menu> GetAllMenuByIdsWithCollaborative(List<long> menuIds)
+        {
+            return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false
+                                && menuIds.Contains(m.Id))
+                        .Include(m => m.MenuEventTypeList)
+                        .ToList();
         }
     }
 }
