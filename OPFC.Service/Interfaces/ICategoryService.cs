@@ -8,5 +8,7 @@ namespace OPFC.Services.Interfaces
     public interface ICategoryService
     {
         List<Category> GetAllByMenuId(long id);
+
+        List<Category> GetAll();
     }
 }

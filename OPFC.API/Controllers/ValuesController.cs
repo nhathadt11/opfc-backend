@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.Services.Interfaces;
 using ServiceStack;
@@ -12,7 +13,12 @@ namespace OPFC.API.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        
+        [AllowAnonymous]
+        [HttpGet("/")]
+        public void GetSuggestion()
+        {
+
+        }
 
         // GET api/values
         [HttpGet]
