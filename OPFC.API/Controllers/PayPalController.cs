@@ -56,14 +56,26 @@ namespace OPFC.API.Controllers
         }
 
 
-        [HttpPost("refund")]
+        [HttpPost("Refund/{orderLineId}")]
         [AllowAnonymous]
-        public IActionResult Refund()
+        public IActionResult Refund(long orderLineId)
         {
 
 
             try
             {
+
+                var orderLine = _serviceUow.OrderLineService.GetOrderLineById(orderLineId);
+
+                var order = _serviceUow.OrderService.GetOrderById(orderLine.OrderId);
+
+                var amount = orderLine.Amount;
+
+                var saleId = order.PaypalSaleRef;
+
+                _serviceUow.PaypalService.Refund(saleId,amount);
+
+
                 return Ok();
             }
             catch (Exception e)

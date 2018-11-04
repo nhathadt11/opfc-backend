@@ -109,8 +109,36 @@ namespace OPFC.Services.Implementations
             return payment;
         }
 
+        public bool Refund(string saleId, decimal amount)
+        {
+            var apiContext = new APIContext(new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET).GetAccessToken());
 
-       
+            var sale = new Sale();
+            sale.id = saleId;
+
+            var refund = new Refund();
+
+
+
+            refund.amount = new Amount
+            {
+                total = amount.ToString(),
+                currency = "USD"
+            };
+            try
+            {
+                sale.Refund(apiContext, refund);
+
+                return true;
+            }
+            catch( Exception ex)
+            {
+                throw ex;
+            }
+
+
+        }
+
         public long SaveOrderAndExecutePayment(string paymentId, string payperID)
         {
             using (var scope = new System.Transactions.TransactionScope())
