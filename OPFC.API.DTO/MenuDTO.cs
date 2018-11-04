@@ -44,7 +44,7 @@ namespace OPFC.API.DTO
 
         public List<Category> CategoryList { get; set; }
 
-        public int TotalBookMark { get; set; }
+        public int TotalBookmark { get; set; }
 
         public int TotalRating { get; set; }
     }
