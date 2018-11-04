@@ -36,5 +36,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Where(sl => sl.DistrictId == districtId && sl.IsDeleted == false).ToList();
         }
+
+        public List<ServiceLocation> GetServiceLocationsByBrandId(long brandId)
+        {
+            return DbSet.Where(sl => sl.BrandId == brandId && sl.IsDeleted == false).ToList();
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace OPFC.Services.Interfaces
         ServiceLocation GetServiceLocationById(long id);
 
         List<ServiceLocation> GetAllServiceLocation();
+
+        List<ServiceLocation> GetServiceLocationsByBrandId(long brandId);
     }
 }
