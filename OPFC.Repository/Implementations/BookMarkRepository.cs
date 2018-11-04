@@ -26,8 +26,8 @@ namespace OPFC.Repositories.Implementations
             var bookmark = DbSet.SingleOrDefault();
             if (bookmark != null)
             {
-                bookmark.IsDeleted = true;
-                DbSet.Update(bookmark);
+
+                DbSet.Remove(bookmark);
                 return true;
             }
             return false; 
@@ -36,12 +36,6 @@ namespace OPFC.Repositories.Implementations
         public List<BookMark> GetAllBookMark()
         {
             return DbSet.DefaultIfEmpty().ToList();
-
-        }
-
-        public BookMark GetBookMarkById(long id)
-        {
-            return DbSet.SingleOrDefault(b => b.BookMarkId == id);
 
         }
     }

@@ -48,6 +48,9 @@ namespace OPFC.Repositories.UnitOfWork
             modelBuilder.Entity<MenuEventType>()
                 .HasKey(mt => new { mt.MenuId, mt.EventTypeId });
 
+            modelBuilder.Entity<BookMark>()
+            .HasKey(mt => new { mt.MenuId, mt.UserId });
+
             base.OnModelCreating(modelBuilder);
         }
 

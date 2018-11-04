@@ -18,7 +18,6 @@ namespace OPFC.Services.Implementations
 
         public BookMark CreateBookMark(BookMark bookMark)
         {
-            bookMark.IsDeleted = false;
             var result = _opfcUow.BookMarkRepository.CreateBookMark(bookMark);
             _opfcUow.Commit();
             return result;
@@ -29,23 +28,25 @@ namespace OPFC.Services.Implementations
             return _opfcUow.BookMarkRepository.GetAllBookMark().ToList();
         }
 
+        public void RemoveBookmark(long userId, long menuId)
+        {
+            var result = _opfcUow.BookMarkRepository
+                .GetAll()
+                .SingleOrDefault(bm => bm.UserId == userId && bm.MenuId == menuId);
+            if (result == null)
+            {
+                throw new Exception("Bookmark could not be found");
+            }
+
+            _opfcUow.BookMarkRepository.Delete(result);
+            _opfcUow.Commit();
+        }
+
         public BookMark UpdateBookMark(BookMark bookMark)
         {
             var result = _opfcUow.BookMarkRepository.UpdateBookMark(bookMark);
             _opfcUow.Commit();
             return result;
-        }
-
-        public bool DeleteBookMark(BookMark bookMark)
-        {
-            var result = _opfcUow.BookMarkRepository.DeleteBookMark(bookMark);
-            _opfcUow.Commit();
-            return result;
-        }
-
-        public BookMark GetBookMarkbyId(long id)
-        {
-            return _opfcUow.BookMarkRepository.GetBookMarkById(id);
         }
     }
 }

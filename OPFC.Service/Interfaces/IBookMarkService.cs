@@ -7,8 +7,7 @@ namespace OPFC.Services.Interfaces
     {
         BookMark CreateBookMark(BookMark bookMark);
         BookMark UpdateBookMark(BookMark bookMark);
-        bool DeleteBookMark(BookMark bookMark);
         List<BookMark> GetAllBookMark();
-        BookMark GetBookMarkbyId(long id);
+        void RemoveBookmark(long userId, long menuId);
     }
 }
