@@ -13,6 +13,5 @@ namespace OPFC.Models
         public decimal Amount { get; set; }
         public decimal AmountEarned { get; set; }
         public int Status { get; set; }
-        public string PaypalSaleRef { get; set; }
     }
 }

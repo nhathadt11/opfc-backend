@@ -28,6 +28,8 @@ namespace OPFC.API.Controllers
                 var payment = _serviceUow.PaypalService.CreatePayment(request, "http://localhost:5000/Paypal/ExecutePayment", "http://localhost:5000/PayPal/Cancel", "sale");
 
                 return Created("CreatePayment", new { redirect = payment.links[1].href });
+
+                //return new JsonResult(payment);
             }
             catch(Exception ex)
             {
