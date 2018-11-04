@@ -130,15 +130,19 @@ namespace OPFC.Services.Implementations
                     Quantity = int.Parse(item.quantity)
                 }).ToList();
 
+
+                var execute = ExecutePayment(paymentId, payperID);
+
                 var orderRequest = new CreateOrderRequest
                 {
                     EventId = eventId,
                     UserId = userId,
                     RequestMenuList = requestMenuList,
+                    PaymentId = paymentDetail.id,
+                    SaleId = execute.transactions[0].related_resources[0].sale.id
                 };
-                var createdOrder = _serviceUow.OrderService.CreateOrder(orderRequest);
 
-                ExecutePayment(paymentId, payperID);
+                var createdOrder = _serviceUow.OrderService.CreateOrder(orderRequest);
 
                 scope.Complete();
 

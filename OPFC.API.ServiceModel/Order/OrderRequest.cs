@@ -11,6 +11,9 @@ namespace OPFC.API.ServiceModel.Order
         public long UserId { get; set; }
         public long EventId { get; set; }
         public List<RequestOrderItem> RequestMenuList { get; set; }
+        public string PaymentId { get; set; }
+        public string SaleId { get; set; }
+
     }
 
     [Route("/Order/UpdateOrder/", "POST")]

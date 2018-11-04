@@ -50,7 +50,8 @@ namespace OPFC.Services.Implementations
                         DateOrdered = DateTime.Now,
                         TotalAmount = orderMenus.Aggregate((decimal)0, (acc, m) => acc + m.Price),
                         Status = (int) OrderStatus.Requesting,
-                        PaypalRef = "PAY-***",
+                        PaypalRef = orderRequest.PaymentId,
+                        PaypalSaleRef = orderRequest.SaleId,
                         IsDeleted = false
                     };
                     var createdOrdered = _opfcUow.OrderRepository.CreateOrder(order);
@@ -75,8 +76,7 @@ namespace OPFC.Services.Implementations
                             BrandId = b.BrandId,
                             Amount = amount,
                             AmountEarned = amount * (decimal)(100 - AppSettings.Rate),
-                            Status = (int)OrderStatus.Requesting,
-                            PaypalSaleRef = "SAL-***"
+                            Status = (int)OrderStatus.Requesting
                         };
                         var createdOrderLine = _opfcUow.OrderLineRepository.Create(orderLine);
                         _opfcUow.Commit();
