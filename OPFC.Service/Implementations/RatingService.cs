@@ -55,7 +55,7 @@ namespace OPFC.Services.Implementations
             var foundMenu = _opfcUow.MenuRepository.GetById(found.MenuId);
             if (foundMenu.TotalRating > 0)
             {
-                foundMenu.TotalBookMark -= 1;
+                foundMenu.TotalBookmark -= 1;
                 _opfcUow.MenuRepository.UpdateMenu(foundMenu);
             }
         }

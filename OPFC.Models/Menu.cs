@@ -26,7 +26,7 @@ namespace OPFC.Models
         public decimal Price { get; set; }
 
         [DefaultValue(0)]
-        public int? TotalBookMark { get; set; }
+        public int? TotalBookmark { get; set; }
 
         [DefaultValue(0)]
         public int? TotalRating { get; set; }

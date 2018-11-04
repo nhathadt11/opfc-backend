@@ -21,11 +21,11 @@ namespace OPFC.Services.Implementations
             var result = _opfcUow.BookMarkRepository.CreateBookMark(bookMark);
 
             var foundMenu = _opfcUow.MenuRepository.GetById(bookMark.MenuId);
-            if (foundMenu.TotalBookMark == null)
+            if (foundMenu.TotalBookmark == null)
             {
-                foundMenu.TotalBookMark = 0;
+                foundMenu.TotalBookmark = 0;
             }
-            foundMenu.TotalBookMark += 1;
+            foundMenu.TotalBookmark += 1;
             _opfcUow.MenuRepository.UpdateMenu(foundMenu);
             
             _opfcUow.Commit();
@@ -50,13 +50,19 @@ namespace OPFC.Services.Implementations
             _opfcUow.BookMarkRepository.Delete(result);
 
             var foundMenu = _opfcUow.MenuRepository.GetById(result.MenuId);
-            if (foundMenu.TotalBookMark > 0)
+            if (foundMenu.TotalBookmark > 0)
             {
-                foundMenu.TotalBookMark -= 1;
+                foundMenu = NewMethod(foundMenu);
                 _opfcUow.MenuRepository.UpdateMenu(foundMenu);
             }
 
             _opfcUow.Commit();
+        }
+
+        private static Menu NewMethod(Menu foundMenu)
+        {
+            foundMenu.TotalBookmark -= 1;
+            return foundMenu;
         }
 
         public BookMark UpdateBookMark(BookMark bookMark)
