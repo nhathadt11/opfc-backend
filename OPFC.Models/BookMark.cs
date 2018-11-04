@@ -6,15 +6,10 @@ namespace OPFC.Models
 {
     public class BookMark
     {
-        [Key]
-        public long BookMarkId { get; set; }
-
-        [ForeignKey("Id")]
+        [Key, Column(Order = 0)]
         public long UserId { get; set; }
 
-        [ForeignKey("Id")]
+        [Key, Column(Order = 1)]
         public long MenuId { get; set; }
-
-        public bool IsDeleted { get; set; }
     }
 }
