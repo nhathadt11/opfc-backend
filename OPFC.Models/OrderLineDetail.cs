@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPFC.Models
 {
@@ -11,5 +12,7 @@ namespace OPFC.Models
         public decimal Amount { get; set; }
         public int Quantity { get; set; }
         public string Note { get; set; }
+        [NotMapped]
+        public string BrandName { get; set; }
     }
 }

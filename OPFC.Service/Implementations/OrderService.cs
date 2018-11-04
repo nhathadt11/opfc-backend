@@ -298,43 +298,48 @@ namespace OPFC.Services.Implementations
         //    };
         //}
         
-        //private string GetMenuNameById(long id)
-        //{
-        //    return _opfcUow.MenuRepository
-        //        .GetAll()
-        //        .SingleOrDefault(m => m.Id == id)
-        //        ?.MenuName;
-        //}
+        private string GetMenuNameById(long id)
+        {
+            return _opfcUow.MenuRepository
+                .GetAll()
+                .SingleOrDefault(m => m.Id == id)
+                ?.MenuName;
+        }
         
         public EventPlannerOrder GetEventPlannerOrderById(long orderId)
         {
-            //var foundOrder = _opfcUow.OrderRepository
-            //    .GetOrderById(orderId);
-            //var foundEvent = _opfcUow.EventRepository
-            //    .GettAllEvent()
-            //    .SingleOrDefault(e => e.OrderId == orderId);
-            //var orderLineList = _opfcUow.OrderLineRepository
-            //    .GetAll()
-            //    .Where(ol => ol.OrderId == orderId)
-            //    .Map(ToEventPlannerOrderLine);
+            var foundOrder = _opfcUow.OrderRepository
+                .GetOrderById(orderId);
+            var foundEvent = _opfcUow.EventRepository
+                .GettAllEvent()
+                .SingleOrDefault(e => e.Id == foundOrder.EventId);
+            var orderLineList = _opfcUow.OrderLineRepository
+                .GetAll()
+                .Where(ol => ol.OrderId == orderId)
+                .AsEnumerable()
+                .SelectMany(ol =>
+                {
+                    var orderLineDetailList = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineId(ol.Id).ToList();
+                    return orderLineDetailList.Select(old => { old.BrandName = GetBrandNameById(ol.BrandId); return old; });
+                })
+                .Map(ToEventPlannerOrderLineDetail);
 
-            //return new EventPlannerOrder
-            //{
-            //    OrderNo = foundOrder.OrderId,
-            //    EventNo = foundEvent.Id,
-            //    EventName = foundEvent.EventName,
-            //    EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
-            //    MenuNumber = orderLineList.Count(),
-            //    StartAt = foundEvent.StartAt,
-            //    EndAt = foundEvent.EndAt,
-            //    OrderAt = foundOrder.DateOrdered,
-            //    Note = foundOrder.Note,
-            //    OrderStatus = foundOrder.Status,
-            //    ServingNumber = foundEvent.ServingNumber,
-            //    TotalPrice = foundOrder.TotalAmount,
-            //    OrderLineList = orderLineList,
-            //};
-            return null;
+            return new EventPlannerOrder
+            {
+                OrderNo = foundOrder.OrderId,
+                EventNo = foundEvent.Id,
+                EventName = foundEvent.EventName,
+                EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
+                MenuNumber = orderLineList.Count(),
+                StartAt = foundEvent.StartAt,
+                EndAt = foundEvent.EndAt,
+                OrderAt = foundOrder.DateOrdered,
+                Note = foundOrder.Note,
+                OrderStatus = ((OrderStatus)foundOrder.Status).ToString("F"),
+                ServingNumber = foundEvent.ServingNumber,
+                TotalPrice = foundOrder.TotalAmount,
+                OrderLineList = orderLineList,
+            };
         }
 
         public List<EventPlannerOrder> GetEventPlannerOrders(long userId)
@@ -382,26 +387,26 @@ namespace OPFC.Services.Implementations
             return eventPlannerOrderList;
         }
         
-        //private EventPlannerOrderLine ToEventPlannerOrderLine(OrderLine orderLine)
-        //{
-        //    var mealList = GetAllMealByMenuId(orderLine.MenuId)
-        //        .Select(m => new IdNameValue { Id = m.Id, Name = m.MealName })
-        //        .ToList();
+        private EventPlannerOrderLine ToEventPlannerOrderLineDetail(OrderLineDetail orderLineDetail)
+        {
+            var mealList = GetAllMealByMenuId(orderLineDetail.MenuId)
+                .Select(m => new IdNameValue { Id = m.Id, Name = m.MealName })
+                .ToList();
 
-        //    return new EventPlannerOrderLine
-        //    {
-        //        OrderLineId = orderLine.Id,
-        //        MenuId = orderLine.MenuId,
-        //        MenuName = GetMenuNameById(orderLine.MenuId),
-        //        BrandName = GetBrandNameById(orderLine.BrandId),
-        //        ImageUrl = null,
-        //        MealList = mealList,
-        //        Note = orderLine.Note,
-        //        Status = orderLine.Status,
-        //        Price = orderLine.Amount,
-        //        OtherFee = 0
-        //    };
-        //}
+            return new EventPlannerOrderLine
+            {
+                OrderLineId = orderLineDetail.Id,
+                MenuId = orderLineDetail.MenuId,
+                MenuName = GetMenuNameById(orderLineDetail.MenuId),
+                BrandName = orderLineDetail.BrandName,
+                ImageUrl = null,
+                MealList = mealList,
+                Note = orderLineDetail.Note,
+                //Status = ((OrderStatus)orderLineDetail.Status).ToString("F"),
+                Price = orderLineDetail.Amount,
+                OtherFee = 0
+            };
+        }
 
         private string GetBrandNameById(long brandId)
         {
