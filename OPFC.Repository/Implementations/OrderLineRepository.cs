@@ -25,5 +25,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Where(ol => ol.OrderId == orderId).ToList();
         }
+
+        public OrderLine GetOrderLineById(long id)
+        {
+            return DbSet.SingleOrDefault(o => o.Id == id);
+        }
     }
 }

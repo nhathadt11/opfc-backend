@@ -22,6 +22,7 @@ namespace OPFC.Services.Factory
             // TODO: Register repository here
             return new Dictionary<Type, Func<object, object>>
                 {
+                {typeof(IOrderLineService), coreService => new OrderLineService(opfcUow)},
                 {typeof(IPaypalService), coreService => new PaypalService(opfcUow)},
                 {typeof(ICityService), coreService => new CityService(opfcUow)},
                 {typeof(IDistrictService), coreService => new DistrictService(opfcUow)},

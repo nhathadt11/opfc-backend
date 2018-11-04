@@ -14,5 +14,7 @@ namespace OPFC.Repositories.Interfaces
         bool DeleteOrder(Order order);
 
         List<Order> GetAllOrder();
+
+
     }
 }
