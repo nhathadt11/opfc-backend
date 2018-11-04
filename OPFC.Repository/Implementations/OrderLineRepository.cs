@@ -20,5 +20,10 @@ namespace OPFC.Repositories.Implementations
         {
             DbSet.AddRange(orderLines);
         }
+
+        public List<OrderLine> GetAllByOrderId(long orderId)
+        {
+            return DbSet.Where(ol => ol.OrderId == orderId).ToList();
+        }
     }
 }

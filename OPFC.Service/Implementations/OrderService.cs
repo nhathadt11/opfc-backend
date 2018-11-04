@@ -339,45 +339,47 @@ namespace OPFC.Services.Implementations
 
         public List<EventPlannerOrder> GetEventPlannerOrders(long userId)
         {
-            //var orderList = _opfcUow.OrderRepository
-            //    .GetAllOrder()
-            //    .Where(o => o.UserId == userId);
+            var orderList = _opfcUow.OrderRepository
+                .GetAllOrder()
+                .Where(o => o.UserId == userId);
 
-            //var eventPlannerOrderList = orderList.Select(o => {
-            //    var foundEvent = _opfcUow.EventRepository
-            //        .GettAllEvent()
-            //        .SingleOrDefault(e => e.OrderId == o.OrderId);
-            //    if (foundEvent == null)
-            //    {
-            //        throw new Exception($"Event could not be found for orderId {o.OrderId}");
-            //    }
+            var eventPlannerOrderList = orderList.Select(o => {
+                var foundEvent = _opfcUow.EventRepository
+                    .GettAllEvent()
+                    .SingleOrDefault(e => e.Id == o.EventId);
+                if (foundEvent == null)
+                {
+                    throw new Exception($"Event could not be found for orderId {o.OrderId}");
+                }
 
-            //    var eventPlannerOrderLineList = _opfcUow.OrderLineRepository
-            //        .GetAll()
-            //        .Where(ol => ol.OrderId == o.OrderId).AsEnumerable()
-            //        .Select(ToEventPlannerOrderLine)
-            //        .ToList();
+                var orderLineDetailCountByOrderLineId = _opfcUow.OrderLineRepository
+                    .GetAllByOrderId(o.OrderId)
+                    .AsEnumerable()
+                    .Select(ol =>
+                    {
+                        var orderLineDetailList = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineId(ol.Id);
+                        return orderLineDetailList.Count;
+                    })
+                    .Aggregate(0, (acc, cur) => acc + cur);
 
-            //    return new EventPlannerOrder
-            //    {
-            //        OrderNo = o.OrderId,
-            //        EventNo = foundEvent.Id,
-            //        EventName = foundEvent.EventName,
-            //        EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
-            //        MenuNumber = eventPlannerOrderLineList.Count(),
-            //        StartAt = foundEvent.StartAt,
-            //        EndAt = foundEvent.EndAt,
-            //        OrderAt = o.DateOrdered,
-            //        Note = o.Note,
-            //        OrderStatus = o.Status,
-            //        ServingNumber = foundEvent.ServingNumber,
-            //        TotalPrice = o.TotalAmount,
-            //        OrderLineList = eventPlannerOrderLineList,
-            //    };
-            //}).ToList();
+                return new EventPlannerOrder
+                {
+                    OrderNo = o.OrderId,
+                    EventNo = foundEvent.Id,
+                    EventName = foundEvent.EventName,
+                    EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
+                    MenuNumber = orderLineDetailCountByOrderLineId,
+                    StartAt = foundEvent.StartAt,
+                    EndAt = foundEvent.EndAt,
+                    OrderAt = o.DateOrdered,
+                    Note = o.Note,
+                    OrderStatus = ((OrderStatus)o.Status).ToString("F"),
+                    ServingNumber = foundEvent.ServingNumber,
+                    TotalPrice = o.TotalAmount
+                };
+            }).ToList();
 
-            //return eventPlannerOrderList;
-            return null;
+            return eventPlannerOrderList;
         }
         
         //private EventPlannerOrderLine ToEventPlannerOrderLine(OrderLine orderLine)
