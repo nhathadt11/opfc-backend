@@ -19,6 +19,15 @@ namespace OPFC.Services.Implementations
         public BookMark CreateBookMark(BookMark bookMark)
         {
             var result = _opfcUow.BookMarkRepository.CreateBookMark(bookMark);
+
+            var foundMenu = _opfcUow.MenuRepository.GetById(bookMark.MenuId);
+            if (foundMenu.TotalBookMark == null)
+            {
+                foundMenu.TotalBookMark = 0;
+            }
+            foundMenu.TotalBookMark += 1;
+            _opfcUow.MenuRepository.UpdateMenu(foundMenu);
+            
             _opfcUow.Commit();
             return result;
         }
@@ -39,6 +48,14 @@ namespace OPFC.Services.Implementations
             }
 
             _opfcUow.BookMarkRepository.Delete(result);
+
+            var foundMenu = _opfcUow.MenuRepository.GetById(result.MenuId);
+            if (foundMenu.TotalBookMark > 0)
+            {
+                foundMenu.TotalBookMark -= 1;
+                _opfcUow.MenuRepository.UpdateMenu(foundMenu);
+            }
+
             _opfcUow.Commit();
         }
 
