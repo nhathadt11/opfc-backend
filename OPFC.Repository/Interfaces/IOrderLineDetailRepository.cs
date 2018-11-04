@@ -7,5 +7,6 @@ namespace OPFC.Repositories.Interfaces
     public interface IOrderLineDetailRepository : IRepository<OrderLineDetail>
     {
         void CreateRange(List<OrderLineDetail> orderLineDetails);
+        List<OrderLineDetail> GetAllByOrderLineId(long orderLineId);
     }
 }
