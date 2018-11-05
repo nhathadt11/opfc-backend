@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
@@ -12,6 +13,11 @@ namespace OPFC.Services.Implementations
         public OrderLineService(IOpfcUow opfcUow)
         {
             _opfcUow = opfcUow;
+        }
+
+        public List<OrderLine> GetAllByOrderId(long orderId)
+        {
+            return _opfcUow.OrderLineRepository.GetAllByOrderId(orderId);
         }
 
         public OrderLine GetOrderLineById(long id)

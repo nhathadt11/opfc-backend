@@ -8,8 +8,6 @@ namespace OPFC.Repositories.Interfaces
         OrderLine Create(OrderLine orderLine);
         void CreateMany(List<OrderLine> orderLines);
         List<OrderLine> GetAllByOrderId(long orderId);
-
         OrderLine GetOrderLineById(long id);
-
     }
 }
