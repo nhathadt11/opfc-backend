@@ -47,5 +47,9 @@ namespace OPFC.API.DTO
         public int TotalBookmark { get; set; }
 
         public int TotalRating { get; set; }
+
+        public decimal AverageRatingPoint { get; set; }
+
+        public decimal TotalRatingPoint { get; set; }
     }
 }

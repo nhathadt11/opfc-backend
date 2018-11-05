@@ -25,6 +25,15 @@ namespace OPFC.Services.Implementations
                 foundMenu.TotalRating = 0;
             }
             foundMenu.TotalRating += 1;
+
+            if (foundMenu.TotalRatingPoint == null)
+            {
+                foundMenu.TotalRatingPoint = 0;
+            }
+            foundMenu.TotalRatingPoint += rating.Rate;
+
+            foundMenu.AverageRatingPoint = (decimal) foundMenu.TotalRatingPoint / foundMenu.TotalRating;
+
             _opfcUow.MenuRepository.UpdateMenu(foundMenu);
 
             _opfcUow.Commit();

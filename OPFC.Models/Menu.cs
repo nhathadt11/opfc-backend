@@ -31,6 +31,10 @@ namespace OPFC.Models
         [DefaultValue(0)]
         public int? TotalRating { get; set; }
 
+        public decimal? AverageRatingPoint { get; set; }
+
+        public decimal? TotalRatingPoint { get; set; }
+
         public List<MenuMeal> MenuMealList { get; set; }
 
         public List<MenuEventType> MenuEventTypeList { get; set; }
