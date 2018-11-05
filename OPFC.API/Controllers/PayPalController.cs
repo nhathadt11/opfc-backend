@@ -2,12 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.Services.UnitOfWork;
-using OPFC.API.ServiceModel.PayPal;
-using AutoMapper;
-using OPFC.API.DTO.RequestPaypalObject;
-using OPFC.Services.Interfaces;
 using OPFC.API.ServiceModel.Order;
-using PayPal.Api;
+using OPFC.Constants;
 
 namespace OPFC.API.Controllers
 {
@@ -17,7 +13,7 @@ namespace OPFC.API.Controllers
     [ApiController]
     public class PayPalController : ControllerBase
     {
-        private readonly IServiceUow _serviceUow = ServiceStack.AppHostBase.Instance.TryResolve<IServiceUow>();
+        private readonly IServiceUow _serviceUow = ServiceStack.ServiceStackHost.Instance.TryResolve<IServiceUow>();
 
         [HttpPost("CreatePayment")]
         [AllowAnonymous]
@@ -25,11 +21,15 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var payment = _serviceUow.PaypalService.CreatePayment(request, "http://localhost:5000/Paypal/ExecutePayment", "http://localhost:5000/PayPal/Cancel", "sale");
+                var payment = _serviceUow.PaypalService.CreatePayment
+                (
+                    request,
+                    $"{AppSettings.BACKEND_BASE_URL}/Paypal/ExecutePayment",
+                    $"{AppSettings.BACKEND_BASE_URL}/PayPal/Cancel",
+                    "sale"
+                );
 
                 return Created("CreatePayment", new { redirect = payment.links[1].href });
-
-                //return new JsonResult(payment);
             }
             catch(Exception ex)
             {
@@ -46,8 +46,7 @@ namespace OPFC.API.Controllers
 			try
 			{
                 var orderId = _serviceUow.PaypalService.SaveOrderAndExecutePayment(paymentId, PayerID);
-
-                return Redirect($"https://opfc-frontend.surge.sh/profile/event-planner/order/{orderId}");
+                return Redirect($"{AppSettings.FRONTEND_BASE_URL}/profile/event-planner/order/{orderId}");
             }
             catch
 			{
@@ -60,21 +59,14 @@ namespace OPFC.API.Controllers
         [AllowAnonymous]
         public IActionResult Refund(long orderLineId)
         {
-
-
             try
             {
-
                 var orderLine = _serviceUow.OrderLineService.GetOrderLineById(orderLineId);
-
                 var order = _serviceUow.OrderService.GetOrderById(orderLine.OrderId);
-
                 var amount = orderLine.Amount;
-
                 var saleId = order.PaypalSaleRef;
 
                 _serviceUow.PaypalService.Refund(saleId,amount);
-
 
                 return Ok();
             }
