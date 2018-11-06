@@ -68,6 +68,7 @@ namespace OPFC.Services.Implementations
         {
             var result = new Event();
 
+            newEvent.Status = (int)EventStatus.OnGoing;
             newEvent.IsDeleted = false;
 
             using (var scope = new TransactionScope())
