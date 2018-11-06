@@ -109,16 +109,19 @@ namespace OPFC.Services.Implementations
             return payment;
         }
 
-        public bool Refund(string saleId, decimal amount)
+        public void Refund(long orderLineId)
         {
             var apiContext = new APIContext(new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET).GetAccessToken());
+            
+            var orderLine = _serviceUow.OrderLineService.GetOrderLineById(orderLineId);
+            var order = _serviceUow.OrderService.GetOrderById(orderLine.OrderId);
+            var amount = orderLine.Amount;
+            var saleId = order.PaypalSaleRef;
 
             var sale = new Sale();
             sale.id = saleId;
 
             var refund = new Refund();
-
-
 
             refund.amount = new Amount
             {
@@ -128,15 +131,12 @@ namespace OPFC.Services.Implementations
             try
             {
                 sale.Refund(apiContext, refund);
-
-                return true;
+                _serviceUow.OrderLineService.Cancel(orderLineId);
             }
             catch( Exception ex)
             {
                 throw ex;
             }
-
-
         }
 
         public long SaveOrderAndExecutePayment(string paymentId, string payperID)

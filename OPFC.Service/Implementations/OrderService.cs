@@ -227,7 +227,7 @@ namespace OPFC.Services.Implementations
                     StartAt = foundEvent.StartAt,
                     EndAt = foundEvent.EndAt,
                     EventStatus = ((EventStatus)foundEvent.Status).ToString("F"),
-                    OrderStatus = ((OrderStatus)GetOrderById(ol.OrderId).Status).ToString("F"),
+                    OrderStatus = ((OrderStatus)ol.Status).ToString("F"),
                     ServingNumber = foundEvent.ServingNumber,
                     CityName = GetCityNameById(foundEvent.CityId),
                     DistrictName = GetDistrictNameById(foundEvent.DistrictId),

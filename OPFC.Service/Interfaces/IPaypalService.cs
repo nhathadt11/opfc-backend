@@ -14,7 +14,6 @@ namespace OPFC.Services.Interfaces
 
         long SaveOrderAndExecutePayment( string paymentId, string payperID);
 
-        bool Refund(string saleId, decimal amount);
-
+        void Refund(long orderLineId);
     }
 }

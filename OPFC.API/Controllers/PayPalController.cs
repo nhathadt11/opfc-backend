@@ -61,12 +61,7 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var orderLine = _serviceUow.OrderLineService.GetOrderLineById(orderLineId);
-                var order = _serviceUow.OrderService.GetOrderById(orderLine.OrderId);
-                var amount = orderLine.Amount;
-                var saleId = order.PaypalSaleRef;
-
-                _serviceUow.PaypalService.Refund(saleId,amount);
+                _serviceUow.PaypalService.Refund(orderLineId);
 
                 return Ok();
             }
