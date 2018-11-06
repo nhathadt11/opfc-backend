@@ -166,14 +166,18 @@ namespace OPFC.Services.Implementations
         {
             var forEvent = _opfcUow.EventRepository.GetEventById(eventId);
             var userByBrand = GetUserByBrandId(orderLine.BrandId);
+            var fromUsername = _opfcUow.UserRepository.GetById(userId).Username;
 
             FirebaseService.FirebaseService.Instance.SendNotification(new OrderPayload
             {
                 FromUserId = userId,
-                FromUsername = _opfcUow.UserRepository.GetById(userId).Username,
+                FromUsername = fromUsername,
                 ToUserId = userByBrand.Id,
                 ToUsername = _opfcUow.UserRepository.GetById(userByBrand.Id).Username,
                 Message = forEvent.EventName,
+                Subject = fromUsername,
+                Verb = "requested for",
+                Object = forEvent.EventName,
                 CreatedAt = DateTime.Now,
                 Read = false,
                 Data = new Dictionary<string, object>
@@ -457,7 +461,10 @@ namespace OPFC.Services.Implementations
                 ToUserId = eventPlannerUser.Id,
                 ToUsername = eventPlannerUser.Username,
                 CreatedAt = DateTime.Now,
-                Message = "has approved",
+                Message = $"{brandUser.Username} approved {foundEvent.EventName}",
+                Subject = brandUser.Username,
+                Verb = "approved",
+                Object = foundEvent.EventName,
                 Read = false,
                 Data = new Dictionary<string, object> {
                     { "OrderId", order.OrderId },

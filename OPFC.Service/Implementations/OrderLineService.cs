@@ -27,7 +27,7 @@ namespace OPFC.Services.Implementations
             _opfcUow.Commit();
 
             OrderPayload orderPayload = _serviceUow.OrderService.GetOrderPayloadByOrderLineId(orderLineId);
-            orderPayload.Message = "has approved";
+            orderPayload.Verb = "approved";
             
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
         }
@@ -40,7 +40,7 @@ namespace OPFC.Services.Implementations
             _opfcUow.Commit();
 
             OrderPayload orderPayload = _serviceUow.OrderService.GetOrderPayloadByOrderLineId(orderLineId);
-            orderPayload.Message = "has canceled";
+            orderPayload.Verb = "canceled";
             
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
         }
