@@ -92,10 +92,10 @@ namespace OPFC.Services.Implementations
                         }).ToList();
                         _opfcUow.OrderLineDetailRepository.CreateRange(orderLineDetails);
                         _opfcUow.Commit();
+                        
+                        // notification
+                        SendNotification(orderLine, userId, orderRequest.EventId, createdOrdered.OrderId);
                     });
-
-                    // notification
-                    SendNotification(orderMenus, userId, orderRequest.EventId, createdOrdered.OrderId);
 
                     scope.Complete();
 
@@ -160,29 +160,25 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        private void SendNotification(Menu[] menuList, long userId, long eventId, long orderId)
+        private void SendNotification(OrderLine orderLine, long userId, long eventId, long orderId)
         {
-            menuList.Each(m =>
-            {
-                var forEvent = _opfcUow.EventRepository.GetEventById(eventId);
-                var userByBrand = GetUserByBrandId(m.BrandId);
+            var forEvent = _opfcUow.EventRepository.GetEventById(eventId);
+            var userByBrand = GetUserByBrandId(orderLine.BrandId);
 
-                FirebaseService.FirebaseService.Instance.SendNotification(new OrderPayload
+            FirebaseService.FirebaseService.Instance.SendNotification(new OrderPayload
+            {
+                FromUserId = userId,
+                FromUsername = _opfcUow.UserRepository.GetById(userId).Username,
+                ToUserId = userByBrand.Id,
+                ToUsername = _opfcUow.UserRepository.GetById(userByBrand.Id).Username,
+                Message = forEvent.EventName,
+                CreatedAt = DateTime.Now,
+                Read = false,
+                Data = new Dictionary<string, object>
                 {
-                    FromUserId = userId,
-                    FromUsername = _opfcUow.UserRepository.GetById(userId).Username,
-                    ToUserId = userByBrand.Id,
-                    ToUsername = _opfcUow.UserRepository.GetById(userByBrand.Id).Username,
-                    Message = m.MenuName,
-                    CreatedAt = DateTime.Now,
-                    Data = new Dictionary<string, object>
-                    {
-                        { "OrderId", orderId },
-                        { "MenuId", m.Id },
-                        { "MenuName", m.MenuName },
-                        { "Event", forEvent }
-                    }
-                });
+                    { "OrderId", orderId },
+                    { "Event", forEvent }
+                }
             });
         }
 

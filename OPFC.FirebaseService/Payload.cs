@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace OPFC.FirebaseService
 {
@@ -11,6 +12,8 @@ namespace OPFC.FirebaseService
         public string ToUsername { get; set; }
         public string Message { get; set; }
         public DateTime CreatedAt { get; set; }
+        [DefaultValue(false)]
+        public Boolean Read { get; set; }
         public virtual Dictionary<string, object> Data { get; set; }
     }
 }
