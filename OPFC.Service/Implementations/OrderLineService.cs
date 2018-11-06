@@ -45,6 +45,11 @@ namespace OPFC.Services.Implementations
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
         }
 
+        public bool Exists(long orderLineId)
+        {
+            return _opfcUow.OrderLineRepository.GetById(orderLineId) != null;
+        }
+
         public List<OrderLine> GetAllByOrderId(long orderId)
         {
             return _opfcUow.OrderLineRepository.GetAllByOrderId(orderId);
