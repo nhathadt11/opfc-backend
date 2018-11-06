@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OPFC.API.ServiceModel.Order;
+using OPFC.FirebaseService;
 using OPFC.Models;
 using OPFC.Repositories.Interfaces;
 
@@ -17,5 +18,7 @@ namespace OPFC.Services.Interfaces
         List<BrandOrder> GetBrandOrderByBrandId(long brandId);
         List<EventPlannerOrder> GetEventPlannerOrders(long userId);
         EventPlannerOrder GetEventPlannerOrderById(long orderId);
+        Order GetOrderRelatedToOrderLineId(long orderLineId);
+        OrderPayload GetOrderPayloadByOrderLineId(long orderLineId);
     }
 }

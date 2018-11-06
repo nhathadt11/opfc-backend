@@ -334,5 +334,16 @@ namespace OPFC.Services.Implementations
 
             return Result;
         }
+
+        public Event GetEventRelatedToOrderId(long orderId)
+        {
+            var foundOrder = _opfcUow.OrderRepository.GetById(orderId);
+            if (foundOrder == null)
+            {
+                throw new Exception("Event could not be found.");
+            }
+
+            return GetEventById(foundOrder.EventId);
+        }
     }
 }

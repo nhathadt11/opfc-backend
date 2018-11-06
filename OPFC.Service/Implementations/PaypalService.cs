@@ -9,6 +9,7 @@ using OPFC.Constants;
 using OPFC.API.ServiceModel.PayPal;
 using System.Linq;
 using System.Collections;
+using System.Transactions;
 using OPFC.API.ServiceModel.Order;
 using OPFC.Services.UnitOfWork;
 using OPFC.Models;
@@ -111,8 +112,10 @@ namespace OPFC.Services.Implementations
 
         public void Refund(long orderLineId)
         {
-            var apiContext = new APIContext(new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET).GetAccessToken());
-            
+            var apiContext =
+                new APIContext(new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET)
+                    .GetAccessToken());
+
             var orderLine = _serviceUow.OrderLineService.GetOrderLineById(orderLineId);
             var order = _serviceUow.OrderService.GetOrderById(orderLine.OrderId);
             var amount = orderLine.Amount;
@@ -128,20 +131,14 @@ namespace OPFC.Services.Implementations
                 total = amount.ToString(),
                 currency = "USD"
             };
-            try
-            {
-                sale.Refund(apiContext, refund);
-                _serviceUow.OrderLineService.Cancel(orderLineId);
-            }
-            catch( Exception ex)
-            {
-                throw ex;
-            }
+            
+            sale.Refund(apiContext, refund);
+            _serviceUow.OrderLineService.Cancel(orderLineId);
         }
 
         public long SaveOrderAndExecutePayment(string paymentId, string payperID)
         {
-            using (var scope = new System.Transactions.TransactionScope())
+            using (var scope = new TransactionScope())
             {
                 var paymentDetail = GetPaymentDetail(paymentId);
 

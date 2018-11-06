@@ -8,12 +8,14 @@ using OPFC.FirebaseService;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
+using OPFC.Services.UnitOfWork;
 using ServiceStack;
 
 namespace OPFC.Services.Implementations
 {
     public class OrderService : IOrderService
     {
+        readonly IServiceUow _serviceUow = ServiceStackHost.Instance.TryResolve<IServiceUow>();
         readonly IOpfcUow _opfcUow;
 
         public OrderService(IOpfcUow opfcUow)
@@ -92,7 +94,7 @@ namespace OPFC.Services.Implementations
                         }).ToList();
                         _opfcUow.OrderLineDetailRepository.CreateRange(orderLineDetails);
                         _opfcUow.Commit();
-                        
+
                         // notification
                         SendNotification(orderLine, userId, orderRequest.EventId, createdOrdered.OrderId);
                     });
@@ -423,6 +425,46 @@ namespace OPFC.Services.Implementations
         public bool Exits(long id)
         {
             return _opfcUow.OrderRepository.GetOrderById(id) != null;
+        }
+
+        public Order GetOrderRelatedToOrderLineId(long orderLineId)
+        {
+            var foundOrderLine = _opfcUow.OrderLineRepository
+                .GetAll()
+                .SingleOrDefault(o => o.Id == orderLineId);
+            if (foundOrderLine == null)
+            {
+                throw new Exception("OrderLine could not be found.");
+            }
+
+            return GetOrderById(foundOrderLine.OrderId);
+        }
+
+        public OrderPayload GetOrderPayloadByOrderLineId(long orderLineId)
+        {
+            var orderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
+            
+            var brandId = orderLine.BrandId;
+            var brandUser = _serviceUow.UserService.GetUserByBrandId(brandId);
+            var eventPlannerUser = _serviceUow.UserService.GetUserWhoMadeOrderLineId(orderLineId);
+            var order = _serviceUow.OrderService.GetOrderRelatedToOrderLineId(orderLineId);
+            var foundEvent = _serviceUow.EventService.GetEventRelatedToOrderId(order.OrderId);
+
+            return new OrderPayload
+            {
+                FromUserId = brandUser.Id,
+                FromUsername = brandUser.Username,
+                ToUserId = eventPlannerUser.Id,
+                ToUsername = eventPlannerUser.Username,
+                CreatedAt = DateTime.Now,
+                Message = "has approved",
+                Read = false,
+                Data = new Dictionary<string, object> {
+                    { "OrderId", order.OrderId },
+                    { "EventId", foundEvent.Id },
+                    { "EventName", foundEvent.EventName }
+                }
+            };
         }
     }
 }

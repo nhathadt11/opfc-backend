@@ -9,5 +9,6 @@ namespace OPFC.Services.Interfaces
         OrderLine GetOrderLineById(long id);
         List<OrderLine> GetAllByOrderId(long orderId);
         void Cancel(long orderLineId);
+        void Approve(long orderLineId);
     }
 }

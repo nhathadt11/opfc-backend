@@ -24,5 +24,7 @@ namespace OPFC.Services.Interfaces
         List<object> GetSuggestion(long eventId, List<long> menuIds);
 
         bool IsEventExist(long eventId);
+
+        Event GetEventRelatedToOrderId(long orderId);
     }
 }

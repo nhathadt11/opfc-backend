@@ -136,5 +136,41 @@ namespace OPFC.Services.Implementations
         {
             return _opfcUow.UserRepository.GetById(id);
         }
+
+        public User GetUserByBrandId(long brandId)
+        {
+            Brand foundBrand = _opfcUow.BrandRepository.GetBrandById(brandId);
+            if (foundBrand == null)
+            {
+                throw new Exception("Brand could not be found.");
+            }
+
+            return _opfcUow.UserRepository.GetById(foundBrand.UserId);
+        }
+
+        public User GetUserWhoMadeOrderLineId(long orderLineId)
+        {
+            var foundOrderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
+            if (foundOrderLine == null)
+            {
+                throw new Exception("OrderLine could not be found.");
+            }
+
+            var foundOrder = _opfcUow.OrderRepository
+                .GetAll()
+                .SingleOrDefault(o => o.OrderId == foundOrderLine.OrderId);
+            if (foundOrderLine == null)
+            {
+                throw new Exception("Order could not be found.");
+            }
+
+            var eventPlannerUser = _opfcUow.UserRepository.GetById(foundOrder.UserId);
+            if (eventPlannerUser == null)
+            {
+                throw new Exception("User could not be found");
+            }
+
+            return eventPlannerUser;
+        }
     }
 }
