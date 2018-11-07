@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -23,6 +24,16 @@ namespace OPFC.Models
         public long BrandId { get; set; }
 
         public decimal Price { get; set; }
+
+        [DefaultValue(0)]
+        public int? TotalBookmark { get; set; }
+
+        [DefaultValue(0)]
+        public int? TotalRating { get; set; }
+
+        public decimal? AverageRatingPoint { get; set; }
+
+        public decimal? TotalRatingPoint { get; set; }
 
         public List<MenuMeal> MenuMealList { get; set; }
 

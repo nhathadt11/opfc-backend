@@ -16,5 +16,7 @@ namespace OPFC.Repositories.Interfaces
         List<Menu> GetAllByBrandId(long id);
 
         List<Menu> GetAllMenuWithCollaborative();
+
+        List<Menu> GetAllMenuByIdsWithCollaborative(List<long> menuIds);
     }
 }

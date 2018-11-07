@@ -22,6 +22,11 @@ namespace OPFC.Services.Implementations
             _opfcUow = opfcUow;
         }
 
+        public List<Category> GetAll()
+        {
+            return _opfcUow.CategoryRepository.GetAll();
+        }
+
         public List<Category> GetAllByMenuId(long id)
         {
             var menuCategoryIds = _opfcUow.MenuCategoryRepository

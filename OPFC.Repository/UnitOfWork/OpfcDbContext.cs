@@ -48,6 +48,12 @@ namespace OPFC.Repositories.UnitOfWork
             modelBuilder.Entity<MenuEventType>()
                 .HasKey(mt => new { mt.MenuId, mt.EventTypeId });
 
+            modelBuilder.Entity<BookMark>()
+                .HasKey(mt => new { mt.MenuId, mt.UserId });
+                
+            modelBuilder.Entity<ServiceLocation>()
+                .HasKey(mt => new { mt.BrandId, mt.DistrictId });
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -143,5 +149,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[EventCategory]
         /// </summary>
         public DbSet<EventCategory> EventCategory { get; set; }
+        
+        /// <summary>
+        /// [dbo].[OrderLineDetail]
+        /// </summary>
+        public DbSet<OrderLineDetail> OrderLineDetail { get; set; }
     }
 }

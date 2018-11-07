@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using dotenv.net;
+using dotenv.net.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OPFC.API.ServiceModel.Tasks;
+using OPFC.Constants;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Implementations;
 using OPFC.Services.Interfaces;
@@ -17,10 +20,13 @@ namespace OPFC.API
 {
     public class Startup
     {
+        private IHostingEnvironment CurrentEnvironment{ get; set; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            // Capture the current environment
+            CurrentEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -61,6 +67,17 @@ namespace OPFC.API
                     ValidateAudience = false
                 };
             });
+            
+            // configure dotenv
+            services.AddEnv(builder => {
+                builder
+                .AddEnvFile(CurrentEnvironment.IsDevelopment() ? ".env.development" : ".env")
+                .AddThrowOnError(false)
+                .AddEncoding(Encoding.ASCII);
+            });
+            
+            System.Console.WriteLine("BACKEND_BASE_URL: " + AppSettings.BACKEND_BASE_URL);
+            System.Console.WriteLine("FRONTEND_BASE_URL: " + AppSettings.FRONTEND_BASE_URL);
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();

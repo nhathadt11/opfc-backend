@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OPFC.API.DTO;
 using OPFC.API.ServiceModel.Event;
 using OPFC.Models;
+using OPFC.Recommendation;
 using OPFC.Services.UnitOfWork;
 
 namespace OPFC.API.Controllers
@@ -27,6 +29,25 @@ namespace OPFC.API.Controllers
                 var created = _serviceUow.EventService.SaveEvent(Mapper.Map<Event>(eventReq));
 
                 return Created("/Event", Mapper.Map<EventDTO>(created));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpGet("{eventId}")]
+        public ActionResult Get(long eventId)
+        {
+            try
+            {
+                var foundEvent = _serviceUow.EventService.GetEventById(eventId);
+                if (foundEvent == null)
+                {
+                    return NotFound("Event could not be found");
+                }
+
+                return Ok(foundEvent);
             }
             catch (Exception ex)
             {
@@ -104,16 +125,14 @@ namespace OPFC.API.Controllers
                     return NotFound("User could not be found.");
                 }
 
-                var foundEvent = _serviceUow.EventService.GetEventById(id);
-                if (foundEvent == null)
+                var eventExits = _serviceUow.EventService.IsEventExist(id);
+                if (!eventExits)
                 {
                     return NotFound("Event could not be found.");
                 }
+                var toBeUpdate = Mapper.Map<Event>(request.Event);
 
-                var eventReq = Mapper.Map(request.Event, foundEvent);
-                eventReq.IsDeleted = false;
-
-                var result = _serviceUow.EventService.UpdateEvent(Mapper.Map<Event>(eventReq));
+                var result = _serviceUow.EventService.UpdateEvent(toBeUpdate);
                 return Ok(Mapper.Map<EventDTO>(result));
             }
             catch (Exception ex)
@@ -192,18 +211,53 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpGet("/Event/GetSuggestion/{eventId}")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId)
+        [AllowAnonymous]
+        [HttpGet("/User/{userId}/Event/{eventId}/GetSuggestion")]
+        public ActionResult<List<object>> GetSuggestion(long userId, long eventId)
         {
             try
             {
-               var result =  _serviceUow.EventService.GetSuggestion(eventId);
-                return Ok(result);
+
+                Class1 class1 = new Class1();
+                Recommendation.Objects.UserBehavior userBehavior = new Recommendation.Objects.UserBehavior();
+                userBehavior.Users = _serviceUow.UserService.GetAllUser();
+                userBehavior.Menus = _serviceUow.MenuService.GetAllMenu();
+                userBehavior.Categories = _serviceUow.CategoryService.GetAll();
+
+                foreach (var user in userBehavior.Users)
+                {
+                    foreach (var menu in userBehavior.Menus)
+                    {
+                        userBehavior.UserActions.Add(new Recommendation.Objects.UserAction(user.Id, "", menu.Id, menu.MenuName));
+                    }
+                }
+
+                var result = class1.GetSuggest(userBehavior, userId);
+
+                var suggestedMenuIds = result.Select(x => x.MenuId).Distinct().ToList();
+
+                var rs = _serviceUow.EventService.GetSuggestion(eventId, suggestedMenuIds);
+
+                return rs;
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        //[HttpGet("/Event/GetSuggestion/{eventId}")]
+        //public ActionResult<List<List<Menu>>> GetSuggestion(long eventId)
+        //{
+        //    try
+        //    {
+        //       var result =  _serviceUow.EventService.GetSuggestion(eventId);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

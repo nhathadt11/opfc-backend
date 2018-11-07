@@ -14,6 +14,8 @@ namespace OPFC.Models
 
         public string Description { get; set; }
 
+        public DateTime Date { get; set; }
+
         public DateTime StartAt { get; set; }
 
         public DateTime EndAt { get; set; }
@@ -33,9 +35,6 @@ namespace OPFC.Models
         [ForeignKey("EventTypeId")]
         public long EventTypeId { get; set;}
 
-        [ForeignKey("OrderId")]
-        public long? OrderId { get; set; }
-
         public long UserId { get; set; }
 
         public bool? IsDeleted { get; set; }
@@ -44,9 +43,18 @@ namespace OPFC.Models
 
         public City City { get; set; }
         
-        public string Status { get; set; }
+        [NotMapped]
+        public string DistrictName { get; set; }
+
+        [NotMapped]
+        public string CityName { get; set; }
+        
+        public int Status { get; set; }
 
         [NotMapped]
         public long[] CategoryIds { get; set; }
+
+        [NotMapped]
+        public string[] CategoryNames { get; set; }
     }
 }

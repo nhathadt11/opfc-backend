@@ -16,13 +16,17 @@ namespace OPFC.Models
 
         public decimal TotalAmount { get; set; }
 
-        public string Status { get; set; } 
+        public int Status { get; set; } 
 
         public bool IsDeleted { get; set; }
         
         public string PaypalRef { get; set; }
 
+        public string PaypalSaleRef { get; set; }
+
         public string Note { get; set; }
+        
+        public long EventId { get; set; }
 
         //[ForeignKey("OrderId")]
         public List<Transaction> TransactionList { get; set; }

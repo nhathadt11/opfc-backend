@@ -19,6 +19,23 @@ namespace OPFC.Services.Implementations
         {
             rating.RateTime = DateTime.Now;
             var created = _opfcUow.RatingRepository.CreateRating(rating);
+            var foundMenu = _opfcUow.MenuRepository.GetById(rating.MenuId);
+            if (foundMenu.TotalRating == null)
+            {
+                foundMenu.TotalRating = 0;
+            }
+            foundMenu.TotalRating += 1;
+
+            if (foundMenu.TotalRatingPoint == null)
+            {
+                foundMenu.TotalRatingPoint = 0;
+            }
+            foundMenu.TotalRatingPoint += rating.Rate;
+
+            foundMenu.AverageRatingPoint = (decimal) foundMenu.TotalRatingPoint / foundMenu.TotalRating;
+
+            _opfcUow.MenuRepository.UpdateMenu(foundMenu);
+
             _opfcUow.Commit();
 
             return created;
@@ -41,6 +58,14 @@ namespace OPFC.Services.Implementations
             if (UpdateRating(found) == null)
             {
                 throw new Exception("Rating could not be updated.");
+            }
+            _opfcUow.RatingRepository.Delete(found);
+
+            var foundMenu = _opfcUow.MenuRepository.GetById(found.MenuId);
+            if (foundMenu.TotalRating > 0)
+            {
+                foundMenu.TotalBookmark -= 1;
+                _opfcUow.MenuRepository.UpdateMenu(foundMenu);
             }
         }
 

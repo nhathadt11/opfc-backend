@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
 using OPFC.API.ServiceModel.Order;
+using OPFC.Constants;
 using OPFC.FirebaseService;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
+using OPFC.Services.UnitOfWork;
 using ServiceStack;
 
 namespace OPFC.Services.Implementations
 {
     public class OrderService : IOrderService
     {
-        private readonly IOpfcUow _opfcUow;
+        readonly IServiceUow _serviceUow = ServiceStackHost.Instance.TryResolve<IServiceUow>();
+        readonly IOpfcUow _opfcUow;
 
         public OrderService(IOpfcUow opfcUow)
         {
@@ -34,20 +37,24 @@ namespace OPFC.Services.Implementations
                     var isEventExist = _opfcUow.EventRepository.IsEventExist(orderRequest.EventId);
                     if (!isEventExist) throw new Exception("Event could not be found");
 
-                    var requestOrderMenuIds = orderRequest.MenuIds;
+                    var requestOrderMenuIds = orderRequest.RequestMenuList.Select(m => m.MenuId);
                     var requestOrderMenus = _opfcUow.MenuRepository
                                                     .GetAllMenu()
                                                     .Where(m => requestOrderMenuIds.Contains(m.Id));
 
                     var orderMenus = requestOrderMenus as Menu[] ?? requestOrderMenus.ToArray();
 
+                    // Order
                     var order = new Order
                     {
                         UserId = userId,
+                        EventId = orderRequest.EventId,
                         DateOrdered = DateTime.Now,
                         TotalAmount = orderMenus.Aggregate((decimal)0, (acc, m) => acc + m.Price),
-                        Status = "Request Approval",
-                        PaypalRef = "PAY-***"
+                        Status = (int)OrderStatus.Requesting,
+                        PaypalRef = orderRequest.PaymentId,
+                        PaypalSaleRef = orderRequest.SaleId,
+                        IsDeleted = false
                     };
                     var createdOrdered = _opfcUow.OrderRepository.CreateOrder(order);
 
@@ -55,25 +62,43 @@ namespace OPFC.Services.Implementations
                     // Althought we commit here, current order did not saved into database because we are still in TransactionScope.
                     _opfcUow.Commit();
 
-                    var orderLines = orderMenus.Map(m => new OrderLine
+                    var menuByBrandId = orderMenus.GroupBy(
+                        ol => ol.BrandId,
+                        ol => ol,
+                        (key, ol) => new { BrandId = key, MenuList = ol.ToList().CreateCopy() }
+                    ).ToList();
+
+                    menuByBrandId.ForEach(b =>
                     {
-                        MenuId = m.Id,
-                        OrderId = createdOrdered.OrderId,
-                        Amount = m.Price,
-                        BrandId = m.BrandId,
-                        PaypalSaleRef = "SAL-***"
+                        var amount = b.MenuList.Aggregate((decimal)0, (acc, m) => acc + m.Price);
+
+                        // OrderLine
+                        var orderLine = new OrderLine
+                        {
+                            OrderId = createdOrdered.OrderId,
+                            BrandId = b.BrandId,
+                            Amount = amount,
+                            AmountEarned = amount * (decimal)(100 - AppSettings.Rate),
+                            Status = (int)OrderStatus.Requesting
+                        };
+                        var createdOrderLine = _opfcUow.OrderLineRepository.Create(orderLine);
+                        _opfcUow.Commit();
+
+                        var orderLineDetails = b.MenuList.Map(m => new OrderLineDetail
+                        {
+                            OrderLineId = createdOrderLine.Id,
+                            MenuId = m.Id,
+                            Quantity = 1,
+                            Amount = m.Price,
+
+                        }).ToList();
+                        _opfcUow.OrderLineDetailRepository.CreateRange(orderLineDetails);
+                        _opfcUow.Commit();
+
+                        // notification
+                        SendNotification(orderLine, userId, orderRequest.EventId, createdOrdered.OrderId);
                     });
 
-                    var forEvent = _opfcUow.EventRepository.GetEventById(orderRequest.EventId);
-                    forEvent.OrderId = createdOrdered.OrderId;
-                    _opfcUow.EventRepository.UpdateEvent(forEvent);
-                    _opfcUow.Commit();
-
-                    _opfcUow.OrderLineRepository.CreateMany(orderLines);
-                    _opfcUow.Commit();
-
-                    SendNotification(orderMenus, userId, orderRequest.EventId, createdOrdered.OrderId);
-                    
                     scope.Complete();
 
                     return createdOrdered;
@@ -137,29 +162,29 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        private void SendNotification(Menu[] menuList, long userId, long eventId, long orderId)
+        private void SendNotification(OrderLine orderLine, long userId, long eventId, long orderId)
         {
-            menuList.Each(m =>
-            {           
-                var forEvent = _opfcUow.EventRepository.GetEventById(eventId);
-                var userByBrand = GetUserByBrandId(m.BrandId);
+            var forEvent = _opfcUow.EventRepository.GetEventById(eventId);
+            var userByBrand = GetUserByBrandId(orderLine.BrandId);
+            var fromUsername = _opfcUow.UserRepository.GetById(userId).Username;
 
-                FirebaseService.FirebaseService.Instance.SendNotification(new OrderPayload
+            FirebaseService.FirebaseService.Instance.SendNotification(new OrderPayload
+            {
+                FromUserId = userId,
+                FromUsername = fromUsername,
+                ToUserId = userByBrand.Id,
+                ToUsername = _opfcUow.UserRepository.GetById(userByBrand.Id).Username,
+                Message = forEvent.EventName,
+                Subject = fromUsername,
+                Verb = "requested for",
+                Object = forEvent.EventName,
+                CreatedAt = DateTime.Now,
+                Read = false,
+                Data = new Dictionary<string, object>
                 {
-                    FromUserId = userId,
-                    FromUsername = _opfcUow.UserRepository.GetById(userId).Username,
-                    ToUserId = userByBrand.Id,
-                    ToUsername = _opfcUow.UserRepository.GetById(userByBrand.Id).Username,
-                    Message = m.MenuName,
-                    CreatedAt = DateTime.Now,
-                    Data = new Dictionary<string, object>
-                    {
-                        { "OrderId", orderId },
-                        { "MenuId", m.Id },
-                        { "MenuName", m.MenuName },
-                        { "Event", forEvent }
-                    }
-                }); 
+                    { "OrderId", orderId },
+                    { "Event", forEvent }
+                }
             });
         }
 
@@ -181,45 +206,47 @@ namespace OPFC.Services.Implementations
                 .Where(ol => ol.BrandId == brandId)
                 .ToList();
 
-            var orderLinesByOrderId = orderLineList
-                .GroupBy(
-                    ol => ol.OrderId,
-                    ol => ol,
-                    (key, ol) => new { OrderId = key, OrderLines = ol.ToList() }
-                ).ToList();
+            var brandOrder = orderLineList.Select(ol =>
+            {
+                var foundOrder = _opfcUow.OrderRepository.GetById(ol.OrderId);
+                if (foundOrder == null)
+                {
+                    throw new Exception("Order could not be found.");
+                }
 
-            var brandOrder = orderLinesByOrderId.Select(o => {
                 var foundEvent = _opfcUow.EventRepository
                     .GettAllEvent()
-                    .SingleOrDefault(e => e.OrderId == o.OrderId);
-
+                    .SingleOrDefault(e => e.Id == foundOrder.EventId);
                 if (foundEvent == null)
                 {
-                    throw new Exception($"Event could not be found for {o.OrderId}");
+                    throw new Exception($"Event could not be found for {ol.OrderId}.");
                 }
-            
+
+                var orderLineDetails = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineId(ol.Id);
+
                 return new BrandOrder
                 {
-                    OrderNo = o.OrderId,
+                    OrderNo = ol.Id,
                     EventNo = foundEvent.Id,
                     EventName = foundEvent.EventName,
                     EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
                     StartAt = foundEvent.StartAt,
                     EndAt = foundEvent.EndAt,
-                    EventStatus = foundEvent.Status,
-                    OrderStatus = GetOrderById(o.OrderId).Status,
+                    EventStatus = ((EventStatus)foundEvent.Status).ToString("F"),
+                    OrderStatus = ((OrderStatus)ol.Status).ToString("F"),
                     ServingNumber = foundEvent.ServingNumber,
                     CityName = GetCityNameById(foundEvent.CityId),
                     DistrictName = GetDistrictNameById(foundEvent.DistrictId),
                     Address = foundEvent.Address,
-                    TotalPrice = SumOrderLineAmountByIds(o.OrderLines.Select(ol => ol.Id).ToArray()),
-                    BrandOderLineList = o.OrderLines.Map(ol => ol.Id).Select(OrderLineToBrandOrderLineById).ToList()
+                    TotalAmount = ol.Amount,
+                    TotalAmountEarned = ol.AmountEarned,
+                    BrandOderLineList = orderLineDetails.Select(OrderLineToBrandOrderLineById).ToList()
                 };
             }).ToList();
 
             return brandOrder;
         }
-        
+
         private string GetEventTypeNameById(long id)
         {
             return _opfcUow.EventTypeRepository
@@ -227,7 +254,7 @@ namespace OPFC.Services.Implementations
                 .FirstOrDefault(et => et.Id == id)
                 ?.EventTypeName;
         }
-        
+
         private string GetCityNameById(long id)
         {
             return _opfcUow.CityRepository
@@ -235,7 +262,7 @@ namespace OPFC.Services.Implementations
                 .SingleOrDefault(c => c.Id == id)
                 ?.Name;
         }
-        
+
         private string GetDistrictNameById(long id)
         {
             return _opfcUow.DistrictRepository
@@ -243,34 +270,29 @@ namespace OPFC.Services.Implementations
                 .SingleOrDefault(d => d.Id == id)
                 ?.Name;
         }
-        
+
         private decimal SumOrderLineAmountByIds(long[] ids)
         {
             var orderLines = _opfcUow.OrderLineRepository
                 .GetAll()
                 .Where(ol => ids.Contains(ol.Id)).ToList();
-                
+
             var aggregate = orderLines.Aggregate((decimal)0, (acc, m) => acc + m.Amount);
 
             return aggregate;
         }
-        
-        private BrandOrderLine OrderLineToBrandOrderLineById(long orderLineId)
-        {
-            var foundOrderLine = _opfcUow.OrderLineRepository
-                .GetAll()
-                .SingleOrDefault(ol => ol.Id == orderLineId);
 
+        private BrandOrderLine OrderLineToBrandOrderLineById(OrderLineDetail orderLineDetail)
+        {
             return new BrandOrderLine
             {
-                MenuId = foundOrderLine.MenuId,
-                MenuName = GetMenuNameById(foundOrderLine.Id),
-                Note = foundOrderLine.Note,
-                Price = foundOrderLine.Amount,
-                Status = foundOrderLine.Status
+                MenuId = orderLineDetail.MenuId,
+                MenuName = GetMenuNameById(orderLineDetail.MenuId),
+                Note = orderLineDetail.Note,
+                Price = orderLineDetail.Amount
             };
         }
-        
+
         private string GetMenuNameById(long id)
         {
             return _opfcUow.MenuRepository
@@ -278,18 +300,24 @@ namespace OPFC.Services.Implementations
                 .SingleOrDefault(m => m.Id == id)
                 ?.MenuName;
         }
-        
+
         public EventPlannerOrder GetEventPlannerOrderById(long orderId)
         {
             var foundOrder = _opfcUow.OrderRepository
                 .GetOrderById(orderId);
             var foundEvent = _opfcUow.EventRepository
                 .GettAllEvent()
-                .SingleOrDefault(e => e.OrderId == orderId);
+                .SingleOrDefault(e => e.Id == foundOrder.EventId);
             var orderLineList = _opfcUow.OrderLineRepository
                 .GetAll()
                 .Where(ol => ol.OrderId == orderId)
-                .Map(ToEventPlannerOrderLine);
+                .AsEnumerable()
+                .SelectMany(ol =>
+                {
+                    var orderLineDetailList = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineId(ol.Id).ToList();
+                    return orderLineDetailList.Select(old => { old.BrandName = GetBrandNameById(ol.BrandId); return old; });
+                })
+                .Map(ToEventPlannerOrderLineDetail);
 
             return new EventPlannerOrder
             {
@@ -302,7 +330,8 @@ namespace OPFC.Services.Implementations
                 EndAt = foundEvent.EndAt,
                 OrderAt = foundOrder.DateOrdered,
                 Note = foundOrder.Note,
-                OrderStatus = foundOrder.Status,
+                OrderStatus = ((OrderStatus)foundOrder.Status).ToString("F"),
+                EventStatus = ((EventStatus)foundEvent.Status).ToString("F"),
                 ServingNumber = foundEvent.ServingNumber,
                 TotalPrice = foundOrder.TotalAmount,
                 OrderLineList = orderLineList,
@@ -315,20 +344,25 @@ namespace OPFC.Services.Implementations
                 .GetAllOrder()
                 .Where(o => o.UserId == userId);
 
-            var eventPlannerOrderList = orderList.Select(o => {
+            var eventPlannerOrderList = orderList.Select(o =>
+            {
                 var foundEvent = _opfcUow.EventRepository
                     .GettAllEvent()
-                    .SingleOrDefault(e => e.OrderId == o.OrderId);
+                    .SingleOrDefault(e => e.Id == o.EventId);
                 if (foundEvent == null)
                 {
                     throw new Exception($"Event could not be found for orderId {o.OrderId}");
                 }
 
-                var eventPlannerOrderLineList = _opfcUow.OrderLineRepository
-                    .GetAll()
-                    .Where(ol => ol.OrderId == o.OrderId).AsEnumerable()
-                    .Select(ToEventPlannerOrderLine)
-                    .ToList();
+                var orderLineDetailCountByOrderLineId = _opfcUow.OrderLineRepository
+                    .GetAllByOrderId(o.OrderId)
+                    .AsEnumerable()
+                    .Select(ol =>
+                    {
+                        var orderLineDetailList = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineId(ol.Id);
+                        return orderLineDetailList.Count;
+                    })
+                    .Aggregate(0, (acc, cur) => acc + cur);
 
                 return new EventPlannerOrder
                 {
@@ -336,38 +370,37 @@ namespace OPFC.Services.Implementations
                     EventNo = foundEvent.Id,
                     EventName = foundEvent.EventName,
                     EventTypeName = GetEventTypeNameById(foundEvent.EventTypeId),
-                    MenuNumber = eventPlannerOrderLineList.Count(),
+                    MenuNumber = orderLineDetailCountByOrderLineId,
                     StartAt = foundEvent.StartAt,
                     EndAt = foundEvent.EndAt,
                     OrderAt = o.DateOrdered,
                     Note = o.Note,
-                    OrderStatus = o.Status,
+                    OrderStatus = ((OrderStatus)o.Status).ToString("F"),
                     ServingNumber = foundEvent.ServingNumber,
-                    TotalPrice = o.TotalAmount,
-                    OrderLineList = eventPlannerOrderLineList,
+                    TotalPrice = o.TotalAmount
                 };
             }).ToList();
 
             return eventPlannerOrderList;
         }
-        
-        private EventPlannerOrderLine ToEventPlannerOrderLine(OrderLine orderLine)
+
+        private EventPlannerOrderLine ToEventPlannerOrderLineDetail(OrderLineDetail orderLineDetail)
         {
-            var mealList = GetAllMealByMenuId(orderLine.MenuId)
+            var mealList = GetAllMealByMenuId(orderLineDetail.MenuId)
                 .Select(m => new IdNameValue { Id = m.Id, Name = m.MealName })
                 .ToList();
 
             return new EventPlannerOrderLine
             {
-                OrderLineId = orderLine.Id,
-                MenuId = orderLine.MenuId,
-                MenuName = GetMenuNameById(orderLine.MenuId),
-                BrandName = GetBrandNameById(orderLine.BrandId),
+                OrderLineId = orderLineDetail.Id,
+                MenuId = orderLineDetail.MenuId,
+                MenuName = GetMenuNameById(orderLineDetail.MenuId),
+                BrandName = orderLineDetail.BrandName,
                 ImageUrl = null,
                 MealList = mealList,
-                Note = orderLine.Note,
-                Status = orderLine.Status,
-                Price = orderLine.Amount,
+                Note = orderLineDetail.Note,
+                //Status = ((OrderStatus)orderLineDetail.Status).ToString("F"),
+                Price = orderLineDetail.Amount,
                 OtherFee = 0
             };
         }
@@ -378,7 +411,7 @@ namespace OPFC.Services.Implementations
                 .GetById(brandId)
                 ?.BrandName;
         }
-        
+
         private List<Meal> GetAllMealByMenuId(long id)
         {
             var mealIdList = _opfcUow.MenuMealRepository
@@ -396,6 +429,49 @@ namespace OPFC.Services.Implementations
         public bool Exits(long id)
         {
             return _opfcUow.OrderRepository.GetOrderById(id) != null;
+        }
+
+        public Order GetOrderRelatedToOrderLineId(long orderLineId)
+        {
+            var foundOrderLine = _opfcUow.OrderLineRepository
+                .GetAll()
+                .SingleOrDefault(o => o.Id == orderLineId);
+            if (foundOrderLine == null)
+            {
+                throw new Exception("OrderLine could not be found.");
+            }
+
+            return GetOrderById(foundOrderLine.OrderId);
+        }
+
+        public OrderPayload GetOrderPayloadByOrderLineId(long orderLineId)
+        {
+            var orderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
+            
+            var brandId = orderLine.BrandId;
+            var brandUser = _serviceUow.UserService.GetUserByBrandId(brandId);
+            var eventPlannerUser = _serviceUow.UserService.GetUserWhoMadeOrderLineId(orderLineId);
+            var order = _serviceUow.OrderService.GetOrderRelatedToOrderLineId(orderLineId);
+            var foundEvent = _serviceUow.EventService.GetEventRelatedToOrderId(order.OrderId);
+
+            return new OrderPayload
+            {
+                FromUserId = brandUser.Id,
+                FromUsername = brandUser.Username,
+                ToUserId = eventPlannerUser.Id,
+                ToUsername = eventPlannerUser.Username,
+                CreatedAt = DateTime.Now,
+                Message = $"{brandUser.Username} approved {foundEvent.EventName}",
+                Subject = brandUser.Username,
+                Verb = "approved",
+                Object = foundEvent.EventName,
+                Read = false,
+                Data = new Dictionary<string, object> {
+                    { "OrderId", order.OrderId },
+                    { "EventId", foundEvent.Id },
+                    { "EventName", foundEvent.EventName }
+                }
+            };
         }
     }
 }

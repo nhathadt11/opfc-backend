@@ -42,5 +42,13 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Update(menu).Entity;
         }
+
+        public List<Menu> GetAllMenuByIdsWithCollaborative(List<long> menuIds)
+        {
+            return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false
+                                && menuIds.Contains(m.Id))
+                        .Include(m => m.MenuEventTypeList)
+                        .ToList();
+        }
     }
 }

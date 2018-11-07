@@ -12,6 +12,8 @@ namespace OPFC.API.DTO
         public string EventName { get; set; }
 
         public string Description { get; set; }
+        
+        public DateTime Date { get; set; }
 
         public DateTime StartAt { get; set; }
 
@@ -24,6 +26,10 @@ namespace OPFC.API.DTO
         public long CityId { get; set; }
 
         public long DistrictId { get; set; }
+        
+        public string CityName { get; set; }
+
+        public string DistrictName { get; set; }
 
         public CityDTO City { get; set; }
 
@@ -38,5 +44,7 @@ namespace OPFC.API.DTO
         public bool? IsDeleted { get; set; }
 
         public long[] CategoryIds { get; set; }
+        
+        public string[] CategoryNames { get; set; }
     }
 }

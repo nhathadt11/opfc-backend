@@ -43,5 +43,13 @@ namespace OPFC.API.DTO
         public List<RatingDTO> RatingList { get; set; }
 
         public List<Category> CategoryList { get; set; }
+
+        public int TotalBookmark { get; set; }
+
+        public int TotalRating { get; set; }
+
+        public decimal AverageRatingPoint { get; set; }
+
+        public decimal TotalRatingPoint { get; set; }
     }
 }

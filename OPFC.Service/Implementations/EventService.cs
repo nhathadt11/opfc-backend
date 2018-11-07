@@ -48,18 +48,43 @@ namespace OPFC.Services.Implementations
 
         public Event GetEventById(long eventId)
         {
-            return _opfcUow.EventRepository.GetEventById(eventId);
+            var foundEvent = _opfcUow.EventRepository.GetEventById(eventId);
+            if (foundEvent == null)
+            {
+                throw new Exception("Event could not be found.");
+            }
+            var categoryIds = _opfcUow.EventCategoryRepository
+                .GetAllByEventId(eventId)
+                .Select(ec => ec.CategoryId)
+                .ToArray();
+
+            foundEvent.CategoryIds = categoryIds;
+            foundEvent.CategoryNames = _opfcUow.CategoryRepository
+                .GetAllByIds(categoryIds.ToList())
+                .Select(c => c.Name)
+                .ToArray();
+            foundEvent.CityName = _opfcUow.CityRepository.GetById(foundEvent.CityId)?.Name;
+            foundEvent.DistrictName = _opfcUow.DistrictRepository.GetById(foundEvent.DistrictId)?.Name;
+
+            return foundEvent;
         }
 
         public List<Event> GetAllEvent()
         {
-            return _opfcUow.EventRepository.GettAllEvent();
+            return _opfcUow.EventRepository
+                .GettAllEvent()
+                .Select(e =>
+                {
+                    e.CityName = _opfcUow.CityRepository.GetById(e.CityId)?.Name;
+                    e.DistrictName = _opfcUow.DistrictRepository.GetById(e.DistrictId)?.Name;
+                    return e;
+                })
+                .ToList();
         }
 
         public List<Event> GetAllEventByUserId(long userId)
         {
-            return _opfcUow.EventRepository
-                .GettAllEvent()
+            return GetAllEvent()
                 .Where(e => e.UserId == userId)
                 .ToList();
         }
@@ -68,6 +93,7 @@ namespace OPFC.Services.Implementations
         {
             var result = new Event();
 
+            newEvent.Status = (int)EventStatus.OnGoing;
             newEvent.IsDeleted = false;
 
             using (var scope = new TransactionScope())
@@ -86,8 +112,7 @@ namespace OPFC.Services.Implementations
                 scope.Complete();
             }
 
-
-            return result;
+            return GetEventById(result.Id);
         }
 
         public Event UpdateEvent(Event modifiedEvent)
@@ -116,8 +141,7 @@ namespace OPFC.Services.Implementations
                 scope.Complete();
             }
 
-
-            return result;
+            return GetEventById(result.Id);
         }
 
         public List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds)
@@ -133,7 +157,7 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public List<List<Menu>> GetSuggestion(long eventId)
+        public List<object> GetSuggestion(long eventId, List<long> menuIds)
         {
 
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
@@ -141,7 +165,9 @@ namespace OPFC.Services.Implementations
             if (basedEvent == null) throw new Exception("Event not found!");
 
             // Get all existed Menu
-            var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
+            //var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
+
+            var existingMenus = _opfcUow.MenuRepository.GetAllMenuByIdsWithCollaborative(menuIds);
 
             // List out menu id which matched event type id
             var listMenuIdMatchedEventType = _opfcUow.MenuEventTypeRepository.GetAll()
@@ -157,8 +183,8 @@ namespace OPFC.Services.Implementations
                                                                         .Select(sl => sl.BrandId)
                                                                         .ToList();
 
-
-            matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+            // test
+            //matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
 
             matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
 
@@ -269,14 +295,18 @@ namespace OPFC.Services.Implementations
 
             var sortComboWithWeight = comboWithBudget.OrderByDescending(x => x.Value).ToList();
 
-            var finalResult = new List<List<Menu>>();
+            var finalResult = new List<object>();
 
             sortComboWithWeight.ForEach(v =>
             {
                 var ids = v.Key.Split(";").ToList();
                 var mn = matchedMenus.Where(m => ids.Contains(m.Id.ToString())).ToList();
 
-                finalResult.Add(mn);
+                var comboPrice = (double)mn.Select(x => x.Price).ToList().Sum();
+
+                var (Menus, ComboTotal) = (mn, comboPrice);
+
+                finalResult.Add(new { Menus, ComboTotal });
             });
 
             return finalResult;
@@ -326,6 +356,17 @@ namespace OPFC.Services.Implementations
             }
 
             return Result;
+        }
+
+        public Event GetEventRelatedToOrderId(long orderId)
+        {
+            var foundOrder = _opfcUow.OrderRepository.GetById(orderId);
+            if (foundOrder == null)
+            {
+                throw new Exception("Event could not be found.");
+            }
+
+            return GetEventById(foundOrder.EventId);
         }
     }
 }

@@ -84,5 +84,26 @@ namespace OPFC.API.Controllers
 
             return Ok(eventPlannerOrder);
         }
+        
+        [HttpPost("Brand/Approve/{orderLineId}")]
+        public ActionResult ApproveBrandOrder(long orderLineId)
+        {
+            try
+            {
+                var orderLineExists = _serviceUow.OrderLineService.Exists(orderLineId);
+                if (!orderLineExists)
+                {
+                    return NotFound("Order could not be found.");
+                }
+
+                _serviceUow.OrderLineService.Approve(orderLineId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

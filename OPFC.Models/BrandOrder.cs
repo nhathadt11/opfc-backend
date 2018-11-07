@@ -17,7 +17,8 @@ namespace OPFC.Models
         public string CityName { get; set; }
         public string DistrictName { get; set; }
         public string Address { get; set; }
-        public decimal TotalPrice { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal TotalAmountEarned { get; set; }
         public string PaypalRef { get; set; }
         
         public List<BrandOrderLine> BrandOderLineList { get; set; }

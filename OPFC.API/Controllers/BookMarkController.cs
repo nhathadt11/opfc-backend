@@ -51,23 +51,6 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [HttpGet("{id}")]
-        public IActionResult GetById(long id)
-        {
-            try
-            {
-                var found = Mapper.Map<List<BookMarkDTO>>(_serviceUow.BookMarkService.GetBookMarkbyId(id));
-                if (found == null)
-                {
-                    return NotFound("Bookmark could not be found.");
-                }
-                return Ok(found);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
 
         [HttpPut("{id}")]
         public ActionResult Update(long id, UpdateBookMarkRequest request)
@@ -86,24 +69,41 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult Delete(long id)
+        [HttpPost("User/{userId}/Menu/{menuId}")]
+        [AllowAnonymous]
+        public ActionResult Bookmark(long userId, long menuId)
         {
-            var bookMark = _serviceUow.BookMarkService.GetBookMarkbyId(id);
-
-            if (bookMark == null)
-                return NotFound(new { Message = "Could not find bookmark" });
+            // goi bookmark service
+            var bookMark = new BookMark
+            {
+                UserId = userId,
+                MenuId = menuId
+            };
 
             try
             {
-                _serviceUow.BookMarkService.DeleteBookMark(bookMark);
-                return NoContent();
+                var created = _serviceUow.BookMarkService.CreateBookMark(bookMark);
+                return Created("Bookmark", created);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+        }
 
+        [HttpDelete("User/{userId}/Menu/{menuId}")]
+        [AllowAnonymous]
+        public ActionResult RemoveBookmark(long userId, long menuId)
+        {
+            try
+            {
+                _serviceUow.BookMarkService.RemoveBookmark(userId, menuId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

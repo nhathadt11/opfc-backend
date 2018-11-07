@@ -13,6 +13,7 @@ namespace OPFC.Models
         public DateTime StartAt { get; set; }
         public DateTime EndAt { get; set; }
         public string OrderStatus { get; set; }
+        public string EventStatus { get; set; }
         public int ServingNumber { get; set; }
         public decimal TotalPrice { get; set; }
         public string PaypalRef { get; set; }

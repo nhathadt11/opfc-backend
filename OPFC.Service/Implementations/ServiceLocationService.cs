@@ -24,7 +24,7 @@ namespace OPFC.Services.Implementations
 
                 return result;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -63,6 +63,19 @@ namespace OPFC.Services.Implementations
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public List<ServiceLocation> GetServiceLocationsByBrandId(long brandId)
+        {
+            try
+            {
+                var serviceLocations = _opfcUow.ServiceLocationRepository.GetServiceLocationsByBrandId(brandId);
+                return serviceLocations;
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }

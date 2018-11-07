@@ -9,24 +9,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="dotenv.net" Version="1.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
     <PackageReference Include="ServiceStack" Version="5.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="PayPal.SDK.NETCore" Version="1.9.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OPFC.API.Services\OPFC.API.Services.csproj" />
+    <ProjectReference Include="..\OPFC.Recommendation\OPFC.Recommendation.csproj" />
     <ProjectReference Include="..\OPFC.Repository\OPFC.Repositories.csproj" />
     <ProjectReference Include="..\OPFC.Service\OPFC.Services.csproj" />
     <ProjectReference Include="..\OPFC.Utility\OPFC.Utility.csproj" />
+    <ProjectReference Include="..\OPFC.API.DTO\OPFC.API.DTO.csproj" />
+    <ProjectReference Include="..\OPFC.API.ServiceModel\OPFC.API.ServiceModel.csproj" />
+    <ProjectReference Include="..\OPFC.Constant\OPFC.Constants.csproj" />
+    <ProjectReference Include="..\OPFC.FirebaseService\OPFC.FirebaseService.csproj" />
+    <ProjectReference Include="..\OPFC.Models\OPFC.Models.csproj" />
+    <ProjectReference Include="..\OPFC.Recommendation\OPFC.Recommendation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="web.config" />
+  </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Configuration">
+      <HintPath>..\..\..\Downloads\System.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPal, Version=1.9.1.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb" />
+  </ItemGroup>
 </Project>
