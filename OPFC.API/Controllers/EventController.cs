@@ -35,6 +35,25 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpGet("{eventId}")]
+        public ActionResult Get(long eventId)
+        {
+            try
+            {
+                var foundEvent = _serviceUow.EventService.GetEventById(eventId);
+                if (foundEvent == null)
+                {
+                    return NotFound("Event could not be found");
+                }
+
+                return Ok(foundEvent);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost("User/{userId}")]
         public ActionResult Post(long userId, CreateEventRequest request)

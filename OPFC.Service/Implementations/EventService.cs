@@ -48,7 +48,15 @@ namespace OPFC.Services.Implementations
 
         public Event GetEventById(long eventId)
         {
-            return _opfcUow.EventRepository.GetEventById(eventId);
+            var foundEvent = _opfcUow.EventRepository.GetEventById(eventId);
+            var categoryIds = _opfcUow.EventCategoryRepository
+                .GetAllByEventId(eventId)
+                .Select(ec => ec.CategoryId)
+                .ToArray();
+
+            foundEvent.CategoryIds = categoryIds;
+
+            return foundEvent;
         }
 
         public List<Event> GetAllEvent()
