@@ -18,12 +18,7 @@ namespace OPFC.Repositories.Implementations
 
         public List<ServiceLocation> GetAllServiceLocation()
         {
-            return DbSet.OrderBy(sl => sl.Id).ToList();
-        }
-
-        public ServiceLocation GetServiceLocationById(long serviceLocationId)
-        {
-            return DbSet.SingleOrDefault(sl => sl.Id == serviceLocationId);
+            return DbSet.ToList();
         }
 
         public ServiceLocation UpdateServiceLocation(ServiceLocation serviceLocation)
@@ -34,12 +29,17 @@ namespace OPFC.Repositories.Implementations
 
         public List<ServiceLocation> GetServiceLocationByDistrictId(long districtId)
         {
-            return DbSet.Where(sl => sl.DistrictId == districtId && sl.IsDeleted == false).ToList();
+            return DbSet.Where(sl => sl.DistrictId == districtId).ToList();
         }
 
         public List<ServiceLocation> GetServiceLocationsByBrandId(long brandId)
         {
-            return DbSet.Where(sl => sl.BrandId == brandId && sl.IsDeleted == false).ToList();
+            return DbSet.Where(sl => sl.BrandId == brandId).ToList();
+        }
+
+        public ServiceLocation GetServiceLocationById(long serviceLocationId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -49,7 +49,10 @@ namespace OPFC.Repositories.UnitOfWork
                 .HasKey(mt => new { mt.MenuId, mt.EventTypeId });
 
             modelBuilder.Entity<BookMark>()
-            .HasKey(mt => new { mt.MenuId, mt.UserId });
+                .HasKey(mt => new { mt.MenuId, mt.UserId });
+                
+            modelBuilder.Entity<ServiceLocation>()
+                .HasKey(mt => new { mt.BrandId, mt.DistrictId });
 
             base.OnModelCreating(modelBuilder);
         }
