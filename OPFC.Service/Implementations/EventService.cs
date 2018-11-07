@@ -71,13 +71,20 @@ namespace OPFC.Services.Implementations
 
         public List<Event> GetAllEvent()
         {
-            return _opfcUow.EventRepository.GettAllEvent();
+            return _opfcUow.EventRepository
+                .GettAllEvent()
+                .Select(e =>
+                {
+                    e.CityName = _opfcUow.CityRepository.GetById(e.CityId)?.Name;
+                    e.DistrictName = _opfcUow.DistrictRepository.GetById(e.DistrictId)?.Name;
+                    return e;
+                })
+                .ToList();
         }
 
         public List<Event> GetAllEventByUserId(long userId)
         {
-            return _opfcUow.EventRepository
-                .GettAllEvent()
+            return GetAllEvent()
                 .Where(e => e.UserId == userId)
                 .ToList();
         }
