@@ -157,7 +157,7 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public List<object> GetSuggestion(long eventId, List<long> menuIds)
+        public List<object> GetSuggestion(long eventId)
         {
 
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
@@ -165,9 +165,7 @@ namespace OPFC.Services.Implementations
             if (basedEvent == null) throw new Exception("Event not found!");
 
             // Get all existed Menu
-            //var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
-
-            var existingMenus = _opfcUow.MenuRepository.GetAllMenuByIdsWithCollaborative(menuIds);
+            var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
 
             // List out menu id which matched event type id
             var listMenuIdMatchedEventType = _opfcUow.MenuEventTypeRepository.GetAll()
@@ -184,7 +182,7 @@ namespace OPFC.Services.Implementations
                                                                         .ToList();
 
             // test
-            //matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+            matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
 
             matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
 
