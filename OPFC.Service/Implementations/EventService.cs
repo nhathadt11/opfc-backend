@@ -86,7 +86,7 @@ namespace OPFC.Services.Implementations
 
                 scope.Complete();
             }
-
+            result.CategoryIds = newEvent.CategoryIds;
 
             return result;
         }

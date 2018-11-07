@@ -14,6 +14,8 @@ namespace OPFC.Models
 
         public string Description { get; set; }
 
+        public DateTime Date { get; set; }
+
         public DateTime StartAt { get; set; }
 
         public DateTime EndAt { get; set; }
