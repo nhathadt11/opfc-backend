@@ -43,9 +43,18 @@ namespace OPFC.Models
 
         public City City { get; set; }
         
+        [NotMapped]
+        public string DistrictName { get; set; }
+
+        [NotMapped]
+        public string CityName { get; set; }
+        
         public int Status { get; set; }
 
         [NotMapped]
         public long[] CategoryIds { get; set; }
+
+        [NotMapped]
+        public string[] CategoryNames { get; set; }
     }
 }

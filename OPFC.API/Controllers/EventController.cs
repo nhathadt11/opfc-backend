@@ -125,16 +125,14 @@ namespace OPFC.API.Controllers
                     return NotFound("User could not be found.");
                 }
 
-                var foundEvent = _serviceUow.EventService.GetEventById(id);
-                if (foundEvent == null)
+                var eventExits = _serviceUow.EventService.IsEventExist(id);
+                if (!eventExits)
                 {
                     return NotFound("Event could not be found.");
                 }
+                var toBeUpdate = Mapper.Map<Event>(request.Event);
 
-                var eventReq = Mapper.Map(request.Event, foundEvent);
-                eventReq.IsDeleted = false;
-
-                var result = _serviceUow.EventService.UpdateEvent(Mapper.Map<Event>(eventReq));
+                var result = _serviceUow.EventService.UpdateEvent(toBeUpdate);
                 return Ok(Mapper.Map<EventDTO>(result));
             }
             catch (Exception ex)

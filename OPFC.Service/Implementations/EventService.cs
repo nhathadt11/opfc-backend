@@ -49,12 +49,22 @@ namespace OPFC.Services.Implementations
         public Event GetEventById(long eventId)
         {
             var foundEvent = _opfcUow.EventRepository.GetEventById(eventId);
+            if (foundEvent == null)
+            {
+                throw new Exception("Event could not be found.");
+            }
             var categoryIds = _opfcUow.EventCategoryRepository
                 .GetAllByEventId(eventId)
                 .Select(ec => ec.CategoryId)
                 .ToArray();
 
             foundEvent.CategoryIds = categoryIds;
+            foundEvent.CategoryNames = _opfcUow.CategoryRepository
+                .GetAllByIds(categoryIds.ToList())
+                .Select(c => c.Name)
+                .ToArray();
+            foundEvent.CityName = _opfcUow.CityRepository.GetById(foundEvent.CityId)?.Name;
+            foundEvent.DistrictName = _opfcUow.DistrictRepository.GetById(foundEvent.DistrictId)?.Name;
 
             return foundEvent;
         }
@@ -94,9 +104,8 @@ namespace OPFC.Services.Implementations
 
                 scope.Complete();
             }
-            result.CategoryIds = newEvent.CategoryIds;
 
-            return result;
+            return GetEventById(result.Id);
         }
 
         public Event UpdateEvent(Event modifiedEvent)
@@ -125,8 +134,7 @@ namespace OPFC.Services.Implementations
                 scope.Complete();
             }
 
-
-            return result;
+            return GetEventById(result.Id);
         }
 
         public List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds)

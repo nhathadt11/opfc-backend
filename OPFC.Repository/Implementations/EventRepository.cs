@@ -49,7 +49,7 @@ namespace OPFC.Repositories.Implementations
 
         public bool IsEventExist(long eventId)
         {
-            return DbSet.Any(e => e.Id == eventId);
+            return DbSet.Any(e => e.Id == eventId && e.IsDeleted == false);
         }
     }
 }
