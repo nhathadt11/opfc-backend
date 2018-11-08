@@ -60,15 +60,29 @@ namespace OPFC.API.Controllers
         [HttpGet("Brand/{brandId}")]
         public ActionResult GetBrandOrders(long brandId)
         {
-            var brandOrderList = _serviceUow.OrderService.GetBrandOrderByBrandId(brandId);
-            return Ok(brandOrderList);
+            try
+            {
+                var brandOrderList = _serviceUow.OrderService.GetBrandOrderByBrandId(brandId);
+                return Ok(brandOrderList);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         [HttpGet("EventPlanner/User/{userId}")]
         public ActionResult GetEventPlannerOrders(long userId)
         {
-            var eventPlannerOrderList = _serviceUow.OrderService.GetEventPlannerOrders(userId);
-            return Ok(eventPlannerOrderList);
+            try
+            {
+                var eventPlannerOrderList = _serviceUow.OrderService.GetEventPlannerOrders(userId);
+                return Ok(eventPlannerOrderList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("EventPlanner/{orderId}")]
