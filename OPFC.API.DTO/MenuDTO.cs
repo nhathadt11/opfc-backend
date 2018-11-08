@@ -35,6 +35,10 @@ namespace OPFC.API.DTO
         public List<long> EventTypeIds { get; set; }
 
         public List<string> EventTypeNames { get; set; }
+        
+        public List<long> CategoryIds { get; set; }
+        
+        public List<string> CategoryNames { get; set; }
 
         public List<Meal> MealList { get; set; }
         

@@ -198,6 +198,10 @@ namespace OPFC.API.Controllers
                     var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
                     menu.EventTypeIds = eventTypeList.Select(e => e.Id).ToList();
                     menu.EventTypeNames = eventTypeList.Select(e => e.EventTypeName).ToList();
+
+                    var categoryList = _serviceUow.CategoryService.GetAllByMenuId(menu.Id);
+                    menu.CategoryIds = categoryList.Select(c => c.Id).ToList();
+                    menu.CategoryNames = categoryList.Select(c => c.Name).ToList();
                 }
                 
                 return Ok(returnMenuList);
