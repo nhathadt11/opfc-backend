@@ -21,10 +21,7 @@ namespace OPFC.Services.Implementations
 
         public void Approve(long orderLineId)
         {
-            OrderLine orderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
-            orderLine.Status = (int)OrderStatus.Approved;
-            _opfcUow.OrderLineRepository.Update(orderLine);
-            _opfcUow.Commit();
+            ChangeOrderLineStatus(orderLineId, OrderStatus.Approved);
 
             OrderPayload orderPayload = _serviceUow.OrderService.GetOrderPayloadByOrderLineId(orderLineId);
             orderPayload.Verb = "approved";
@@ -34,13 +31,20 @@ namespace OPFC.Services.Implementations
 
         public void Cancel(long orderLineId)
         {
-            OrderLine orderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
-            orderLine.Status = (int)OrderStatus.Canceled;
-            _opfcUow.OrderLineRepository.Update(orderLine);
-            _opfcUow.Commit();
+            ChangeOrderLineStatus(orderLineId, OrderStatus.Canceled);
 
             OrderPayload orderPayload = _serviceUow.OrderService.GetOrderPayloadByOrderLineId(orderLineId);
             orderPayload.Verb = "canceled";
+            
+            FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
+        }
+        
+        public void MarkAsCompleted(long orderLineId)
+        {
+            ChangeOrderLineStatus(orderLineId, OrderStatus.Completed);
+
+            OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
+            orderPayload.Verb = "marked as completed";
             
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
         }
@@ -58,6 +62,14 @@ namespace OPFC.Services.Implementations
         public OrderLine GetOrderLineById(long id)
         {
             return _opfcUow.OrderLineRepository.GetOrderLineById(id);
+        }
+        
+        void ChangeOrderLineStatus(long orderLineId, OrderStatus status)
+        {
+            OrderLine orderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
+            orderLine.Status = (int)status;
+            _opfcUow.OrderLineRepository.Update(orderLine);
+            _opfcUow.Commit();
         }
     }
 }

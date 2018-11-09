@@ -318,7 +318,8 @@ namespace OPFC.Services.Implementations
                     return orderLineDetailList.Select(old => {
                         old.BrandId = ol.BrandId;
                         old.BrandName = GetBrandNameById(ol.BrandId);
-                        old.Status = ((OrderStatus)ol.Status).ToString("F");
+                        old.StatusId = ol.Status;
+                        old.StatusName = ((OrderStatus)ol.Status).ToString("F");
                         return old;
                     });
                 })
@@ -397,6 +398,7 @@ namespace OPFC.Services.Implementations
 
             return new EventPlannerOrderLine
             {
+                BrandOrderLineId = orderLineDetail.OrderLineId,
                 OrderLineId = orderLineDetail.Id,
                 MenuId = orderLineDetail.MenuId,
                 MenuName = GetMenuNameById(orderLineDetail.MenuId),
@@ -405,7 +407,8 @@ namespace OPFC.Services.Implementations
                 ImageUrl = null,
                 MealList = mealList,
                 Note = orderLineDetail.Note,
-                //Status = ((OrderStatus)orderLineDetail.Status).ToString("F"),
+                StatusId = orderLineDetail.StatusId,
+                StatusName = orderLineDetail.StatusName,
                 Price = orderLineDetail.Amount,
                 OtherFee = 0
             };
@@ -467,9 +470,39 @@ namespace OPFC.Services.Implementations
                 ToUserId = eventPlannerUser.Id,
                 ToUsername = eventPlannerUser.Username,
                 CreatedAt = DateTime.Now,
-                Message = $"{brandUser.Username} approved {foundEvent.EventName}",
+                Message = $"{brandUser.Username} made change to {foundEvent.EventName}",
                 Subject = brandUser.Username,
                 Verb = "approved",
+                Object = foundEvent.EventName,
+                Read = false,
+                Data = new Dictionary<string, object> {
+                    { "OrderId", order.OrderId },
+                    { "EventId", foundEvent.Id },
+                    { "EventName", foundEvent.EventName }
+                }
+            };
+        }
+        
+        public OrderPayload GetEventPlannerOrderPayloadByOrderLineId(long orderLineId)
+        {
+            var orderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
+            
+            var brandId = orderLine.BrandId;
+            var brandUser = _serviceUow.UserService.GetUserByBrandId(brandId);
+            var eventPlannerUser = _serviceUow.UserService.GetUserWhoMadeOrderLineId(orderLineId);
+            var order = _serviceUow.OrderService.GetOrderRelatedToOrderLineId(orderLineId);
+            var foundEvent = _serviceUow.EventService.GetEventRelatedToOrderId(order.OrderId);
+
+            return new OrderPayload
+            {
+                FromUserId = eventPlannerUser.Id,
+                FromUsername = eventPlannerUser.Username,
+                ToUserId = brandUser.Id,
+                ToUsername = brandUser.Username,
+                CreatedAt = DateTime.Now,
+                Message = $"{brandUser.Username} made change to {foundEvent.EventName}",
+                Subject = brandUser.Username,
+                Verb = "made change to",
                 Object = foundEvent.EventName,
                 Read = false,
                 Data = new Dictionary<string, object> {

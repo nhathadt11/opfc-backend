@@ -17,6 +17,8 @@ namespace OPFC.Models
         [NotMapped]
         public string BrandName { get; set; }
         [NotMapped]
-        public string Status { get; set; }
+        public int StatusId { get; set; }
+        [NotMapped]
+        public string StatusName { get; set; }
     }
 }

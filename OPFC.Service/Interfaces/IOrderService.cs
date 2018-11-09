@@ -20,5 +20,6 @@ namespace OPFC.Services.Interfaces
         EventPlannerOrder GetEventPlannerOrderById(long orderId);
         Order GetOrderRelatedToOrderLineId(long orderLineId);
         OrderPayload GetOrderPayloadByOrderLineId(long orderLineId);
+        OrderPayload GetEventPlannerOrderPayloadByOrderLineId(long orderLineId);
     }
 }

@@ -6,6 +6,7 @@ namespace OPFC.Models
     public class EventPlannerOrderLine
     {
         public long OrderLineId { get; set; }
+        public long BrandOrderLineId { get; set; }
         public long MenuId { get; set; }
         public string MenuName { get; set; }
         public long BrandId { get; set; }
@@ -14,7 +15,8 @@ namespace OPFC.Models
         public string Note { get; set; }
         public decimal Price { get; set; }
         public decimal OtherFee { get; set; }
-        public string Status { get; set; }
+        public int StatusId { get; set; }
+        public string StatusName { get; set; }
         public string PaypalSaleRef { get; set; }
         public List<IdNameValue> MealList { get; set; }
     }

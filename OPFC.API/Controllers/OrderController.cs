@@ -126,5 +126,26 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpPost("MarkAsCompleted/{orderLineId}")]
+        public ActionResult MarkAsService(long orderLineId)
+        {
+            try
+            {
+                var orderLineExists = _serviceUow.OrderLineService.Exists(orderLineId);
+                if (!orderLineExists)
+                {
+                    return NotFound("Order Line could not be found.");
+                }
+
+                _serviceUow.OrderLineService.MarkAsCompleted(orderLineId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
