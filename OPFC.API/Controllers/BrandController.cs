@@ -87,6 +87,7 @@ namespace OPFC.API.Controllers
         }
 
         [HttpPost("CreateCaterer")]
+        [AllowAnonymous]
         public IActionResult CreateCaterer(CreateCatererRequest request)
         {
             try

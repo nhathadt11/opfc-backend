@@ -83,5 +83,8 @@ namespace OPFC.Models
 
         [ForeignKey("BrandId")]
         public List<ServiceLocation> ServiceLocationList { get; set; }
+        
+        [NotMapped]
+        public List<long> ServiceLocationIds { get; set; }
     }
 }

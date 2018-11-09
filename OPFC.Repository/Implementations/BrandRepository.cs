@@ -31,6 +31,13 @@ namespace OPFC.Repositories.Implementations
                 brand.UserId = user.Id;
                 DbContext.Add<Brand>(brand);
 
+                var serviceLocations = brand.ServiceLocationIds.Select(sl => new ServiceLocation
+                {
+                    BrandId = brand.Id,
+                    DistrictId = sl,
+                });
+                DbContext.AddRange(serviceLocations);
+
                 DbContext.SaveChanges();
                 scope.Complete();
             }

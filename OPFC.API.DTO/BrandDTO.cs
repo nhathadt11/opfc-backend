@@ -61,5 +61,6 @@ namespace OPFC.API.DTO
         /// </summary>
         public string Ward { get; set; }
        
+        public List<long> ServiceLocationIds { get; set; }
     }
 }
