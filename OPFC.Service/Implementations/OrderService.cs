@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
@@ -315,7 +315,12 @@ namespace OPFC.Services.Implementations
                 .SelectMany(ol =>
                 {
                     var orderLineDetailList = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineId(ol.Id).ToList();
-                    return orderLineDetailList.Select(old => { old.BrandName = GetBrandNameById(ol.BrandId); return old; });
+                    return orderLineDetailList.Select(old => {
+                        old.BrandId = ol.BrandId;
+                        old.BrandName = GetBrandNameById(ol.BrandId);
+                        old.Status = ((OrderStatus)ol.Status).ToString("F");
+                        return old;
+                    });
                 })
                 .Map(ToEventPlannerOrderLineDetail);
 
@@ -395,6 +400,7 @@ namespace OPFC.Services.Implementations
                 OrderLineId = orderLineDetail.Id,
                 MenuId = orderLineDetail.MenuId,
                 MenuName = GetMenuNameById(orderLineDetail.MenuId),
+                BrandId = orderLineDetail.BrandId,
                 BrandName = orderLineDetail.BrandName,
                 ImageUrl = null,
                 MealList = mealList,

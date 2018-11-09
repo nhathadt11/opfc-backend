@@ -28,7 +28,7 @@ namespace OPFC.Repositories.Implementations
 
         public List<Order> GetAllOrder()
         {
-            return DbSet.DefaultIfEmpty().ToList();
+            return DbSet.ToList();
         }
 
         public Order GetOrderById(long id)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace OPFC.Models
@@ -8,6 +8,7 @@ namespace OPFC.Models
         public long OrderLineId { get; set; }
         public long MenuId { get; set; }
         public string MenuName { get; set; }
+        public long BrandId { get; set; }
         public string BrandName { get; set; }
         public string ImageUrl { get; set; }
         public string Note { get; set; }

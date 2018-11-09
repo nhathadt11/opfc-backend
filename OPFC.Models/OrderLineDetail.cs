@@ -13,6 +13,10 @@ namespace OPFC.Models
         public int Quantity { get; set; }
         public string Note { get; set; }
         [NotMapped]
+        public long BrandId { get; set; }
+        [NotMapped]
         public string BrandName { get; set; }
+        [NotMapped]
+        public string Status { get; set; }
     }
 }
