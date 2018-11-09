@@ -88,15 +88,22 @@ namespace OPFC.API.Controllers
         [HttpGet("EventPlanner/{orderId}")]
         public ActionResult GetEventPlannerOrder(long orderId)
         {
-            var orderExists = _serviceUow.OrderService.Exits(orderId);
-            if (!orderExists)
+            try
             {
-                return NotFound("Order could be found.");
+                var orderExists = _serviceUow.OrderService.Exits(orderId);
+                if (!orderExists)
+                {
+                    return NotFound("Order could be found.");
+                }
+    
+                var eventPlannerOrder = _serviceUow.OrderService.GetEventPlannerOrderById(orderId);
+    
+                return Ok(eventPlannerOrder);
             }
-
-            var eventPlannerOrder = _serviceUow.OrderService.GetEventPlannerOrderById(orderId);
-
-            return Ok(eventPlannerOrder);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
         [HttpPost("Brand/Approve/{orderLineId}")]
