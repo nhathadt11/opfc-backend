@@ -39,9 +39,9 @@ namespace OPFC.Models
 
         public bool? IsDeleted { get; set; }
 
-        public District District { get; set; }
-
-        public City City { get; set; }
+//        public District District { get; set; }
+//
+//        public City City { get; set; }
         
         [NotMapped]
         public string DistrictName { get; set; }

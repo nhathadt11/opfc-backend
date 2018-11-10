@@ -134,7 +134,6 @@ namespace OPFC.Services.Implementations
 
                 _opfcUow.Commit();
 
-
                 _opfcUow.EventCategoryRepository.AddMultiples(modifiedEvent.Id, catIds);
                 _opfcUow.Commit();
 
