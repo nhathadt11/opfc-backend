@@ -21,6 +21,7 @@ namespace OPFC.Services.Implementations
 
         public Menu CreateMenu(Menu menu)
         {
+            menu.IsActive = true;
             var result = _opfcUow.MenuRepository.CreateMenu(menu);
             _opfcUow.Commit();
             return result;
@@ -77,7 +78,9 @@ namespace OPFC.Services.Implementations
                 Description = request.Description,
                 Price = request.Price,
                 ServingNumber = request.ServingNumber,
-                BrandId = brandId
+                BrandId = brandId,
+                IsActive = true,
+                IsDeleted = false
             };
 
             var createdMenu = _opfcUow.MenuRepository.CreateMenu(menu);
