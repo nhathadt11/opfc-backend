@@ -304,6 +304,11 @@ namespace OPFC.Services.Implementations
 
                 var (Menus, ComboTotal) = (mn, comboPrice);
 
+                // Note: this will compare ComboTotal with event Budget before add to result list
+                //if (ComboTotal <= (double) basedEvent.Budget) {
+                //    finalResult.Add(new { Menus, ComboTotal });
+                //}
+
                 finalResult.Add(new { Menus, ComboTotal });
             });
 
