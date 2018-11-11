@@ -180,11 +180,14 @@ namespace OPFC.Services.Implementations
                                                                         .Select(sl => sl.BrandId)
                                                                         .ToList();
 
-            // test
             matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
 
-            // origin: m.ServingNumber >= basedEvent.ServingNumber
-            matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
+            var percent = basedEvent.ServingNumber * 0.2;
+            var botServing = basedEvent.ServingNumber - percent;
+            var topServing = basedEvent.ServingNumber + percent;
+
+            //matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
+            matchedMenus = matchedMenus.Where(m => m.ServingNumber >= botServing && m.ServingNumber <= topServing).ToList();
 
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
