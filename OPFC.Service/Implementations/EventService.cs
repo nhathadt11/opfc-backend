@@ -286,7 +286,8 @@ namespace OPFC.Services.Implementations
                 {
                     avgBud += (double)m.Price;
                 });
-                var w = v.Value + ((1 / avgBud) * 0.4);
+                //var w = v.Value + ((1 / avgBud) * 0.4);
+                var w = v.Value + ((1 / Math.Abs(avgBud - (double)basedEvent.Budget)) * 0.4);
                 comboWithBudget.Add(v.Key, w);
             });
 
@@ -316,7 +317,8 @@ namespace OPFC.Services.Implementations
                     var categoryIds = menuCategories.Where(x => x.Key == menu.Id)
                         .Select(x => x.Select(c => c.CategoryId).ToList()).ToList();
 
-                    if (categoryIds.Count > 0) {
+                    if (categoryIds.Count > 0)
+                    {
                         ComboCategoryIds.AddRange(categoryIds[0]);
                     }
                 }
