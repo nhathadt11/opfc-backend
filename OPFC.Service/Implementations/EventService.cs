@@ -184,7 +184,7 @@ namespace OPFC.Services.Implementations
             matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
 
             // origin: m.ServingNumber >= basedEvent.ServingNumber
-            matchedMenus = matchedMenus.Where(m => m.ServingNumber <= basedEvent.ServingNumber).ToList();
+            matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
 
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
