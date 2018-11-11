@@ -256,11 +256,14 @@ namespace OPFC.API.Controllers
 
             try
             {
-                var result = _serviceUow.EventService.GetSuggestion(eventId)
-                                                     .Skip((takePage - 1) * takeSize)
-                                                     .Take(takeSize)
-                                                     .ToList();
-                return Ok(result);
+                var combos = _serviceUow.EventService.GetSuggestion(eventId);
+                var total = combos.Count;
+                var result = combos
+                    .Skip((takePage - 1) * takeSize)
+                    .Take(takeSize)
+                    .ToList();
+
+                return Ok(new { total, result });
             }
             catch (Exception ex)
             {
