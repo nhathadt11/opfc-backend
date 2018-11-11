@@ -309,7 +309,21 @@ namespace OPFC.Services.Implementations
                 //    finalResult.Add(new { Menus, ComboTotal });
                 //}
 
-                finalResult.Add(new { Menus, ComboTotal });
+                var ComboCategoryIds = new List<long>();
+                // TODO: refactor this code
+                foreach (var menu in Menus)
+                {
+                    var categoryIds = menuCategories.Where(x => x.Key == menu.Id)
+                        .Select(x => x.Select(c => c.CategoryId).ToList()).ToList();
+
+                    if (categoryIds.Count > 0) {
+                        ComboCategoryIds.AddRange(categoryIds[0]);
+                    }
+                }
+
+                ComboCategoryIds = ComboCategoryIds.Distinct().OrderBy(x => x).ToList();
+
+                finalResult.Add(new { Menus, ComboTotal, ComboCategoryIds });
             });
 
             return finalResult;
