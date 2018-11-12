@@ -73,5 +73,7 @@ namespace OPFC.API.DTO
         /// Gets or set user address
         /// </summary>
         public string Address { get; set; }
+        
+        public bool IsDeleted { get; set; }
     }
 }
