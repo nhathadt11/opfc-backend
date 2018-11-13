@@ -43,6 +43,7 @@ namespace OPFC.Services.Implementations
         {
             ChangeOrderLineStatus(orderLineId, OrderStatus.Completed);
 
+
             OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
             orderPayload.Verb = "marked as completed";
             
