@@ -204,7 +204,7 @@ namespace OPFC.Services.Implementations
                             },
                             receiver = gmail,
                             note = "Tks",
-                            sender_item_id = ""
+                            sender_item_id = "item_1"
                         }
                     }
                    
@@ -212,6 +212,7 @@ namespace OPFC.Services.Implementations
                 };
 
                 var created = payout.Create(apiContext, false);
+                Console.WriteLine(created.batch_header.time_completed);
                 return true;
             }
         }

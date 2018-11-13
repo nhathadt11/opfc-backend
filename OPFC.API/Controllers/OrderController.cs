@@ -42,6 +42,18 @@ namespace OPFC.API.Controllers
 
         }
 
+        [HttpGet("OrderLine/{id}")]
+        public ActionResult GetAllOrderLine(string id)
+        {
+            if (string.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^\\d+$"))
+                return BadRequest(new { Message = "Invalid Id" });
+
+            var orderLines = _serviceUow.OrderLineService.GetAllByOrderId(long.Parse(id));
+
+            return Ok(Mapper.Map<List<OrderLine>>(orderLines));
+
+        }
+
         [HttpGet("{id}")]
         public ActionResult Get(string id)
         {

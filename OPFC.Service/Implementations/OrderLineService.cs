@@ -43,6 +43,9 @@ namespace OPFC.Services.Implementations
         {
             ChangeOrderLineStatus(orderLineId, OrderStatus.Completed);
 
+            var orderLine = _serviceUow.OrderLineService.GetOrderLineById(orderLineId);
+
+            _serviceUow.PaypalService.Transfer("buyertestaa@gmail.com", (double) orderLine.AmountEarned);
 
             OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
             orderPayload.Verb = "marked as completed";
