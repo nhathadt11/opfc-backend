@@ -85,6 +85,9 @@ namespace OPFC.Models
         public List<ServiceLocation> ServiceLocationList { get; set; }
         
         [NotMapped]
+        public string Avatar { get; set; }
+        
+        [NotMapped]
         public List<long> ServiceLocationIds { get; set; }
     }
 }

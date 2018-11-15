@@ -44,7 +44,12 @@ namespace OPFC.Services.Implementations
 
         public Brand GetBrandById(long id)
         {
-            return _opfcUow.BrandRepository.GetBrandById(id);   
+            var foundBrand = _opfcUow.BrandRepository.GetBrandById(id);
+            var foundUser = _opfcUow.UserRepository.GetById(foundBrand.UserId);
+
+            foundBrand.Avatar = foundUser.Avatar;
+
+            return foundBrand;
         }
 
         public Brand UpdateBrand(Brand brand)
