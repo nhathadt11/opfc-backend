@@ -15,5 +15,7 @@ namespace OPFC.Services.Interfaces
         List<ServiceLocation> GetAllServiceLocation();
 
         List<ServiceLocation> GetServiceLocationsByBrandId(long brandId);
+
+        void UpdateServiceLocationByBrand(long brandIs, List<long> districtIds);
     }
 }

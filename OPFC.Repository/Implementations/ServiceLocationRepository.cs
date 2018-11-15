@@ -41,5 +41,15 @@ namespace OPFC.Repositories.Implementations
         {
             throw new NotImplementedException();
         }
+
+        public void RemoveRange(List<ServiceLocation> serviceLocations)
+        {
+            DbSet.RemoveRange(serviceLocations);
+        }
+
+        public void AddRange(List<ServiceLocation> serviceLocations)
+        {
+            DbSet.AddRange(serviceLocations);
+        }
     }
 }

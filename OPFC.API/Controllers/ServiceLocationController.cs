@@ -23,8 +23,11 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var result = _serviceUow.ServiceLocationService.GetServiceLocationsByBrandId(brandId);
-                return result;
+                var result = _serviceUow.ServiceLocationService
+                    .GetServiceLocationsByBrandId(brandId)
+                    .Select(s => s.DistrictId)
+                    .ToList();
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -32,6 +35,20 @@ namespace OPFC.API.Controllers
             }
         }
 
-
+        [HttpPut("/ServiceLocation/Brand/{brandId}")]
+        public ActionResult UpdateServiceLocationByBrandId(long brandId, [FromBody]List<long> serviceLocationIds)
+        {
+            try
+            {
+                _serviceUow
+                    .ServiceLocationService
+                    .UpdateServiceLocationByBrand(brandId, serviceLocationIds);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
