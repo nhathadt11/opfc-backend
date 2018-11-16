@@ -19,5 +19,6 @@ namespace OPFC.Models
         public string StatusName { get; set; }
         public string PaypalSaleRef { get; set; }
         public List<IdNameValue> MealList { get; set; }
+        public bool DidRate { get; set; }
     }
 }

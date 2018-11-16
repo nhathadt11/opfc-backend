@@ -315,11 +315,14 @@ namespace OPFC.Services.Implementations
                 .SelectMany(ol =>
                 {
                     var orderLineDetailList = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineId(ol.Id).ToList();
+                    var privateRating = _serviceUow.PrivateRatingService.GetPrivateRatingByOrderLineId(ol.Id);
+
                     return orderLineDetailList.Select(old => {
                         old.BrandId = ol.BrandId;
                         old.BrandName = GetBrandNameById(ol.BrandId);
                         old.StatusId = ol.Status;
                         old.StatusName = ((OrderStatus)ol.Status).ToString("F");
+                        old.DidRate = privateRating != null;
                         return old;
                     });
                 })
@@ -410,7 +413,8 @@ namespace OPFC.Services.Implementations
                 StatusId = orderLineDetail.StatusId,
                 StatusName = orderLineDetail.StatusName,
                 Price = orderLineDetail.Amount,
-                OtherFee = 0
+                OtherFee = 0,
+                DidRate = orderLineDetail.DidRate,
             };
         }
 

@@ -20,5 +20,7 @@ namespace OPFC.Models
         public int StatusId { get; set; }
         [NotMapped]
         public string StatusName { get; set; }
+        [NotMapped]
+        public bool DidRate { get; set; }
     }
 }
