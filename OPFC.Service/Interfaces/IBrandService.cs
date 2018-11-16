@@ -18,5 +18,7 @@ namespace OPFC.Services.Interfaces
         void SavePhoto(Photo photo);
 
         Brand GetBrandByUserId(long id);
+
+        bool Exists(long id);
     }
 }

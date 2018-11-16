@@ -54,9 +54,18 @@ namespace OPFC.Services.Implementations
 
         public Brand UpdateBrand(Brand brand)
         {
-            
-            var result = _opfcUow.BrandRepository.UpdateBrand(brand);
-            _opfcUow.Commit();
+            Brand result = null;
+            using(var scope = new TransactionScope())
+            {
+                result = _opfcUow.BrandRepository.UpdateBrand(brand);
+                var userToUpdate = _opfcUow.UserRepository.GetById(brand.UserId);
+                userToUpdate.Avatar = brand.Avatar;
+                _opfcUow.UserRepository.Update(userToUpdate);
+    
+                _opfcUow.Commit();
+
+                scope.Complete();
+            }
 
             return result;
         }
@@ -89,6 +98,11 @@ namespace OPFC.Services.Implementations
         public List<Brand> GetAllBrand()
         {
             return _opfcUow.BrandRepository.GetAllBrand();
+        }
+
+        public bool Exists(long id)
+        {
+            return _opfcUow.BrandRepository.Exists(id);
         }
     }
 }

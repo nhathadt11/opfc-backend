@@ -106,8 +106,8 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var found = _serviceUow.BrandService.GetBrandById(id);
-                if (found == null)
+                var existing = _serviceUow.BrandService.Exists(id);
+                if (!existing)
                 {
                     return NotFound("Brand could not be found");
                 }

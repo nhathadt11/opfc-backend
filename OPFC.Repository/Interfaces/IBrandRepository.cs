@@ -19,6 +19,8 @@ namespace OPFC.Repositories.Interfaces
         List<Brand> GetAllBrand();
 
         Brand GetBrandByUserId(long id);
+
+        bool Exists(long id);
     }
 
 }

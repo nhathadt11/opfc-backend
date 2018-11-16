@@ -62,6 +62,10 @@ namespace OPFC.API.DTO
         public string Ward { get; set; }
         
         public string Avatar { get; set; }
+        
+        public long CityId { get; set; }
+        
+        public long DistrictId { get; set; }
        
         public List<long> ServiceLocationIds { get; set; }
     }

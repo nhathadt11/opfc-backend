@@ -59,5 +59,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Update(brand).Entity;
         }
+
+        public bool Exists(long id)
+        {
+            return DbSet.Any(b => b.Id == id);
+        }
     }
 }
