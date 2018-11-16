@@ -50,12 +50,12 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpGet("Transaction/{id}")]
+        [HttpGet("OrderLine/{id}")]
         public IActionResult GetByTransactionId(long id)
         {
             try
             {
-                if (!_serviceUow.MenuService.Exists(id)) throw new Exception("Transaction could not be found.");
+                if (!_serviceUow.MenuService.Exists(id)) throw new Exception("OrderLine could not be found.");
 
                 var retrieved = _serviceUow.PrivateRatingService.GetAllPrivateRating().Where(r => r.Id == id);
                 var returnPrivateRatingList = Mapper.Map<List<PrivateRatingDTO>>(retrieved);
@@ -72,15 +72,16 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [HttpPost("Transaction/{transactionId}/User/{userId}")]
-        public IActionResult Create(long transactionId, long userId, CreatePrivateRatingRequest request)
+        [HttpPost("User/{userId}/OrderLine/{orderLineId}")]
+        public IActionResult Create(long userId, long orderLineId, CreatePrivateRatingRequest request)
         {
             try
             {
-                request.PrivateRating.TransactionId = transactionId;
+                request.PrivateRating.OrderLineId = orderLineId;
                 request.PrivateRating.UserId = userId;
-                var privaterating = Mapper.Map<PrivateRating>(request);
-                var created = Mapper.Map<PrivateRatingDTO>(_serviceUow.PrivateRatingService.CreatePrivateRating(privaterating));
+                var privaterating = Mapper.Map<PrivateRating>(request.PrivateRating);
+                var created = _serviceUow.PrivateRatingService.CreatePrivateRating(privaterating);
+                var returnRating = Mapper.Map<PrivateRatingDTO>(created);
 
                 return Created("Private Rating", created);
             }

@@ -9,9 +9,9 @@ namespace OPFC.API.DTO
 
         public decimal DiffVateries { get; set; }
 
-        public decimal ChefExp { get; set; }
+        public decimal ResonablePrice { get; set; }
 
-        public decimal Flexibility { get; set; }
+        public decimal OnTime { get; set; }
 
         public decimal FoodQuality { get; set; }
 
@@ -23,6 +23,6 @@ namespace OPFC.API.DTO
 
         public bool IsDeleted { get; set; }
 
-        public long TransactionId { get; set; }
+        public long OrderLineId { get; set; }
     }
 }
