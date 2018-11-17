@@ -107,6 +107,11 @@ namespace OPFC.Services.Implementations
                 throw ex;
             }
         }
+        
+        public bool IsUserExist(long userId)
+        {
+            return _opfcUow.UserRepository.IsUserExist(userId);
+        }
 
         public string GetCityNameForUserId(long userId)
         {

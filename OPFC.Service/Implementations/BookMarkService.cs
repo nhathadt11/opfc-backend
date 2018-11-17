@@ -71,5 +71,13 @@ namespace OPFC.Services.Implementations
             _opfcUow.Commit();
             return result;
         }
+
+        public List<BookMark> GetAllByUserId(long userId)
+        {
+            return _opfcUow.BookMarkRepository
+                .GetAll()
+                .Where(b => b.UserId == userId)
+                .ToList();
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace OPFC.Services.Interfaces
         BookMark UpdateBookMark(BookMark bookMark);
         List<BookMark> GetAllBookMark();
         void RemoveBookmark(long userId, long menuId);
+        List<BookMark> GetAllByUserId(long userId);
     }
 }

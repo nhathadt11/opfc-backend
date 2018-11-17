@@ -36,6 +36,8 @@ namespace OPFC.Services.Interfaces
 
         bool IsUserExist(string userName);
 
+        bool IsUserExist(long userId);
+
         string GetCityNameForUserId(long userId);
 
         User GetUserByBrandId(long brandId);

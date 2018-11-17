@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using OPFC.API.ServiceModel.Menu;
 using System.Transactions;
+using OPFC.Services.UnitOfWork;
 
 namespace OPFC.Services.Implementations
 {
     public class MenuService : IMenuService
     {
+        private readonly IServiceUow _serviceUow = ServiceStack.ServiceStackHost.Instance.TryResolve<IServiceUow>();
         private readonly IOpfcUow _opfcUow;
 
         public MenuService(IOpfcUow opfcUow)
@@ -187,6 +189,19 @@ namespace OPFC.Services.Implementations
             var result = _opfcUow.MenuRepository.UpdateMenu(menu);
             _opfcUow.Commit();
             return result;
+        }
+
+        public List<Menu> GetAllBookmarkedMenuByUserId(long userId)
+        {
+            var bookmarkedMenuIds = _serviceUow.BookMarkService
+                .GetAllByUserId(userId)
+                .Select(b => b.MenuId);
+            var bookmarkedMenuList = _serviceUow.MenuService
+                .GetAllMenu()
+                .Where(m => bookmarkedMenuIds.Contains(m.Id))
+                .ToList();
+
+            return bookmarkedMenuList;
         }
     }
 }

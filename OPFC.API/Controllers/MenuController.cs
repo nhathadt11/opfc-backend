@@ -211,5 +211,25 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
+        
+        [HttpGet("User/{userId}/Bookmark")]
+        public ActionResult GetAllByUserId(long userId)
+        {
+            try
+            {
+                var userExists = _serviceUow.UserService.IsUserExist(userId);
+                if (!userExists)
+                {
+                    return BadRequest("User does not exist.");
+                }
+
+                var result = _serviceUow.MenuService.GetAllBookmarkedMenuByUserId(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
