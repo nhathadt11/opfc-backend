@@ -95,6 +95,8 @@ namespace OPFC.Repositories.UnitOfWork
         IEventCategoryRepository EventCategoryRepository { get; }
         
         IOrderLineDetailRepository OrderLineDetailRepository { get; }
+        
+        IBrandSummaryRepository BrandSummaryRepository { get; }
 
         /// <summary>
         /// Dispose

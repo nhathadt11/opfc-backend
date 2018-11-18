@@ -55,5 +55,7 @@ namespace OPFC.API.DTO
         public decimal AverageRatingPoint { get; set; }
 
         public decimal TotalRatingPoint { get; set; }
+        
+        public BrandSummary BrandSummary { get; set; }
     }
 }

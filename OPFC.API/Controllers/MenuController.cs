@@ -75,6 +75,9 @@ namespace OPFC.API.Controllers
                 var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
                 returnMenu.BrandName = brand.BrandName;
 
+                var brandSummary = _serviceUow.BrandSummaryService.GetBrandSummaryByBrandId(returnMenu.BrandId);
+                returnMenu.BrandSummary = brandSummary;
+
                 returnMenu.BrandPhone = brand.Phone;
                 returnMenu.BrandParticipantNumber = brand.ParticipantNumber;
                 returnMenu.BrandEmail = brand.Email;

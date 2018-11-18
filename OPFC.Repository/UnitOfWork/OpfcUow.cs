@@ -58,6 +58,7 @@ namespace OPFC.Repositories.UnitOfWork
         public IMenuCategoryRepository MenuCategoryRepository { get { return GetRepo<IMenuCategoryRepository>(); } }
         public IEventCategoryRepository EventCategoryRepository { get { return GetRepo<IEventCategoryRepository>(); } }
         public IOrderLineDetailRepository OrderLineDetailRepository { get { return GetRepo<IOrderLineDetailRepository>(); } }
+        public IBrandSummaryRepository BrandSummaryRepository { get { return GetRepo<IBrandSummaryRepository>(); } }
 
 
         /// <summary>

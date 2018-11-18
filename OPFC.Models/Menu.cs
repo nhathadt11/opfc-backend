@@ -38,6 +38,9 @@ namespace OPFC.Models
         public List<MenuMeal> MenuMealList { get; set; }
 
         public List<MenuEventType> MenuEventTypeList { get; set; }
+        
+        [NotMapped]
+        public BrandSummary BrandSummary { get; set; }
 
         [NotMapped]
         public List<Meal> MealList { get; set; }
