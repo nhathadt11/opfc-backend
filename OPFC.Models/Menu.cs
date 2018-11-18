@@ -31,9 +31,9 @@ namespace OPFC.Models
         [DefaultValue(0)]
         public int? TotalRating { get; set; }
 
-        public decimal? AverageRatingPoint { get; set; }
+        public double? AverageRatingPoint { get; set; }
 
-        public decimal? TotalRatingPoint { get; set; }
+        public double? TotalRatingPoint { get; set; }
 
         public List<MenuMeal> MenuMealList { get; set; }
 

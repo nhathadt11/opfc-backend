@@ -8,7 +8,7 @@ namespace OPFC.Models
         [Key]
         public long RatingId { get; set; }
 
-        public long Rate { get; set; }
+        public double Rate { get; set; }
 
         public long MenuId { get; set; }
 
