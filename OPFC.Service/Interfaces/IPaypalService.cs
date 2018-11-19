@@ -15,5 +15,7 @@ namespace OPFC.Services.Interfaces
         long SaveOrderAndExecutePayment( string paymentId, string payperID);
 
         void Refund(long orderLineId);
+
+        bool Transfer(string gmail, double amount);
     }
 }

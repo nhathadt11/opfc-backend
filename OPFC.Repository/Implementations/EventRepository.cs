@@ -35,8 +35,8 @@ namespace OPFC.Repositories.Implementations
         public List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds)
         {
             var availableEvents = DbSet.Where(e => e.IsDeleted == false && e.DistrictId == serviceLocation)
-                                        .Include(e => e.District)
-                                        .Include(e => e.City)
+//                                        .Include(e => e.District)
+//                                        .Include(e => e.City)
                                         .ToList();
 
             var result = availableEvents.Where(e => e.ServingNumber >= servingNumber &&

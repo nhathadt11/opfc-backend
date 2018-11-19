@@ -60,6 +60,13 @@ namespace OPFC.API.DTO
         /// Gets or sets brand Ward
         /// </summary>
         public string Ward { get; set; }
+        
+        public string Avatar { get; set; }
+        
+        public long CityId { get; set; }
+        
+        public long DistrictId { get; set; }
        
+        public List<long> ServiceLocationIds { get; set; }
     }
 }

@@ -175,5 +175,46 @@ namespace OPFC.Services.Implementations
             }
 
         }
+
+        public bool Transfer(string gmail, double amount)
+        {
+            using (var scope = new TransactionScope())
+            {
+                var apiContext =
+                new APIContext(new OAuthTokenCredential(PaypalConfig.CLIENT_ID, PaypalConfig.CLIENT_SECRET)
+                    .GetAccessToken());
+
+                var payout = new Payout
+                {
+                    sender_batch_header = new PayoutSenderBatchHeader
+                    {
+                        sender_batch_id = "batch_" + Guid.NewGuid().ToString().Substring(0, 8),
+                        email_subject = "your money"
+                    },
+
+                    items = new List<PayoutItem>
+                    {
+                        new PayoutItem
+                        {
+                            recipient_type = PayoutRecipientType.EMAIL,
+                            amount = new Currency
+                            {
+                                value = amount.ToString(),
+                                currency = "USD"
+                            },
+                            receiver = gmail,
+                            note = "Tks",
+                            sender_item_id = "item_1"
+                        }
+                    }
+                   
+
+                };
+
+                var created = payout.Create(apiContext, false);
+                Console.WriteLine(created.batch_header.time_completed);
+                return true;
+            }
+        }
     }
 }

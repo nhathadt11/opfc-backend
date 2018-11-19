@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
@@ -77,6 +78,18 @@ namespace OPFC.Services.Implementations
             {
                 throw;
             }
+        }
+        
+        public void UpdateServiceLocationByBrand(long brandId, List<long> districtIds)
+        {
+            var serviceLocations = GetServiceLocationsByBrandId(brandId);
+            _opfcUow.ServiceLocationRepository.RemoveRange(serviceLocations);
+
+            var nextServiceLocations = districtIds
+                .Select(id => new ServiceLocation { BrandId = brandId, DistrictId = id })
+                .ToList();
+            _opfcUow.ServiceLocationRepository.AddRange(nextServiceLocations);
+            _opfcUow.Commit();
         }
     }
 }

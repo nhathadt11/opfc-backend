@@ -134,7 +134,6 @@ namespace OPFC.Services.Implementations
 
                 _opfcUow.Commit();
 
-
                 _opfcUow.EventCategoryRepository.AddMultiples(modifiedEvent.Id, catIds);
                 _opfcUow.Commit();
 
@@ -157,7 +156,7 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public List<object> GetSuggestion(long eventId, List<long> menuIds)
+        public List<object> GetSuggestion(long eventId)
         {
 
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
@@ -165,9 +164,7 @@ namespace OPFC.Services.Implementations
             if (basedEvent == null) throw new Exception("Event not found!");
 
             // Get all existed Menu
-            //var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
-
-            var existingMenus = _opfcUow.MenuRepository.GetAllMenuByIdsWithCollaborative(menuIds);
+            var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
 
             // List out menu id which matched event type id
             var listMenuIdMatchedEventType = _opfcUow.MenuEventTypeRepository.GetAll()
@@ -183,10 +180,14 @@ namespace OPFC.Services.Implementations
                                                                         .Select(sl => sl.BrandId)
                                                                         .ToList();
 
-            // test
-            //matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+            matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
 
-            matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
+            var percent = basedEvent.ServingNumber * 0.2;
+            var botServing = basedEvent.ServingNumber - percent;
+            var topServing = basedEvent.ServingNumber + percent;
+
+            //matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
+            matchedMenus = matchedMenus.Where(m => m.ServingNumber >= botServing && m.ServingNumber <= topServing).ToList();
 
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
@@ -288,7 +289,8 @@ namespace OPFC.Services.Implementations
                 {
                     avgBud += (double)m.Price;
                 });
-                var w = v.Value + ((1 / avgBud) * 0.4);
+                //var w = v.Value + ((1 / avgBud) * 0.4);
+                var w = v.Value + ((1 / Math.Abs(avgBud - (double)basedEvent.Budget)) * 0.4);
                 comboWithBudget.Add(v.Key, w);
             });
 
@@ -306,7 +308,27 @@ namespace OPFC.Services.Implementations
 
                 var (Menus, ComboTotal) = (mn, comboPrice);
 
-                finalResult.Add(new { Menus, ComboTotal });
+                // Note: this will compare ComboTotal with event Budget before add to result list
+                //if (ComboTotal <= (double) basedEvent.Budget) {
+                //    finalResult.Add(new { Menus, ComboTotal });
+                //}
+
+                var ComboCategoryIds = new List<long>();
+                // TODO: refactor this code
+                foreach (var menu in Menus)
+                {
+                    var categoryIds = menuCategories.Where(x => x.Key == menu.Id)
+                        .Select(x => x.Select(c => c.CategoryId).ToList()).ToList();
+
+                    if (categoryIds.Count > 0)
+                    {
+                        ComboCategoryIds.AddRange(categoryIds[0]);
+                    }
+                }
+
+                ComboCategoryIds = ComboCategoryIds.Distinct().OrderBy(x => x).ToList();
+
+                finalResult.Add(new { Menus, ComboTotal, ComboCategoryIds });
             });
 
             return finalResult;

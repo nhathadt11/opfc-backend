@@ -37,6 +37,7 @@ namespace OPFC.API.ServiceModel.Menu
         public decimal Price { get; set; }
         public List<string> Photos { get; set; }
         public List<long> EventTypeIds { get; set; }
+        public List<long> CategoryIds { get; set; }
         public List<long> MealIds { get; set; }
         public List<string> Tags { get; set; }
     }

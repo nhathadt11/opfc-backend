@@ -154,5 +154,10 @@ namespace OPFC.Repositories.UnitOfWork
         /// [dbo].[OrderLineDetail]
         /// </summary>
         public DbSet<OrderLineDetail> OrderLineDetail { get; set; }
+        
+        /// <summary>
+        /// [dbo].[BrandSummary]
+        /// </summary>
+        public DbSet<BrandSummary> BrandSummary { get; set; }
     }
 }

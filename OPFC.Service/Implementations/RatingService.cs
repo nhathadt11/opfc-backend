@@ -32,7 +32,7 @@ namespace OPFC.Services.Implementations
             }
             foundMenu.TotalRatingPoint += rating.Rate;
 
-            foundMenu.AverageRatingPoint = (decimal) foundMenu.TotalRatingPoint / foundMenu.TotalRating;
+            foundMenu.AverageRatingPoint = foundMenu.TotalRatingPoint / foundMenu.TotalRating;
 
             _opfcUow.MenuRepository.UpdateMenu(foundMenu);
 

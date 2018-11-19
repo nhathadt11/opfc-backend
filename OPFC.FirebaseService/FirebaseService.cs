@@ -27,6 +27,8 @@ namespace OPFC.FirebaseService
             {
                 AuthSecret = "wKorwGwAUXRrfdqPGgZJJJmvU24BKxjrO6nIzoKp",
                 BasePath = "https://opfc-400d3.firebaseio.com/"
+                //AuthSecret = "FnA9MxskGGfXO7JLd3vKcsktULP0cAY9ADU72KXt",
+                //BasePath = "https://opfc-97847.firebaseio.com/"
             };
             
             return new FirebaseClient(config);

@@ -70,7 +70,6 @@ namespace OPFC.API.Controllers
         }
 
         [HttpPost("User/{userId}/Menu/{menuId}")]
-        [AllowAnonymous]
         public ActionResult Bookmark(long userId, long menuId)
         {
             // goi bookmark service
@@ -92,7 +91,6 @@ namespace OPFC.API.Controllers
         }
 
         [HttpDelete("User/{userId}/Menu/{menuId}")]
-        [AllowAnonymous]
         public ActionResult RemoveBookmark(long userId, long menuId)
         {
             try

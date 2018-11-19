@@ -14,7 +14,7 @@ namespace OPFC.Models
 
         public string Description { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public DateTime StartAt { get; set; }
 
@@ -39,9 +39,9 @@ namespace OPFC.Models
 
         public bool? IsDeleted { get; set; }
 
-        public District District { get; set; }
-
-        public City City { get; set; }
+//        public District District { get; set; }
+//
+//        public City City { get; set; }
         
         [NotMapped]
         public string DistrictName { get; set; }
@@ -49,7 +49,7 @@ namespace OPFC.Models
         [NotMapped]
         public string CityName { get; set; }
         
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         [NotMapped]
         public long[] CategoryIds { get; set; }

@@ -211,53 +211,64 @@ namespace OPFC.API.Controllers
             }
         }
 
-        [AllowAnonymous]
-        [HttpGet("/User/{userId}/Event/{eventId}/GetSuggestion")]
-        public ActionResult<List<object>> GetSuggestion(long userId, long eventId)
-        {
-            try
-            {
-
-                Class1 class1 = new Class1();
-                Recommendation.Objects.UserBehavior userBehavior = new Recommendation.Objects.UserBehavior();
-                userBehavior.Users = _serviceUow.UserService.GetAllUser();
-                userBehavior.Menus = _serviceUow.MenuService.GetAllMenu();
-                userBehavior.Categories = _serviceUow.CategoryService.GetAll();
-
-                foreach (var user in userBehavior.Users)
-                {
-                    foreach (var menu in userBehavior.Menus)
-                    {
-                        userBehavior.UserActions.Add(new Recommendation.Objects.UserAction(user.Id, "", menu.Id, menu.MenuName));
-                    }
-                }
-
-                var result = class1.GetSuggest(userBehavior, userId);
-
-                var suggestedMenuIds = result.Select(x => x.MenuId).Distinct().ToList();
-
-                var rs = _serviceUow.EventService.GetSuggestion(eventId, suggestedMenuIds);
-
-                return rs;
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        //[HttpGet("/Event/GetSuggestion/{eventId}")]
-        //public ActionResult<List<List<Menu>>> GetSuggestion(long eventId)
+        #region Recommendation system code
+        //[AllowAnonymous]
+        //[HttpGet("/User/{userId}/Event/{eventId}/GetSuggestion")]
+        //public ActionResult<List<object>> GetSuggestion(long userId, long eventId)
         //{
         //    try
         //    {
-        //       var result =  _serviceUow.EventService.GetSuggestion(eventId);
-        //        return Ok(result);
+
+        //        Class1 class1 = new Class1();
+        //        Recommendation.Objects.UserBehavior userBehavior = new Recommendation.Objects.UserBehavior();
+        //        userBehavior.Users = _serviceUow.UserService.GetAllUser();
+        //        userBehavior.Menus = _serviceUow.MenuService.GetAllMenu();
+        //        userBehavior.Categories = _serviceUow.CategoryService.GetAll();
+
+        //        foreach (var user in userBehavior.Users)
+        //        {
+        //            foreach (var menu in userBehavior.Menus)
+        //            {
+        //                userBehavior.UserActions.Add(new Recommendation.Objects.UserAction(user.Id, "", menu.Id, menu.MenuName));
+        //            }
+        //        }
+
+        //        var result = class1.GetSuggest(userBehavior, userId);
+
+        //        var suggestedMenuIds = result.Select(x => x.MenuId).Distinct().ToList();
+
+        //        var rs = _serviceUow.EventService.GetSuggestion(eventId, suggestedMenuIds);
+
+        //        return rs;
         //    }
         //    catch (Exception ex)
         //    {
         //        return BadRequest(ex.Message);
         //    }
         //}
+        #endregion
+
+        [HttpGet("/Event/GetSuggestion/{eventId}")]
+        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size)
+        {
+            var takePage = page ?? 1;
+            var takeSize = size ?? 10;
+
+            try
+            {
+                var combos = _serviceUow.EventService.GetSuggestion(eventId);
+                var total = combos.Count;
+                var result = combos
+                    .Skip((takePage - 1) * takeSize)
+                    .Take(takeSize)
+                    .ToList();
+
+                return Ok(new { total, result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

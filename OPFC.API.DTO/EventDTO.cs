@@ -40,6 +40,8 @@ namespace OPFC.API.DTO
         public long EventTypeId { get; set; }
 
         public long UserId { get; set; }
+        
+        public int Status { get; set; }
 
         public bool? IsDeleted { get; set; }
 

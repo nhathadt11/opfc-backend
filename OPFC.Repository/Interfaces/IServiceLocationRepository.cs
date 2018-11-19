@@ -17,5 +17,9 @@ namespace OPFC.Repositories.Interfaces
         List<ServiceLocation> GetServiceLocationByDistrictId(long districtId);
 
         List<ServiceLocation> GetServiceLocationsByBrandId(long brandId);
+        
+        void RemoveRange(List<ServiceLocation> serviceLocations);
+
+        void AddRange(List<ServiceLocation> serviceLocations);
     }
 }

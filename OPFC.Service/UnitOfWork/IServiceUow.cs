@@ -23,5 +23,6 @@ namespace OPFC.Services.UnitOfWork
         IEventTypeService EventTypeService { get; }
         ICategoryService CategoryService { get; }
         IPrivateRatingService PrivateRatingService { get; }
+        IBrandSummaryService BrandSummaryService { get; }
     }
 }

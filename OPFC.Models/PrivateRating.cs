@@ -8,17 +8,17 @@ namespace OPFC.Models
         [Key]
         public long Id { get; set; }
 
-        public decimal SupportService { get; set; }
+        public double SupportService { get; set; }
 
-        public decimal DiffVateries { get; set; }
+        public double DiffVateries { get; set; }
 
-        public decimal ChefExp { get; set; }
+        public double ResonablePrice { get; set; }
 
-        public decimal Flexibility { get; set; }
+        public double OnTime { get; set; }
 
-        public decimal FoodQuality { get; set; }
+        public double FoodQuality { get; set; }
 
-        public decimal Attitude { get; set; }
+        public double Attitude { get; set; }
 
         public DateTime RatingTime { get; set; }
 
@@ -26,7 +26,7 @@ namespace OPFC.Models
 
         public bool IsDeleted { get; set; }
 
-        public long TransactionId { get; set; }
+        public long OrderLineId { get; set; }
 
     }
 }

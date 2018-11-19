@@ -68,6 +68,7 @@ namespace OPFC.Services.Implementations
 
                 user.IsActive = true;
                 user.IsDeleted = false;
+                user.UserRoleId = 1;
 
                 var result = _opfcUow.UserRepository.CreateUser(user);
                 _opfcUow.Commit();
@@ -105,6 +106,11 @@ namespace OPFC.Services.Implementations
             {
                 throw ex;
             }
+        }
+        
+        public bool IsUserExist(long userId)
+        {
+            return _opfcUow.UserRepository.IsUserExist(userId);
         }
 
         public string GetCityNameForUserId(long userId)

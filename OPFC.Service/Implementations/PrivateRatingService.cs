@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
@@ -17,6 +18,12 @@ namespace OPFC.Services.Implementations
 
         public PrivateRating CreatePrivateRating(PrivateRating privaterating)
         {
+            var rated = GetPrivateRatingByOrderLineId(privaterating.OrderLineId);
+            if (rated != null)
+            {
+                throw new Exception("This order was already rated.");
+            }
+            
             privaterating.RatingTime = DateTime.Now;
             var created = _opfcUow.PrivateRatingRepository.CreatePrivateRating(privaterating);
             _opfcUow.Commit();
@@ -55,6 +62,13 @@ namespace OPFC.Services.Implementations
             _opfcUow.Commit();
 
             return result;
+        }
+
+        public PrivateRating GetPrivateRatingByOrderLineId(long orderLineId)
+        {
+            return _opfcUow.PrivateRatingRepository
+                .GetAllPrivateRating()
+                .SingleOrDefault(r => r.OrderLineId == orderLineId);
         }
     }
 }

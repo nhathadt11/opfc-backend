@@ -15,5 +15,7 @@ namespace OPFC.Services.Interfaces
         List<PrivateRating> GetAllPrivateRating();
 
         void DeletePrivateRatingById(long id);
+
+        PrivateRating GetPrivateRatingByOrderLineId(long orderLineId);
     }
 }

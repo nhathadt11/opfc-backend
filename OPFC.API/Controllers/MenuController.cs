@@ -75,6 +75,9 @@ namespace OPFC.API.Controllers
                 var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
                 returnMenu.BrandName = brand.BrandName;
 
+                var brandSummary = _serviceUow.BrandSummaryService.GetBrandSummaryByBrandId(returnMenu.BrandId);
+                returnMenu.BrandSummary = brandSummary;
+
                 returnMenu.BrandPhone = brand.Phone;
                 returnMenu.BrandParticipantNumber = brand.ParticipantNumber;
                 returnMenu.BrandEmail = brand.Email;
@@ -198,6 +201,10 @@ namespace OPFC.API.Controllers
                     var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
                     menu.EventTypeIds = eventTypeList.Select(e => e.Id).ToList();
                     menu.EventTypeNames = eventTypeList.Select(e => e.EventTypeName).ToList();
+
+                    var categoryList = _serviceUow.CategoryService.GetAllByMenuId(menu.Id);
+                    menu.CategoryIds = categoryList.Select(c => c.Id).ToList();
+                    menu.CategoryNames = categoryList.Select(c => c.Name).ToList();
                 }
                 
                 return Ok(returnMenuList);
@@ -205,6 +212,26 @@ namespace OPFC.API.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+        
+        [HttpGet("User/{userId}/Bookmark")]
+        public ActionResult GetAllByUserId(long userId)
+        {
+            try
+            {
+                var userExists = _serviceUow.UserService.IsUserExist(userId);
+                if (!userExists)
+                {
+                    return BadRequest("User does not exist.");
+                }
+
+                var result = _serviceUow.MenuService.GetAllBookmarkedMenuByUserId(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

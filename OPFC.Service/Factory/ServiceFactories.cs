@@ -37,7 +37,8 @@ namespace OPFC.Services.Factory
                 {typeof(IEventTypeService), coreService => new EventTypeService(opfcUow)},
                 {typeof(ICategoryService), coreService => new CategoryService(opfcUow)},
                 {typeof(IPrivateRatingService), coreService => new PrivateRatingService(opfcUow)},
-                { typeof(IServiceLocationService), coreService => new ServiceLocationService(opfcUow)},
+                {typeof(IServiceLocationService), coreService => new ServiceLocationService(opfcUow)},
+                {typeof(IBrandSummaryService), coreService => new BrandSummaryService(opfcUow)},
             };
         }
 

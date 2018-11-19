@@ -42,6 +42,18 @@ namespace OPFC.API.Controllers
 
         }
 
+        [HttpGet("OrderLine/{id}")]
+        public ActionResult GetAllOrderLine(string id)
+        {
+            if (string.IsNullOrEmpty(id) || !Regex.IsMatch(id, "^\\d+$"))
+                return BadRequest(new { Message = "Invalid Id" });
+
+            var orderLines = _serviceUow.OrderLineService.GetAllByOrderId(long.Parse(id));
+
+            return Ok(Mapper.Map<List<OrderLine>>(orderLines));
+
+        }
+
         [HttpGet("{id}")]
         public ActionResult Get(string id)
         {
@@ -60,29 +72,50 @@ namespace OPFC.API.Controllers
         [HttpGet("Brand/{brandId}")]
         public ActionResult GetBrandOrders(long brandId)
         {
-            var brandOrderList = _serviceUow.OrderService.GetBrandOrderByBrandId(brandId);
-            return Ok(brandOrderList);
+            try
+            {
+                var brandOrderList = _serviceUow.OrderService.GetBrandOrderByBrandId(brandId);
+                return Ok(brandOrderList);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         [HttpGet("EventPlanner/User/{userId}")]
         public ActionResult GetEventPlannerOrders(long userId)
         {
-            var eventPlannerOrderList = _serviceUow.OrderService.GetEventPlannerOrders(userId);
-            return Ok(eventPlannerOrderList);
+            try
+            {
+                var eventPlannerOrderList = _serviceUow.OrderService.GetEventPlannerOrders(userId);
+                return Ok(eventPlannerOrderList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("EventPlanner/{orderId}")]
         public ActionResult GetEventPlannerOrder(long orderId)
         {
-            var orderExists = _serviceUow.OrderService.Exits(orderId);
-            if (!orderExists)
+            try
             {
-                return NotFound("Order could be found.");
+                var orderExists = _serviceUow.OrderService.Exits(orderId);
+                if (!orderExists)
+                {
+                    return NotFound("Order could be found.");
+                }
+    
+                var eventPlannerOrder = _serviceUow.OrderService.GetEventPlannerOrderById(orderId);
+    
+                return Ok(eventPlannerOrder);
             }
-
-            var eventPlannerOrder = _serviceUow.OrderService.GetEventPlannerOrderById(orderId);
-
-            return Ok(eventPlannerOrder);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
         [HttpPost("Brand/Approve/{orderLineId}")]
@@ -97,6 +130,27 @@ namespace OPFC.API.Controllers
                 }
 
                 _serviceUow.OrderLineService.Approve(orderLineId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpPost("MarkAsCompleted/{orderLineId}")]
+        public ActionResult MarkAsService(long orderLineId)
+        {
+            try
+            {
+                var orderLineExists = _serviceUow.OrderLineService.Exists(orderLineId);
+                if (!orderLineExists)
+                {
+                    return NotFound("Order Line could not be found.");
+                }
+
+                _serviceUow.OrderLineService.MarkAsCompleted(orderLineId);
 
                 return Ok();
             }

@@ -31,6 +31,13 @@ namespace OPFC.Repositories.Implementations
                 brand.UserId = user.Id;
                 DbContext.Add<Brand>(brand);
 
+                var serviceLocations = brand.ServiceLocationIds.Select(sl => new ServiceLocation
+                {
+                    BrandId = brand.Id,
+                    DistrictId = sl,
+                });
+                DbContext.AddRange(serviceLocations);
+
                 DbContext.SaveChanges();
                 scope.Complete();
             }
@@ -51,6 +58,11 @@ namespace OPFC.Repositories.Implementations
         public Brand UpdateBrand(Brand brand)
         {
             return DbSet.Update(brand).Entity;
+        }
+
+        public bool Exists(long id)
+        {
+            return DbSet.Any(b => b.Id == id);
         }
     }
 }

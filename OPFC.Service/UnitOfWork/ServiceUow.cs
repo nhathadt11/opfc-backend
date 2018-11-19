@@ -32,6 +32,7 @@ namespace OPFC.Services.UnitOfWork
         public IPrivateRatingService PrivateRatingService { get { return GetRepoService<IPrivateRatingService>(); } }
         public IRatingService RatingService { get { return GetRepoService<IRatingService>(); } }
         public ICategoryService CategoryService { get { return GetRepoService<ICategoryService>(); } }
+        public IBrandSummaryService BrandSummaryService { get { return GetRepoService<IBrandSummaryService>(); } }
 
         private T GetRepoService<T>() where T : class
         {
