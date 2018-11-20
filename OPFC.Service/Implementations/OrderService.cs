@@ -78,7 +78,7 @@ namespace OPFC.Services.Implementations
                             OrderId = createdOrdered.OrderId,
                             BrandId = b.BrandId,
                             Amount = amount,
-                            AmountEarned = amount * (decimal)(100 - AppSettings.Rate),
+                            AmountEarned = amount * (decimal)(1 - AppSettings.Rate),
                             Status = (int)OrderStatus.Requesting
                         };
                         var createdOrderLine = _opfcUow.OrderLineRepository.Create(orderLine);

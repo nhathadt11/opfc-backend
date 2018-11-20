@@ -189,7 +189,7 @@ namespace OPFC.Services.Implementations
                     sender_batch_header = new PayoutSenderBatchHeader
                     {
                         sender_batch_id = "batch_" + Guid.NewGuid().ToString().Substring(0, 8),
-                        email_subject = "your money"
+                        email_subject = "Money for service completion"
                     },
 
                     items = new List<PayoutItem>
@@ -203,7 +203,7 @@ namespace OPFC.Services.Implementations
                                 currency = "USD"
                             },
                             receiver = gmail,
-                            note = "Tks",
+                            note = "Thank for using our service",
                             sender_item_id = "item_1"
                         }
                     }

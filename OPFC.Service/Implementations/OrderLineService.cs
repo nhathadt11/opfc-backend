@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using OPFC.FirebaseService;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
@@ -41,15 +42,13 @@ namespace OPFC.Services.Implementations
         
         public void MarkAsCompleted(long orderLineId)
         {
-            ChangeOrderLineStatus(orderLineId, OrderStatus.Completed);
-
-            var orderLine = _serviceUow.OrderLineService.GetOrderLineById(orderLineId);
-
-            _serviceUow.PaypalService.Transfer("buyertestaa@gmail.com", (double) orderLine.AmountEarned);
-
+            var orderLine = ChangeOrderLineStatus(orderLineId, OrderStatus.Completed);
+            var success = _serviceUow.PaypalService.Transfer("nhathadt11-facilitator@gmail.com", (double) orderLine.AmountEarned);
+            
+            if (!success) throw new Exception("Could not transfer money");
+                
             OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
             orderPayload.Verb = "marked as completed";
-            
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
         }
 
@@ -68,12 +67,13 @@ namespace OPFC.Services.Implementations
             return _opfcUow.OrderLineRepository.GetOrderLineById(id);
         }
         
-        void ChangeOrderLineStatus(long orderLineId, OrderStatus status)
+        OrderLine ChangeOrderLineStatus(long orderLineId, OrderStatus status)
         {
             OrderLine orderLine = _opfcUow.OrderLineRepository.GetById(orderLineId);
             orderLine.Status = (int)status;
             _opfcUow.OrderLineRepository.Update(orderLine);
             _opfcUow.Commit();
+            return orderLine;
         }
     }
 }
