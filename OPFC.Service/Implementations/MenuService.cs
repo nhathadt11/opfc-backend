@@ -74,47 +74,57 @@ namespace OPFC.Services.Implementations
 
         public Menu CreateMenuByBrand(long brandId, CreateMenuRequest request)
         {
-            var menu = new Menu
+            using(var scope = new TransactionScope())
             {
-                MenuName = request.MenuName,
-                Description = request.Description,
-                Price = request.Price,
-                ServingNumber = request.ServingNumber,
-                BrandId = brandId,
-                IsActive = true,
-                IsDeleted = false
-            };
-
-            var createdMenu = _opfcUow.MenuRepository.CreateMenu(menu);
-
-            var mealIds = request.MealIds;
-            var menuMealList = _opfcUow.MealRepository
-                .GetAllMeal()
-                .Where(m => mealIds.Contains(m.Id))
-                .Select(m => new MenuMeal
+                var menu = new Menu
                 {
-                    MenuId = menu.Id,
-                    MealId = m.Id,
+                    MenuName = request.MenuName,
+                    Description = request.Description,
+                    Price = request.Price,
+                    ServingNumber = request.ServingNumber,
+                    BrandId = brandId,
+                    IsActive = true,
                     IsDeleted = false
-                })
-                .ToList();
+                };
+    
+                var createdMenu = _opfcUow.MenuRepository.CreateMenu(menu);
+    
+                var mealIds = request.MealIds;
+                var menuMealList = _opfcUow.MealRepository
+                    .GetAllMeal()
+                    .Where(m => mealIds.Contains(m.Id))
+                    .Select(m => new MenuMeal
+                    {
+                        MenuId = menu.Id,
+                        MealId = m.Id,
+                        IsDeleted = false
+                    })
+                    .ToList();
+    
+                var eventTypeIds = request.EventTypeIds;
+                var menuEventTypeList = _opfcUow.EventTypeRepository
+                    .GetAllEventType()
+                    .Where(e => eventTypeIds.Contains(e.Id))
+                    .Select(e => new MenuEventType
+                    {
+                        MenuId = menu.Id,
+                        EventTypeId = e.Id,
+                    })
+                    .ToList();
+    
+                _opfcUow.MenuMealRepository.CreateRange(menuMealList);
+                _opfcUow.MenuEventTypeRepository.CreateRange(menuEventTypeList);
+                _opfcUow.Commit();
 
-            var eventTypeIds = request.EventTypeIds;
-            var menuEventTypeList = _opfcUow.EventTypeRepository
-                .GetAllEventType()
-                .Where(e => eventTypeIds.Contains(e.Id))
-                .Select(e => new MenuEventType
-                {
-                    MenuId = menu.Id,
-                    EventTypeId = e.Id,
-                })
-                .ToList();
+                var brandSummary = _opfcUow.BrandSummaryRepository.GetByBrandId(brandId);
+                brandSummary.MenuCount += 1;
+                _opfcUow.BrandSummaryRepository.Update(brandSummary);
+                _opfcUow.Commit();
 
-            _opfcUow.MenuMealRepository.CreateRange(menuMealList);
-            _opfcUow.MenuEventTypeRepository.CreateRange(menuEventTypeList);
-            _opfcUow.Commit();
-
-            return createdMenu;
+                scope.Complete();
+                
+                return createdMenu;
+            }
         }
 
         public Menu UpdateMenuByBrand(long brandId, long menuId, UpdateMenuRequest request)

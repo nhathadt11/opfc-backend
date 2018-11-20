@@ -25,5 +25,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.SingleOrDefault(bs => bs.BrandId == brandId);
         }
+        
+        public BrandSummary Update(BrandSummary brandSummary)
+        {
+            return DbSet.Update(brandSummary).Entity;
+        }
     }
 }

@@ -4,6 +4,7 @@ using OPFC.Services.Interfaces;
 using OPFC.Repositories.UnitOfWork;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace OPFC.Services.Implementations
 {
@@ -30,8 +31,20 @@ namespace OPFC.Services.Implementations
 
         public Meal CreateMealForBrand(Meal meal, long brandId)
         {
-            meal.BrandId = brandId;
-            return CreateMeal(meal);
+            using(var scope = new TransactionScope())
+            {
+                meal.BrandId = brandId;
+                var result = CreateMeal(meal);
+                _opfcUow.Commit();
+
+                var brandSummary = _opfcUow.BrandSummaryRepository.GetByBrandId(brandId);
+                brandSummary.MealCount += 1;
+                _opfcUow.BrandSummaryRepository.Update(brandSummary);
+                _opfcUow.Commit();
+
+                scope.Complete();
+                return result;
+            }
         }
 
         public List<Meal> GetAllMeal()

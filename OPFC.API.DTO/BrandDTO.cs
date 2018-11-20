@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using OPFC.Models;
 
 namespace OPFC.API.DTO
 {
@@ -68,5 +69,7 @@ namespace OPFC.API.DTO
         public long DistrictId { get; set; }
        
         public List<long> ServiceLocationIds { get; set; }
+        
+        public BrandSummary BrandSummary { get; set; }
     }
 }

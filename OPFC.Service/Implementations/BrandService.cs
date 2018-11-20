@@ -26,11 +26,21 @@ namespace OPFC.Services.Implementations
 
         public Brand CreateBrand(Brand brand)
         {
-            
-            var result = _opfcUow.BrandRepository.CreateBrand(brand);
-            _opfcUow.Commit();
+            using(var scope = new TransactionScope())
+            {
+                var result = _opfcUow.BrandRepository.CreateBrand(brand);
+                _opfcUow.Commit();
 
-            return result;
+                var brandSummary = new BrandSummary
+                {
+                    BrandId = result.Id
+                };
+                _opfcUow.BrandSummaryRepository.Create(brandSummary);
+                _opfcUow.Commit();
+
+                scope.Complete();
+                return result;
+            }
         }
 
         public Caterer CreateCaterer(Caterer caterer)
@@ -48,6 +58,9 @@ namespace OPFC.Services.Implementations
             var foundUser = _opfcUow.UserRepository.GetById(foundBrand.UserId);
 
             foundBrand.Avatar = foundUser.Avatar;
+
+            var brandSummary = _opfcUow.BrandSummaryRepository.GetByBrandId(id);
+            foundBrand.BrandSummary = brandSummary;
 
             return foundBrand;
         }

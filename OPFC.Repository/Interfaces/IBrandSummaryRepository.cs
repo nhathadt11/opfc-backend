@@ -9,5 +9,6 @@ namespace OPFC.Repositories.Interfaces
         BrandSummary Create(BrandSummary brandSummary);
         List<BrandSummary> GetAllBrandSummary();
         BrandSummary GetByBrandId(long brandId);
+        BrandSummary Update(BrandSummary brandSummary);
     }
 }

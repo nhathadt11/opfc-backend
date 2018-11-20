@@ -89,5 +89,8 @@ namespace OPFC.Models
         
         [NotMapped]
         public List<long> ServiceLocationIds { get; set; }
+        
+        [NotMapped]
+        public BrandSummary BrandSummary { get; set; }
     }
 }
