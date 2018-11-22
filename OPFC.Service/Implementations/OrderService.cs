@@ -90,7 +90,7 @@ namespace OPFC.Services.Implementations
                             MenuId = m.Id,
                             Quantity = 1,
                             Amount = m.Price,
-
+                            Note = GetNoteFromRequestMenu(orderRequest.RequestMenuList, m.Id)
                         }).ToList();
                         _opfcUow.OrderLineDetailRepository.CreateRange(orderLineDetails);
                         _opfcUow.Commit();
@@ -109,6 +109,11 @@ namespace OPFC.Services.Implementations
                 // It will auto rollback if any exception, so wee do not need rollback manually here
                 throw ex;
             }
+        }
+        
+        private string GetNoteFromRequestMenu(List<RequestOrderItem> requestMenuList, long menuId)
+        {
+            return requestMenuList.SingleOrDefault(rm => rm.MenuId == menuId)?.Note;
         }
 
         public bool DeleteOrder(Order order)
