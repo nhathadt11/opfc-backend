@@ -38,6 +38,8 @@ namespace OPFC.Models
         public List<MenuMeal> MenuMealList { get; set; }
 
         public List<MenuEventType> MenuEventTypeList { get; set; }
+
+        public List<MenuCategory> MenuCategoryList { get; set; }
         
         [NotMapped]
         public BrandSummary BrandSummary { get; set; }
@@ -58,7 +60,7 @@ namespace OPFC.Models
         
         [NotMapped]
         public List<EventType> EventTypeList { get; set; }
-        
+
         [NotMapped]
         public string BrandName { get; set; }
 

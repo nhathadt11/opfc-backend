@@ -194,6 +194,9 @@ namespace OPFC.Services.Implementations
             //
             InjectMealListIntoMenuList(matchedMenus);
 
+            //
+            InjectCategoryListIntoMenuList(matchedMenus);
+
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
             var ratingsGroup = _opfcUow.RatingRepository.GetAllRatingByMenuId(groupMenuIds)
@@ -413,6 +416,17 @@ namespace OPFC.Services.Implementations
             {
                 var listMealIds = m.MenuMealList.Select(mm => mm.MealId).Distinct().ToList();
                 m.MealList = mealList.Where(mm => listMealIds.Contains(mm.Id)).ToList();
+            });
+        }
+
+        private void InjectCategoryListIntoMenuList(List<Menu> menuList)
+        {
+            var categoryList = _opfcUow.CategoryRepository.GetAll();
+
+            menuList.ForEach(m =>
+            {
+                var listCategoryIds = m.MenuCategoryList.Select(mc => mc.CategoryId).Distinct().ToList();
+                m.CategoryList = categoryList.Where(c => listCategoryIds.Contains(c.Id)).ToList();
             });
         }
     }

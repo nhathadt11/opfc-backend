@@ -203,14 +203,14 @@ namespace OPFC.Services.Implementations
             returnMenu.CategoryList = categoryList;
 
             var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
+
+            returnMenu.BrandEmail = brand.Email;
             returnMenu.BrandName = brand.BrandName;
+            returnMenu.BrandParticipantNumber = brand.ParticipantNumber;
+            returnMenu.BrandPhone = brand.Phone;
 
             var brandSummary = _serviceUow.BrandSummaryService.GetBrandSummaryByBrandId(returnMenu.BrandId);
             returnMenu.BrandSummary = brandSummary;
-
-            returnMenu.BrandPhone = brand.Phone;
-            returnMenu.BrandParticipantNumber = brand.ParticipantNumber;
-            returnMenu.BrandEmail = brand.Email;
 
             return returnMenu;
         }
