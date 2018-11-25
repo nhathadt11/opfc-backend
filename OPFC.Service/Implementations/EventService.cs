@@ -191,14 +191,8 @@ namespace OPFC.Services.Implementations
             //matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
             matchedMenus = matchedMenus.Where(m => m.ServingNumber >= botServing && m.ServingNumber <= topServing).ToList();
 
-            // prepare meal list to inject into matched menu
-            var mealList = _opfcUow.MealRepository.GetAllMeal();
-
-            // inject meal list into menu
-            matchedMenus.ForEach(m => {
-                var listMealIds = m.MenuMealList.Select(mm => mm.MealId).Distinct().ToList();
-                m.MealList = mealList.Where(mm => listMealIds.Contains(mm.Id)).ToList();
-            });
+            //
+            InjectMealListIntoMenuList(matchedMenus);
 
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
@@ -407,6 +401,19 @@ namespace OPFC.Services.Implementations
             }
 
             return GetEventById(foundOrder.EventId);
+        }
+
+        private void InjectMealListIntoMenuList(List<Menu> menuList)
+        {
+            // prepare meal list to inject into matched menu
+            var mealList = _opfcUow.MealRepository.GetAllMeal();
+
+            // inject meal list into menu
+            menuList.ForEach(m =>
+            {
+                var listMealIds = m.MenuMealList.Select(mm => mm.MealId).Distinct().ToList();
+                m.MealList = mealList.Where(mm => listMealIds.Contains(mm.Id)).ToList();
+            });
         }
     }
 }
