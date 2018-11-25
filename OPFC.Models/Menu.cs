@@ -55,5 +55,20 @@ namespace OPFC.Models
 
         [NotMapped]
         public List<Category> CategoryList { get; set; }
+        
+        [NotMapped]
+        public List<EventType> EventTypeList { get; set; }
+        
+        [NotMapped]
+        public string BrandName { get; set; }
+
+        [NotMapped]
+        public string BrandPhone { get; set; }
+
+        [NotMapped]
+        public int BrandParticipantNumber { get; set; }
+
+        [NotMapped]
+        public string BrandEmail { get; set; }
     }
 }

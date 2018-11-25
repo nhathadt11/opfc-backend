@@ -191,7 +191,28 @@ namespace OPFC.Services.Implementations
 
         public Menu GetMenuById(long id)
         {
-            return _opfcUow.MenuRepository.GetMenuById(id);
+            var returnMenu = _opfcUow.MenuRepository.GetMenuById(id);
+
+            var mealList = _serviceUow.MealService.GetAllMealByMenuId(returnMenu.Id);
+            returnMenu.MealList = mealList;
+
+            var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(returnMenu.Id);
+            returnMenu.EventTypeList = eventTypeList;
+
+            var categoryList = _serviceUow.CategoryService.GetAllByMenuId(id);
+            returnMenu.CategoryList = categoryList;
+
+            var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
+            returnMenu.BrandName = brand.BrandName;
+
+            var brandSummary = _serviceUow.BrandSummaryService.GetBrandSummaryByBrandId(returnMenu.BrandId);
+            returnMenu.BrandSummary = brandSummary;
+
+            returnMenu.BrandPhone = brand.Phone;
+            returnMenu.BrandParticipantNumber = brand.ParticipantNumber;
+            returnMenu.BrandEmail = brand.Email;
+
+            return returnMenu;
         }
 
         public Menu UpdateMenu(Menu menu)
