@@ -25,6 +25,7 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false)
                         .Include(m => m.MenuEventTypeList)
+                        .Include(m => m.MenuMealList)
                         .ToList();
         }
 

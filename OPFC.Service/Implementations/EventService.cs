@@ -166,6 +166,8 @@ namespace OPFC.Services.Implementations
             // Get all existed Menu
             var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
 
+
+
             // List out menu id which matched event type id
             var listMenuIdMatchedEventType = _opfcUow.MenuEventTypeRepository.GetAll()
                                                                  .Where(x => x.EventTypeId == basedEvent.EventTypeId)
@@ -188,6 +190,15 @@ namespace OPFC.Services.Implementations
 
             //matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
             matchedMenus = matchedMenus.Where(m => m.ServingNumber >= botServing && m.ServingNumber <= topServing).ToList();
+
+            // prepare meal list to inject into matched menu
+            var mealList = _opfcUow.MealRepository.GetAllMeal();
+
+            // inject meal list into menu
+            matchedMenus.ForEach(m => {
+                var listMealIds = m.MenuMealList.Select(mm => mm.MealId).Distinct().ToList();
+                m.MealList = mealList.Where(mm => listMealIds.Contains(mm.Id)).ToList();
+            });
 
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
@@ -332,6 +343,13 @@ namespace OPFC.Services.Implementations
             });
 
             return finalResult;
+        }
+
+        public List<object> GetSuggestion(long eventId, long orderLineId)
+        {
+
+
+            return null;
         }
 
         private Dictionary<string, string> Result = new Dictionary<string, string>();

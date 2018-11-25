@@ -23,6 +23,8 @@ namespace OPFC.Services.Interfaces
 
         List<object> GetSuggestion(long eventId);
 
+        List<object> GetSuggestion(long eventId, long orderLineId);
+
         bool IsEventExist(long eventId);
 
         Event GetEventRelatedToOrderId(long orderId);
