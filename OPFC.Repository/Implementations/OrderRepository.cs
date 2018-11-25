@@ -31,6 +31,11 @@ namespace OPFC.Repositories.Implementations
             return DbSet.ToList();
         }
 
+        public Order GetByEventId(long eventId)
+        {
+            return DbSet.SingleOrDefault(o => o.EventId == eventId);
+        }
+
         public Order GetOrderById(long id)
         {
             return DbSet.SingleOrDefault(o => o.OrderId == id);
@@ -41,7 +46,5 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Update(order).Entity;
         }
-
-
     }
 }

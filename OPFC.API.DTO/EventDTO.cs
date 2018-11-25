@@ -48,5 +48,7 @@ namespace OPFC.API.DTO
         public long[] CategoryIds { get; set; }
         
         public string[] CategoryNames { get; set; }
+        
+        public long OrderId { get; set; }
     }
 }

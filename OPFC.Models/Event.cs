@@ -56,5 +56,8 @@ namespace OPFC.Models
 
         [NotMapped]
         public string[] CategoryNames { get; set; }
+        
+        [NotMapped]
+        public long? OrderId { get; set; }
     }
 }

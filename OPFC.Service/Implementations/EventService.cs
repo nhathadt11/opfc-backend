@@ -77,6 +77,7 @@ namespace OPFC.Services.Implementations
                 {
                     e.CityName = _opfcUow.CityRepository.GetById(e.CityId)?.Name;
                     e.DistrictName = _opfcUow.DistrictRepository.GetById(e.DistrictId)?.Name;
+                    e.OrderId = _opfcUow.OrderRepository.GetByEventId(e.Id)?.OrderId;
                     return e;
                 })
                 .ToList();
@@ -93,7 +94,7 @@ namespace OPFC.Services.Implementations
         {
             var result = new Event();
 
-            newEvent.Status = (int)EventStatus.OnGoing;
+            newEvent.Status = (int)EventStatus.Planning;
             newEvent.IsDeleted = false;
 
             using (var scope = new TransactionScope())
