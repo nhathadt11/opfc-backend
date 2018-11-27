@@ -7,5 +7,6 @@ namespace OPFC.Models
         Approved,
         Canceled,
         Completed,
+        Incompleted,
     }
 }

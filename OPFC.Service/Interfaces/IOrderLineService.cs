@@ -11,6 +11,7 @@ namespace OPFC.Services.Interfaces
         void Cancel(long orderLineId);
         void Approve(long orderLineId);
         void MarkAsCompleted(long orderLineId);
+        void MarkAsIncompleted(long orderLineId);
         bool Exists(long orderLineId);
     }
 }
