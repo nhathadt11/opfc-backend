@@ -272,16 +272,16 @@ namespace OPFC.API.Controllers
         }
 
         [HttpGet("/Event/GetSuggestion/{eventId}/{orderLineId}")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0)
+        public ActionResult<List<Menu>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0)
         {
             var takePage = page ?? 1;
             var takeSize = size ?? 10;
 
             try
             {
-                var combos = _serviceUow.EventService.GetSuggestion(eventId, orderLineId);
-                var total = combos.Count;
-                var result = combos
+                var menus = _serviceUow.EventService.GetSuggestion(eventId, orderLineId);
+                var total = menus.Count;
+                var result = menus
                     .Skip((takePage - 1) * takeSize)
                     .Take(takeSize)
                     .ToList();

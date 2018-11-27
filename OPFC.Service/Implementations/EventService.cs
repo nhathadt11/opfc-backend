@@ -227,7 +227,7 @@ namespace OPFC.Services.Implementations
                     result = result.Where(x => x.BrandId == orderLine.BrandId).ToList();
                     var total = result.Count;
 
-                    return new List<object> { new { result, total } };
+                    return new List<object> { result };
                 }
 
             }
