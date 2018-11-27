@@ -32,7 +32,7 @@ namespace OPFC.Services.Implementations
 
         public void DeleteEvent(long eventId, long userId)
         {
-            var aEvent = GetEventById(eventId);
+            var aEvent = _opfcUow.EventRepository.GetEventById(eventId);
 
             if (aEvent == null)
             {
@@ -40,7 +40,10 @@ namespace OPFC.Services.Implementations
             }
 
             aEvent.IsDeleted = true;
-            if (UpdateEvent(aEvent) == null)
+            var result = _opfcUow.EventRepository.UpdateEvent(aEvent);
+            _opfcUow.Commit();
+
+            if (result == null)
             {
                 throw new Exception("Event could not be deleted.");
             }
@@ -77,6 +80,7 @@ namespace OPFC.Services.Implementations
                 {
                     e.CityName = _opfcUow.CityRepository.GetById(e.CityId)?.Name;
                     e.DistrictName = _opfcUow.DistrictRepository.GetById(e.DistrictId)?.Name;
+                    e.OrderId = _opfcUow.OrderRepository.GetByEventId(e.Id)?.OrderId;
                     return e;
                 })
                 .ToList();
@@ -93,7 +97,7 @@ namespace OPFC.Services.Implementations
         {
             var result = new Event();
 
-            newEvent.Status = (int)EventStatus.OnGoing;
+            newEvent.Status = (int)EventStatus.Planning;
             newEvent.IsDeleted = false;
 
             using (var scope = new TransactionScope())

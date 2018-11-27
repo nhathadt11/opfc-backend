@@ -99,6 +99,11 @@ namespace OPFC.Services.Implementations
                         SendNotification(orderLine, userId, orderRequest.EventId, createdOrdered.OrderId);
                     });
 
+                    var planningEvent = _opfcUow.EventRepository.GetEventById(orderRequest.EventId);
+                    planningEvent.Status = (int)EventStatus.Planned;
+                    _opfcUow.EventRepository.UpdateEvent(planningEvent);
+                    _opfcUow.Commit();
+
                     scope.Complete();
 
                     return createdOrdered;

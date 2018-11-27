@@ -15,6 +15,6 @@ namespace OPFC.Repositories.Interfaces
 
         List<Order> GetAllOrder();
 
-
+        Order GetByEventId(long eventId);
     }
 }

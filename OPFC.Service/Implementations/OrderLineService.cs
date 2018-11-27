@@ -51,6 +51,16 @@ namespace OPFC.Services.Implementations
             orderPayload.Verb = "marked as completed";
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
         }
+        
+        public void MarkAsIncompleted(long orderLineId)
+        {
+            var orderLine = ChangeOrderLineStatus(orderLineId, OrderStatus.Incompleted);
+            _serviceUow.PaypalService.Refund(orderLineId);
+                
+            OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
+            orderPayload.Verb = "marked as incompleted";
+            FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
+        }
 
         public bool Exists(long orderLineId)
         {
