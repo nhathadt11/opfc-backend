@@ -25,6 +25,8 @@ namespace OPFC.Models
 
         public decimal Price { get; set; }
 
+        public string Photo { get; set; }
+
         [DefaultValue(0)]
         public int? TotalBookmark { get; set; }
 

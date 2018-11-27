@@ -76,6 +76,7 @@ namespace OPFC.Services.Implementations
         {
             using(var scope = new TransactionScope())
             {
+                var photo = string.Join(";", request.Photos);
                 var menu = new Menu
                 {
                     MenuName = request.MenuName,
@@ -84,7 +85,8 @@ namespace OPFC.Services.Implementations
                     ServingNumber = request.ServingNumber,
                     BrandId = brandId,
                     IsActive = true,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    Photo = photo
                 };
     
                 var createdMenu = _opfcUow.MenuRepository.CreateMenu(menu);
@@ -136,6 +138,7 @@ namespace OPFC.Services.Implementations
                 menuToUpdate.Description = request.Description;
                 menuToUpdate.Price = request.Price;
                 menuToUpdate.ServingNumber = request.ServingNumber;
+                menuToUpdate.Photo = string.Join(";", request.Photos);
                 
                 var updated = _opfcUow.MenuRepository.UpdateMenu(menuToUpdate);
                 
