@@ -22,5 +22,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Where(old => old.OrderLineId == orderLineId).ToList();
         }
+
+        public List<OrderLineDetail> GetAllByOrderLineIds(List<long> orderLineIds)
+        {
+            return DbSet.Where(old => orderLineIds.Contains(old.OrderLineId)).ToList();
+        }
     }
 }

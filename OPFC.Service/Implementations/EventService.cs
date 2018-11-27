@@ -156,7 +156,7 @@ namespace OPFC.Services.Implementations
             }
         }
 
-        public List<object> GetSuggestion(long eventId)
+        public List<object> GetSuggestion(long eventId, long orderLineId = 0)
         {
 
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
@@ -165,8 +165,6 @@ namespace OPFC.Services.Implementations
 
             // Get all existed Menu
             var existingMenus = _opfcUow.MenuRepository.GetAllMenuWithCollaborative();
-
-
 
             // List out menu id which matched event type id
             var listMenuIdMatchedEventType = _opfcUow.MenuEventTypeRepository.GetAll()
@@ -177,12 +175,62 @@ namespace OPFC.Services.Implementations
             // List out list menu which matched event type
             var matchedMenus = existingMenus.Where(m => listMenuIdMatchedEventType.Contains(m.Id)).ToList();
 
+
+
             // Get all service location by event district Id
             var listBrandIdMatchedDistrictId = _opfcUow.ServiceLocationRepository.GetServiceLocationByDistrictId(basedEvent.DistrictId)
                                                                         .Select(sl => sl.BrandId)
                                                                         .ToList();
 
-            matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+            // for Cancel
+            var orderLine = new OrderLine();
+
+            if (orderLineId > 0)
+            {
+                orderLine = _opfcUow.OrderLineRepository.GetOrderLineById(orderLineId);
+
+                if (orderLine != null)
+                {
+                    var orderLinesByOrderId = _opfcUow.OrderLineRepository.GetAllByOrderId(orderLine.OrderId);
+                    var orderedMenus = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineIds(orderLinesByOrderId.Select(x => x.Id).ToList()).ToList();
+
+                    var cancelledMenuIds = orderedMenus.Where(x => x.OrderLineId == orderLineId).Select(x => x.MenuId).ToList();
+                    var cancelledMenus = existingMenus.Where(m => cancelledMenuIds.Contains(m.Id)).ToList();
+
+                    var orderedMenuIds = orderedMenus.Select(x => x.MenuId).ToList();
+
+
+                    // remove cancelled menus 
+                    matchedMenus.RemoveAll(x => orderedMenuIds.Contains(x.Id));
+
+                    var cmCategoryIds = new List<long>();
+                    cancelledMenus.ForEach(cm =>
+                    {
+                        cmCategoryIds.AddRange(cm.MenuCategoryList.Select(x => x.CategoryId));
+                    });
+
+                    var result = new List<Menu>();
+                    // compare match category
+                    matchedMenus.ForEach(mm =>
+                    {
+                        var mmCategoryIds = mm.MenuCategoryList.Select(x => x.CategoryId).ToList();
+                        if (cmCategoryIds.Any(x => mmCategoryIds.Contains(x)))
+                        {
+                            result.Add(mm);
+                        }
+                    });
+
+                    result = result.Where(x => x.BrandId == orderLine.BrandId).ToList();
+                    var total = result.Count;
+
+                    return new List<object> { new { result, total } };
+                }
+
+            }
+            else
+            {
+                matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+            }
 
             var percent = basedEvent.ServingNumber * 0.2;
             var botServing = basedEvent.ServingNumber - percent;
@@ -340,13 +388,6 @@ namespace OPFC.Services.Implementations
             });
 
             return finalResult;
-        }
-
-        public List<object> GetSuggestion(long eventId, long orderLineId)
-        {
-
-
-            return null;
         }
 
         private Dictionary<string, string> Result = new Dictionary<string, string>();

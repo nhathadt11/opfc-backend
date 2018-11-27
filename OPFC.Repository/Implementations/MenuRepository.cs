@@ -35,6 +35,11 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Where(m => m.BrandId == id).ToList();
         }
 
+        public List<Menu> GetAllByBrandIds(List<long> brandIds)
+        {
+            return DbSet.Where(m => brandIds.Contains(m.BrandId)).ToList();
+        }
+
         public Menu GetMenuById(long MenuId)
         {
             return DbSet.SingleOrDefault(m => m.Id == MenuId && m.IsDeleted == false);

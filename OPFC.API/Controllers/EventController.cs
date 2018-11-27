@@ -248,15 +248,15 @@ namespace OPFC.API.Controllers
         //}
         #endregion
 
-        [HttpGet("/Event/GetSuggestion/{eventId}")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size)
+        [HttpGet("/Event/GetSuggestion/{eventId}/{orderLineId}")]
+        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0)
         {
             var takePage = page ?? 1;
             var takeSize = size ?? 10;
 
             try
             {
-                var combos = _serviceUow.EventService.GetSuggestion(eventId);
+                var combos = _serviceUow.EventService.GetSuggestion(eventId, orderLineId);
                 var total = combos.Count;
                 var result = combos
                     .Skip((takePage - 1) * takeSize)
