@@ -146,14 +146,14 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var foundEvent = _serviceUow.EventService.GetEventById(id);
-                if (foundEvent == null)
+                var eventExists = _serviceUow.EventService.IsEventExist(id);
+                if (!eventExists)
                 {
                     return NotFound(new { Message = "Event could not be found." });
                 }
 
-                var foundUser = _serviceUow.UserService.GetUserById(userId);
-                if (foundUser == null)
+                var userExists = _serviceUow.UserService.IsUserExist(userId);
+                if (!userExists)
                 {
                     return NotFound(new { Message = "User could not be found." });
                 }

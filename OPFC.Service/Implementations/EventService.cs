@@ -32,7 +32,7 @@ namespace OPFC.Services.Implementations
 
         public void DeleteEvent(long eventId, long userId)
         {
-            var aEvent = GetEventById(eventId);
+            var aEvent = _opfcUow.EventRepository.GetEventById(eventId);
 
             if (aEvent == null)
             {
@@ -40,7 +40,10 @@ namespace OPFC.Services.Implementations
             }
 
             aEvent.IsDeleted = true;
-            if (UpdateEvent(aEvent) == null)
+            var result = _opfcUow.EventRepository.UpdateEvent(aEvent);
+            _opfcUow.Commit();
+
+            if (result == null)
             {
                 throw new Exception("Event could not be deleted.");
             }
