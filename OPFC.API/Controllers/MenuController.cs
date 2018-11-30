@@ -62,7 +62,7 @@ namespace OPFC.API.Controllers
                 }
 
                 var returnMenu = Mapper.Map<MenuDTO>(found);
-                returnMenu.Photo = found.Photo.Split(";").ToArray();
+                returnMenu.Photo = found.Photo?.Split(";").ToArray();
                 return Ok(returnMenu);
             }
             catch (Exception e)
@@ -182,7 +182,7 @@ namespace OPFC.API.Controllers
 
                 returnMenuList.ForEach(x =>
                 {
-                    x.Photo = foundMenuList.SingleOrDefault(y => y.Id == x.Id).Photo.Split(";");
+                    x.Photo = foundMenuList.SingleOrDefault(y => y.Id == x.Id).Photo?.Split(";");
                 });
 
                 foreach (var menu in returnMenuList)
