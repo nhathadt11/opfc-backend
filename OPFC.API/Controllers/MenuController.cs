@@ -173,7 +173,7 @@ namespace OPFC.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("Brand/{brandId}")]
-        public ActionResult GetAllMenuByBrandId(long brandId)
+        public ActionResult GetAllMenuByBrandId(long brandId, int page = 1, int size = 12)
         {
             try
             {
@@ -199,8 +199,11 @@ namespace OPFC.API.Controllers
                     menu.CategoryIds = categoryList.Select(c => c.Id).ToList();
                     menu.CategoryNames = categoryList.Select(c => c.Name).ToList();
                 }
+                
+                var pagedMenuList = returnMenuList.Skip((page - 1) * size).Take(size);
+                var total = returnMenuList.Count;
 
-                return Ok(returnMenuList);
+                return Ok(new { menuList = pagedMenuList, total });
             }
             catch (Exception e)
             {

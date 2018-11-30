@@ -7,6 +7,7 @@ using OPFC.Models;
 using OPFC.Services.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace OPFC.API.Controllers
@@ -126,7 +127,7 @@ namespace OPFC.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("Brand/{brandId}")]
-        public IActionResult GetAllByBrandId(long brandId)
+        public IActionResult GetAllByBrandId(long brandId, int page = 1, int size = 9)
         {
             try
             {
@@ -137,7 +138,11 @@ namespace OPFC.API.Controllers
                 }
 
                 List<Meal> mealList = _serviceUow.MealService.GetAllByBrandId(brandId);
-                return Ok(Mapper.Map<List<MealDTO>>(mealList));
+                
+                var returnMealList = Mapper.Map<List<MealDTO>>(mealList);
+                var pagedMealList = returnMealList.Skip((page - 1) * size).Take(size);
+
+                return Ok(new { mealList = pagedMealList, total = returnMealList.Count });
             }
             catch (Exception e)
             {
