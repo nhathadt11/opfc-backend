@@ -249,21 +249,21 @@ namespace OPFC.API.Controllers
         #endregion
 
         [HttpGet("/Event/GetSuggestion/{eventId}")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size)
+        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size, string cacheKey = null )
         {
             var takePage = page ?? 1;
             var takeSize = size ?? 10;
 
             try
             {
-                var combos = _serviceUow.EventService.GetSuggestion(eventId);
-                var total = combos.Count;
-                var result = combos
+                var menuComboWithCacheKey = _serviceUow.EventService.GetSuggestion(eventId, 0, cacheKey);
+                var total = menuComboWithCacheKey.MenuComboList.Count;
+                var result = menuComboWithCacheKey.MenuComboList
                     .Skip((takePage - 1) * takeSize)
                     .Take(takeSize)
                     .ToList();
 
-                return Ok(new { total, result });
+                return Ok(new { total, result, cacheKey = menuComboWithCacheKey.CacheKey });
             }
             catch (Exception ex)
             {
@@ -272,21 +272,21 @@ namespace OPFC.API.Controllers
         }
 
         [HttpGet("/Event/GetSuggestion/{eventId}/{orderLineId}")]
-        public ActionResult<List<Menu>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0)
+        public ActionResult<List<Menu>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0, string cacheKey = null)
         {
             var takePage = page ?? 1;
             var takeSize = size ?? 10;
 
             try
             {
-                var menus = _serviceUow.EventService.GetSuggestion(eventId, orderLineId);
-                var total = menus.Count;
-                var result = menus
+                var menuComboWithCacheKey = _serviceUow.EventService.GetSuggestion(eventId, orderLineId, cacheKey);
+                var total = menuComboWithCacheKey.MenuComboList.Count;
+                var result = menuComboWithCacheKey.MenuComboList
                     .Skip((takePage - 1) * takeSize)
                     .Take(takeSize)
                     .ToList();
 
-                return Ok(new { total, result });
+                return Ok(new { total, result, cacheKey = menuComboWithCacheKey.CacheKey });
             }
             catch (Exception ex)
             {

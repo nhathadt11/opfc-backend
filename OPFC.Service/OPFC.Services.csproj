@@ -13,6 +13,7 @@
     <ProjectReference Include="..\OPFC.Recommendation\OPFC.Recommendation.csproj" />
     <ProjectReference Include="..\OPFC.Utility\OPFC.Utility.csproj" />
     <ProjectReference Include="..\OPFC.Constant\OPFC.Constants.csproj" />
+    <ProjectReference Include="..\RedisService\RedisService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

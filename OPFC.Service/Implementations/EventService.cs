@@ -1,6 +1,10 @@
 ﻿using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
+using RedisService;
+using StackExchange.Redis;
+using StackExchange.Redis.Extensions.Core;
+using StackExchange.Redis.Extensions.Newtonsoft;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,19 +153,19 @@ namespace OPFC.Services.Implementations
 
         public List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds)
         {
-            try
-            {
-
-                return _opfcUow.EventRepository.FindMatchedEvent(serviceLocation, servingNumber, price, eventTypeIds);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return _opfcUow.EventRepository.FindMatchedEvent(serviceLocation, servingNumber, price, eventTypeIds);
         }
 
-        public List<object> GetSuggestion(long eventId, long orderLineId = 0)
+        public MenuComboWithCacheKey GetSuggestion(long eventId, long orderLineId = 0, string cacheKey = null)
         {
+            if (!string.IsNullOrEmpty(cacheKey))
+            {
+                var menuCombo = RedisService.RedisService.INSTANCE.Get<List<MenuCombo>>(cacheKey);
+                if (menuCombo != null)
+                {
+                    return new MenuComboWithCacheKey { CacheKey = cacheKey, MenuComboList = menuCombo };
+                }
+            }
 
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
 
@@ -227,7 +231,11 @@ namespace OPFC.Services.Implementations
                     result = result.Where(x => x.BrandId == orderLine.BrandId).ToList();
                     var total = result.Count;
 
-                    return new List<object> { result };
+                    return new MenuComboWithCacheKey
+                    {
+                        CacheKey = null,
+                        MenuComboList = new List<MenuCombo> { new MenuCombo { Menus = result } }
+                    };
                 }
 
             }
@@ -357,7 +365,7 @@ namespace OPFC.Services.Implementations
 
             var sortComboWithWeight = comboWithBudget.OrderByDescending(x => x.Value).ToList();
 
-            var finalResult = new List<object>();
+            var finalResult = new List<MenuCombo>();
 
             sortComboWithWeight.ForEach(v =>
             {
@@ -388,10 +396,14 @@ namespace OPFC.Services.Implementations
 
                 ComboCategoryIds = ComboCategoryIds.Distinct().OrderBy(x => x).ToList();
 
-                finalResult.Add(new { Menus, ComboTotal, ComboCategoryIds });
+                finalResult.Add(new MenuCombo { Menus = Menus, ComboTotal = ComboTotal, ComboCategoryIds = ComboCategoryIds });
             });
 
-            return finalResult;
+            // Cache to redis if not exists
+            string newCacheKey = Guid.NewGuid().ToString();
+            CacheToRedis(newCacheKey, finalResult);
+
+            return new MenuComboWithCacheKey { CacheKey = newCacheKey, MenuComboList = finalResult };
         }
 
         private Dictionary<string, string> Result = new Dictionary<string, string>();
@@ -473,6 +485,16 @@ namespace OPFC.Services.Implementations
                 var listCategoryIds = m.MenuCategoryList.Select(mc => mc.CategoryId).Distinct().ToList();
                 m.CategoryList = categoryList.Where(c => listCategoryIds.Contains(c.Id)).ToList();
             });
+        }
+
+        void CacheToRedis(string key, List<MenuCombo> menuCombo)
+        {
+            RedisService.RedisService.INSTANCE.Set<List<MenuCombo>>(key, menuCombo);
+        }
+
+        List<MenuCombo> GetFromRedis(string key)
+        {
+            return RedisService.RedisService.INSTANCE.Get<List<MenuCombo>>(key);
         }
     }
 }
