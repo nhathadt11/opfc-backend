@@ -256,14 +256,14 @@ namespace OPFC.API.Controllers
 
             try
             {
-                var menuComboWithCacheKey = _serviceUow.EventService.GetSuggestion(eventId, 0, cacheKey);
-                var total = menuComboWithCacheKey.MenuComboList.Count;
-                var result = menuComboWithCacheKey.MenuComboList
+                var combo = _serviceUow.EventService.GetSuggestion(eventId);
+                var total = combo.Count;
+                var result = combo
                     .Skip((takePage - 1) * takeSize)
                     .Take(takeSize)
                     .ToList();
 
-                return Ok(new { total, result, cacheKey = menuComboWithCacheKey.CacheKey });
+                return Ok(new { total, result });
             }
             catch (Exception ex)
             {
@@ -279,14 +279,14 @@ namespace OPFC.API.Controllers
 
             try
             {
-                var menuComboWithCacheKey = _serviceUow.EventService.GetSuggestion(eventId, orderLineId, cacheKey);
-                var total = menuComboWithCacheKey.MenuComboList.Count;
-                var result = menuComboWithCacheKey.MenuComboList
+                var combo = _serviceUow.EventService.GetSuggestion(eventId, orderLineId);
+                var total = combo.Count;
+                var result = combo
                     .Skip((takePage - 1) * takeSize)
                     .Take(takeSize)
                     .ToList();
 
-                return Ok(new { total, result, cacheKey = menuComboWithCacheKey.CacheKey });
+                return Ok(new { total, result });
             }
             catch (Exception ex)
             {

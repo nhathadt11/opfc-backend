@@ -21,7 +21,7 @@ namespace OPFC.Services.Interfaces
 
         List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds);
 
-        MenuComboWithCacheKey GetSuggestion(long eventId, long orderLineId = 0, string cacheKey = null);
+        List<object> GetSuggestion(long eventId, long orderLineId = 0);
 
         bool IsEventExist(long eventId);
 
