@@ -250,6 +250,9 @@ namespace OPFC.Services.Implementations
             //
             InjectCategoryListIntoMenuList(matchedMenus);
 
+            //
+            InjectBrandName(matchedMenus);
+
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
             var ratingsGroup = _opfcUow.RatingRepository.GetAllRatingByMenuId(groupMenuIds)
@@ -482,6 +485,14 @@ namespace OPFC.Services.Implementations
             {
                 var listCategoryIds = m.MenuCategoryList.Select(mc => mc.CategoryId).Distinct().ToList();
                 m.CategoryList = categoryList.Where(c => listCategoryIds.Contains(c.Id)).ToList();
+            });
+        }
+        
+        private void InjectBrandName(List<Menu> menuList)
+        {
+            menuList.ForEach(m =>
+            {
+                m.BrandName = _opfcUow.BrandRepository.GetById(m.BrandId)?.BrandName;
             });
         }
 
