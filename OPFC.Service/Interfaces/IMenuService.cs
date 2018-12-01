@@ -16,5 +16,6 @@ namespace OPFC.Services.Interfaces
         Menu UpdateMenuByBrand(long brandId, long menuId, UpdateMenuRequest menu);
         bool Exists(long id);
         List<Menu> GetAllBookmarkedMenuByUserId(long userId);
+        List<long> GetAllBookmarkedMenuIdsByUserId(long userId);
     }
 }

@@ -227,15 +227,26 @@ namespace OPFC.Services.Implementations
 
         public List<Menu> GetAllBookmarkedMenuByUserId(long userId)
         {
-            var bookmarkedMenuIds = _serviceUow.BookMarkService
-                .GetAllByUserId(userId)
-                .Select(b => b.MenuId);
+            var bookmarkedMenuIds = GetAllBookmarkedMenuIdsByUserId(userId);
             var bookmarkedMenuList = _serviceUow.MenuService
                 .GetAllMenu()
                 .Where(m => bookmarkedMenuIds.Contains(m.Id))
+                .Select(m =>
+                {
+                    m.BrandName = _opfcUow.BrandRepository.GetById(m.BrandId)?.BrandName;
+                    return m;
+                })
                 .ToList();
 
             return bookmarkedMenuList;
+        }
+        
+        public List<long> GetAllBookmarkedMenuIdsByUserId(long userId)
+        {
+            return _serviceUow.BookMarkService
+                .GetAllByUserId(userId)
+                .Select(b => b.MenuId)
+                .ToList();
         }
     }
 }
