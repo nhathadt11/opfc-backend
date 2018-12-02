@@ -113,7 +113,7 @@ namespace OPFC.API.Controllers
 
                 var updated = _serviceUow.MenuService.UpdateMenu(Mapper.Map<Menu>(request));
                 var result = Mapper.Map<MenuDTO>(updated);
-                result.Photo = updated.Photo.Split(";").ToArray();
+                result.Photo = updated.Photo?.Split(";").ToArray();
 
                 return Ok(result);
             }
@@ -128,20 +128,22 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var foundBrand = _serviceUow.BrandService.GetBrandById(brandId);
-                if (foundBrand == null)
+                //var foundBrand = _serviceUow.BrandService.GetBrandById(brandId);
+                var isBrandExist = _serviceUow.BrandService.Exists(brandId);
+                if (!isBrandExist)
                 {
                     return NotFound("Brand could not be found.");
                 }
 
-                var foundMenu = _serviceUow.MenuService.GetMenuById(menuId);
-                if (foundMenu == null)
+                //var foundMenu = _serviceUow.MenuService.GetMenuById(menuId);
+                var isMenuExist = _serviceUow.MenuService.Exists(menuId);
+                if (!isMenuExist)
                 {
                     return NotFound("Menu could not be found.");
                 }
                 var updated = _serviceUow.MenuService.UpdateMenuByBrand(brandId, menuId, request);
                 var result = Mapper.Map<MenuDTO>(updated);
-                result.Photo = updated.Photo.Split(";");
+                result.Photo = updated.Photo?.Split(";");
 
                 return Ok(result);
             }
