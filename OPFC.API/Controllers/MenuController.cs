@@ -187,23 +187,30 @@ namespace OPFC.API.Controllers
 
                 foreach (var menu in returnMenuList)
                 {
+                    var menuIndex = returnMenuList.IndexOf(menu);
+                    var tempMenu = foundMenuList[menuIndex];
+
                     //var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
-                    if (menu.MealList.Any() && menu.MealList != null)
+                    if (tempMenu.MealList.Any() && tempMenu.MealList != null)
                     {
-                        menu.MealIds = menu.MealList.Select(m => m.Id).ToList();
-                        menu.MealNames = menu.MealList.Select(m => m.MealName).ToList();
+                        menu.MealIds = tempMenu.MealList.Select(m => m.Id).ToList();
+                        menu.MealNames = tempMenu.MealList.Select(m => m.MealName).ToList();
                     }
 
                     //var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
-                    if (menu.EventTypeList.Any() && menu.EventTypeList != null)
+                    if (tempMenu.MenuEventTypeList.Any() && tempMenu.MenuEventTypeList != null)
                     {
-                        menu.EventTypeIds = menu.EventTypeList.Select(e => e.Id).ToList();
-                        menu.EventTypeNames = menu.EventTypeList.Select(e => e.EventTypeName).ToList();
+                        menu.EventTypeIds = tempMenu.MenuEventTypeList.Select(e => e.EventType).Select(e => e.Id).ToList();
+                        menu.EventTypeNames = tempMenu.MenuEventTypeList.Select(e => e.EventType).Select(e => e.EventTypeName).ToList();
                     }
-                    
-                    var categoryList = _serviceUow.CategoryService.GetAllByMenuId(menu.Id);
-                    menu.CategoryIds = categoryList.Select(c => c.Id).ToList();
-                    menu.CategoryNames = categoryList.Select(c => c.Name).ToList();
+
+                    //var categoryList = _serviceUow.CategoryService.GetAllByMenuId(menu.Id);
+
+                    if (tempMenu.MenuCategoryList.Any() && tempMenu.MenuCategoryList != null)
+                    {
+                        menu.CategoryIds = tempMenu.MenuCategoryList.Select(c => c.Category).Select(c => c.Id).ToList();
+                        menu.CategoryNames = tempMenu.MenuCategoryList.Select(c => c.Category).Select(c => c.Name).ToList();
+                    }
                 }
 
                 var pagedMenuList = returnMenuList.Skip((page - 1) * size).Take(size);

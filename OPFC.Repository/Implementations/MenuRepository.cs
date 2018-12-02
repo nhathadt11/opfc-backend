@@ -36,6 +36,8 @@ namespace OPFC.Repositories.Implementations
                         .Include(m => m.MenuEventTypeList)
                         .Include("MenuEventTypeList.EventType")
                         .Include(m => m.MealList)
+                        .Include(m => m.MenuCategoryList)
+                        .Include("MenuCategoryList.Category")
                         .ToList();
         }
 
