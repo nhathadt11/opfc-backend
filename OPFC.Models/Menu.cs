@@ -46,7 +46,7 @@ namespace OPFC.Models
         [NotMapped]
         public BrandSummary BrandSummary { get; set; }
 
-        [NotMapped]
+        //[NotMapped]
         public List<Meal> MealList { get; set; }
 
 //        [ForeignKey("MenuId")]

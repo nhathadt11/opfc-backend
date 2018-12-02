@@ -187,19 +187,25 @@ namespace OPFC.API.Controllers
 
                 foreach (var menu in returnMenuList)
                 {
-                    var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
-                    menu.MealIds = mealList.Select(m => m.Id).ToList();
-                    menu.MealNames = mealList.Select(m => m.MealName).ToList();
+                    //var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
+                    if (menu.MealList.Any() && menu.MealList != null)
+                    {
+                        menu.MealIds = menu.MealList.Select(m => m.Id).ToList();
+                        menu.MealNames = menu.MealList.Select(m => m.MealName).ToList();
+                    }
 
-                    var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
-                    menu.EventTypeIds = eventTypeList.Select(e => e.Id).ToList();
-                    menu.EventTypeNames = eventTypeList.Select(e => e.EventTypeName).ToList();
-
+                    //var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
+                    if (menu.EventTypeList.Any() && menu.EventTypeList != null)
+                    {
+                        menu.EventTypeIds = menu.EventTypeList.Select(e => e.Id).ToList();
+                        menu.EventTypeNames = menu.EventTypeList.Select(e => e.EventTypeName).ToList();
+                    }
+                    
                     var categoryList = _serviceUow.CategoryService.GetAllByMenuId(menu.Id);
                     menu.CategoryIds = categoryList.Select(c => c.Id).ToList();
                     menu.CategoryNames = categoryList.Select(c => c.Name).ToList();
                 }
-                
+
                 var pagedMenuList = returnMenuList.Skip((page - 1) * size).Take(size);
                 var total = returnMenuList.Count;
 
@@ -230,7 +236,7 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
         [HttpGet("User/{userId}/Bookmark/MenuIds")]
         public ActionResult GetAllBookmarkedMenuIdsByUserId(long userId)
         {
