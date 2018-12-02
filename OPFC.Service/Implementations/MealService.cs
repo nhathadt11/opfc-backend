@@ -54,12 +54,21 @@ namespace OPFC.Services.Implementations
 
         public void DeleteMeal(Meal meal)
         {   
-            meal.IsDeleted = true;
-            if (UpdateMeal(meal) == null)
+            using(var scope = new TransactionScope())
             {
-                throw new Exception("Event could not be deleted.");
+                meal.IsDeleted = true;
+                if (UpdateMeal(meal) == null)
+                {
+                    throw new Exception("Event could not be deleted.");
+                }
+                _opfcUow.Commit();
+
+                var brandSummary = _opfcUow.BrandSummaryRepository.GetByBrandId(meal.BrandId);
+                brandSummary.MealCount -= 1;
+                _opfcUow.Commit();
+
+                scope.Complete();
             }
-            _opfcUow.Commit();
         }
 
         public List<Meal> GetAllByBrandId(long brandId)
