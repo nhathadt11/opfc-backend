@@ -8,5 +8,7 @@ namespace OPFC.Models
         public long MenuId { get; set; }
         [Key]
         public long EventTypeId { get; set; }
+
+        public EventType EventType { get; set; }
     }
 }

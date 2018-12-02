@@ -32,7 +32,10 @@ namespace OPFC.Repositories.Implementations
 
         public List<Menu> GetAllByBrandId(long id)
         {
-            return DbSet.Where(m => m.BrandId == id).ToList();
+            return DbSet.Where(m => m.BrandId == id)
+                        .Include(m => m.MenuEventTypeList)
+                        .Include("MenuEventTypeList.EventType")
+                        .ToList();
         }
 
         public List<Menu> GetAllByBrandIds(List<long> brandIds)
