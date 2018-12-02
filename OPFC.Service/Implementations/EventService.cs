@@ -146,6 +146,9 @@ namespace OPFC.Services.Implementations
                 _opfcUow.Commit();
 
                 scope.Complete();
+                
+                // Clear suggestion result cache for that event
+                RedisService.RedisService.INSTANCE.Remove(result.Id.ToString());
             }
 
             return GetEventById(result.Id);

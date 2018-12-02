@@ -41,5 +41,7 @@ namespace RedisService
         public void Set<T>(string key, T value) => _stackExchangeRedisCacheClient.Add(key, value, DateTimeOffset.Now.AddMinutes(5));
 
         public T Get<T>(string key) => _stackExchangeRedisCacheClient.Get<T>(key);
+
+        public bool Remove(string key) => _stackExchangeRedisCacheClient.Remove(key);
     }
 }
