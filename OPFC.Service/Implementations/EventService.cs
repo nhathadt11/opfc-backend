@@ -158,12 +158,6 @@ namespace OPFC.Services.Implementations
 
         public List<object> GetSuggestion(long eventId, long orderLineId = 0)
         {
-            var menuCombo = RedisService.RedisService.INSTANCE.Get<List<object>>(eventId.ToString());
-            if (menuCombo != null)
-            {
-                return menuCombo;
-            }
-
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
 
             if (basedEvent == null) throw new Exception("Event not found!");
@@ -401,9 +395,6 @@ namespace OPFC.Services.Implementations
                     });
             });
 
-            // Cache to redis if not exists
-            CacheToRedis(eventId.ToString(), finalResult);
-
             return finalResult;
         }
 
@@ -504,6 +495,30 @@ namespace OPFC.Services.Implementations
         List<object> GetFromRedis(string key)
         {
             return RedisService.RedisService.INSTANCE.Get<List<object>>(key);
+        }
+
+        public List<object> GetSuggestionWithCache(long eventId, long orderLineId = 0)
+        {
+            try
+            {
+                var cachedMenuCombo = RedisService.RedisService.INSTANCE.Get<List<object>>(eventId.ToString());
+                if (cachedMenuCombo != null)
+                {
+                    return cachedMenuCombo;
+                }
+    
+                var menuCombo = GetSuggestion(eventId, orderLineId);
+                
+                // Cache to redis if not exists
+                CacheToRedis(eventId.ToString(), menuCombo);
+                
+                return menuCombo;
+            }
+            catch (Exception ex)
+            {
+                // Fault tolerance in case of redis service initialization failure
+                return GetSuggestion(eventId, orderLineId);
+            }
         }
     }
 }

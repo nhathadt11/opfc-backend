@@ -249,14 +249,14 @@ namespace OPFC.API.Controllers
         #endregion
 
         [HttpGet("/Event/GetSuggestion/{eventId}")]
-        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size, string cacheKey = null )
+        public ActionResult<List<List<Menu>>> GetSuggestion(long eventId, int? page, int? size)
         {
             var takePage = page ?? 1;
             var takeSize = size ?? 10;
 
             try
             {
-                var combo = _serviceUow.EventService.GetSuggestion(eventId);
+                var combo = _serviceUow.EventService.GetSuggestionWithCache(eventId);
                 var total = combo.Count;
                 var result = combo
                     .Skip((takePage - 1) * takeSize)
@@ -272,14 +272,14 @@ namespace OPFC.API.Controllers
         }
 
         [HttpGet("/Event/GetSuggestion/{eventId}/{orderLineId}")]
-        public ActionResult<List<Menu>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0, string cacheKey = null)
+        public ActionResult<List<Menu>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0)
         {
             var takePage = page ?? 1;
             var takeSize = size ?? 10;
 
             try
             {
-                var combo = _serviceUow.EventService.GetSuggestion(eventId, orderLineId);
+                var combo = _serviceUow.EventService.GetSuggestionWithCache(eventId, orderLineId);
                 var total = combo.Count;
                 var result = combo
                     .Skip((takePage - 1) * takeSize)
