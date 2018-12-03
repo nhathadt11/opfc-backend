@@ -504,7 +504,7 @@ namespace OPFC.Services.Implementations
         {
             try
             {
-                var cachedMenuCombo = RedisService.RedisService.INSTANCE.Get<List<object>>(eventId.ToString());
+                var cachedMenuCombo = GetFromRedis(eventId.ToString());
                 if (cachedMenuCombo != null)
                 {
                     return cachedMenuCombo;
