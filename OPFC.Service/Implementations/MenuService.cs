@@ -98,8 +98,7 @@ namespace OPFC.Services.Implementations
                     .Select(m => new MenuMeal
                     {
                         MenuId = menu.Id,
-                        MealId = m.Id,
-                        IsDeleted = false
+                        MealId = m.Id
                     })
                     .ToList();
 
@@ -138,7 +137,7 @@ namespace OPFC.Services.Implementations
                 menuToUpdate.Description = request.Description;
                 menuToUpdate.Price = request.Price;
                 menuToUpdate.ServingNumber = request.ServingNumber;
-                menuToUpdate.Photo = request.Photos != null ? string.Join(";", request.Photos) : null;
+                menuToUpdate.Photo = (request.Photos != null && request.Photos.Count > 0) ? string.Join(";", request.Photos) : null;
 
                 var updated = _opfcUow.MenuRepository.UpdateMenu(menuToUpdate);
 
@@ -202,14 +201,9 @@ namespace OPFC.Services.Implementations
         {
             var returnMenu = _opfcUow.MenuRepository.GetMenuById(id);
 
-            var mealList = _serviceUow.MealService.GetAllMealByMenuId(returnMenu.Id);
-            returnMenu.MealList = mealList;
-
-            var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(returnMenu.Id);
-            returnMenu.EventTypeList = eventTypeList;
-
-            var categoryList = _serviceUow.CategoryService.GetAllByMenuId(id);
-            returnMenu.CategoryList = categoryList;
+            returnMenu.MealList = returnMenu.MenuMealList?.Select(mm => mm.Meal).ToList();
+            returnMenu.EventTypeList = returnMenu.MenuEventTypeList?.Select(met => met.EventType).ToList();
+            returnMenu.CategoryList = returnMenu.MenuCategoryList?.Select(mc => mc.Category).ToList();
 
             var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
 

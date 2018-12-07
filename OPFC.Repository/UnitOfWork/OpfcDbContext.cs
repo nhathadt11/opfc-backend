@@ -38,6 +38,9 @@ namespace OPFC.Repositories.UnitOfWork
         {
             modelBuilder.Entity<MenuTag>()
                 .HasKey(mt => new { mt.MenuId, mt.TagId });
+                
+            modelBuilder.Entity<MenuMeal>()
+                .HasKey(mt => new { mt.MenuId, mt.MealId });
 
             modelBuilder.Entity<MenuCategory>()
                 .HasKey(mt => new { mt.MenuId, mt.CategoryId });

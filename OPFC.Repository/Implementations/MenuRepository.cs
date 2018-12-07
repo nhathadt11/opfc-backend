@@ -49,7 +49,13 @@ namespace OPFC.Repositories.Implementations
 
         public Menu GetMenuById(long MenuId)
         {
-            return DbSet.SingleOrDefault(m => m.Id == MenuId && m.IsDeleted == false);
+            return DbSet.Include(m => m.MenuEventTypeList)
+                        .Include("MenuEventTypeList.EventType")
+                        .Include(m => m.MenuMealList)
+                        .Include("MenuMealList.Meal")
+                        .Include(m => m.MenuCategoryList)
+                        .Include("MenuCategoryList.Category")
+                        .SingleOrDefault(m => m.Id == MenuId && m.IsDeleted == false);
         }
 
         public Menu UpdateMenu(Menu menu)
