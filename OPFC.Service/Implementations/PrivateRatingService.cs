@@ -4,28 +4,54 @@ using System.Linq;
 using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
+using OPFC.Services.UnitOfWork;
 
 namespace OPFC.Services.Implementations
 {
     public class PrivateRatingService : IPrivateRatingService
     {
         private readonly IOpfcUow _opfcUow;
+        private readonly IServiceUow _serviceUow = ServiceStack.ServiceStackHost.Instance.TryResolve<IServiceUow>();
 
         public PrivateRatingService(IOpfcUow opfcUow)
         {
             _opfcUow = opfcUow;
         }
 
-        public PrivateRating CreatePrivateRating(PrivateRating privaterating)
+        public PrivateRating CreatePrivateRating(PrivateRating privateRating)
         {
-            var rated = GetPrivateRatingByOrderLineId(privaterating.OrderLineId);
+            var rated = GetPrivateRatingByOrderLineId(privateRating.OrderLineId);
             if (rated != null)
             {
                 throw new Exception("This order was already rated.");
             }
             
-            privaterating.RatingTime = DateTime.Now;
-            var created = _opfcUow.PrivateRatingRepository.CreatePrivateRating(privaterating);
+            privateRating.RatingTime = DateTime.Now;
+            var created = _opfcUow.PrivateRatingRepository.CreatePrivateRating(privateRating);
+            _opfcUow.Commit();
+
+            var orderLine = _opfcUow.OrderLineRepository.GetOrderLineById(privateRating.OrderLineId);
+            if (orderLine == null)
+            {
+                throw new Exception("Order line could not be found.");
+            }
+
+            var brandSummary = _opfcUow.BrandSummaryRepository.GetByBrandId(orderLine.BrandId);
+            brandSummary.AttitudeCount += 1;
+            brandSummary.DiffVateriesCount += 1;
+            brandSummary.FoodQualityCount += 1;
+            brandSummary.OnTimeCount += 1;
+            brandSummary.ReasonablePriceCount += 1;
+            brandSummary.SupportServiceCount += 1;
+        
+            brandSummary.TotalAttitude += privateRating.Attitude;
+            brandSummary.TotalDiffVateries += privateRating.DiffVateries;
+            brandSummary.TotalFoodQuality += privateRating.FoodQuality;
+            brandSummary.TotalOnTime += privateRating.OnTime;
+            brandSummary.TotalReasonablePrice += privateRating.ResonablePrice;
+            brandSummary.TotalSupportService += privateRating.SupportService;
+            
+            _serviceUow.BrandSummaryService.Update(brandSummary);
             _opfcUow.Commit();
 
             return created;

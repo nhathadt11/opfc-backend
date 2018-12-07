@@ -6,5 +6,6 @@ namespace OPFC.Services.Interfaces
     public interface IBrandSummaryService
     {
         BrandSummary GetBrandSummaryByBrandId(long brandId);
+        void Update(BrandSummary brandSummary);
     }
 }

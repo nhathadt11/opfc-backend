@@ -46,7 +46,12 @@ namespace OPFC.Services.Implementations
             var success = _serviceUow.PaypalService.Transfer("nhathadt11-facilitator@gmail.com", (double) orderLine.AmountEarned);
             
             if (!success) throw new Exception("Could not transfer money");
-                
+
+            // Increase order count
+            var brandSummary = _serviceUow.BrandSummaryService.GetBrandSummaryByBrandId(orderLine.BrandId);
+            brandSummary.OrderCount += 1;
+            _serviceUow.BrandSummaryService.Update(brandSummary);
+
             OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
             orderPayload.Verb = "marked as completed";
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
