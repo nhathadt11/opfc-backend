@@ -193,10 +193,10 @@ namespace OPFC.API.Controllers
                     var tempMenu = foundMenuList[menuIndex];
 
                     //var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
-                    if (tempMenu.MealList.Any() && tempMenu.MealList != null)
+                    if (tempMenu.MenuMealList.Any() && tempMenu.MenuMealList != null)
                     {
-                        menu.MealIds = tempMenu.MealList.Select(m => m.Id).ToList();
-                        menu.MealNames = tempMenu.MealList.Select(m => m.MealName).ToList();
+                        menu.MealIds = tempMenu.MenuMealList.Select(m => m.Meal.Id).ToList();
+                        menu.MealNames = tempMenu.MenuMealList.Select(m => m.Meal.MealName).ToList();
                     }
 
                     //var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);

@@ -35,7 +35,8 @@ namespace OPFC.Repositories.Implementations
             return DbSet.Where(m => m.BrandId == id)
                         .Include(m => m.MenuEventTypeList)
                         .Include("MenuEventTypeList.EventType")
-                        .Include(m => m.MealList)
+                        .Include(m => m.MenuMealList)
+                        .Include("MenuMealList.Meal")
                         .Include(m => m.MenuCategoryList)
                         .Include("MenuCategoryList.Category")
                         .ToList();

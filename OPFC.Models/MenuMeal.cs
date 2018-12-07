@@ -9,5 +9,6 @@ namespace OPFC.Models
         public long MenuId { get; set; }
         public long MealId { get; set; }
         public bool IsDeleted { get; set; }
+        public Meal Meal { get; set; }
     }
 }
