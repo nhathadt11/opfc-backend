@@ -310,6 +310,14 @@ namespace OPFC.Services.Implementations
                 .SingleOrDefault(m => m.Id == id)
                 ?.MenuName;
         }
+        
+        private string GetMenuPhotoById(long id)
+        {
+            return _opfcUow.MenuRepository
+                .GetAll()
+                .SingleOrDefault(m => m.Id == id)
+                ?.Photo;
+        }
 
         public EventPlannerOrder GetEventPlannerOrderById(long orderId)
         {
@@ -417,7 +425,7 @@ namespace OPFC.Services.Implementations
                 MenuName = GetMenuNameById(orderLineDetail.MenuId),
                 BrandId = orderLineDetail.BrandId,
                 BrandName = orderLineDetail.BrandName,
-                ImageUrl = null,
+                Photo = GetMenuPhotoById(orderLineDetail.MenuId),
                 MealList = mealList,
                 Note = orderLineDetail.Note,
                 StatusId = orderLineDetail.StatusId,
