@@ -50,7 +50,7 @@ namespace OPFC.API.Controllers
             }
             catch
 			{
-                return Redirect("http://google.com.vn");
+                return Redirect($"{AppSettings.FRONTEND_BASE_URL}/error");
 			}
         }
 
