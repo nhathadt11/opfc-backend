@@ -64,6 +64,8 @@ namespace OPFC.Models
         /// </summary>
         public string Ward { get; set; }
 
+        public string PayPalEmail { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

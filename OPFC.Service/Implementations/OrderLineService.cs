@@ -43,7 +43,8 @@ namespace OPFC.Services.Implementations
         public void MarkAsCompleted(long orderLineId)
         {
             var orderLine = ChangeOrderLineStatus(orderLineId, OrderStatus.Completed);
-            var success = _serviceUow.PaypalService.Transfer("nhathadt11-facilitator@gmail.com", (double) orderLine.AmountEarned);
+            var ofBrand = _serviceUow.BrandService.GetBrandById(orderLine.BrandId);
+            var success = _serviceUow.PaypalService.Transfer(ofBrand.PayPalEmail, (double) orderLine.AmountEarned);
             
             if (!success) throw new Exception("Could not transfer money");
 
