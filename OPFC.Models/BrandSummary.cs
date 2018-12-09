@@ -10,12 +10,12 @@ namespace OPFC.Models
         public int MenuCount { get; set; }
         public int MealCount { get; set; }
         public int OrderCount { get; set; }
-        public double SupportServiceCount { get; set; }
-        public double DiffVateriesCount { get; set; }
-        public double ReasonablePriceCount { get; set; }
-        public double OnTimeCount { get; set; }
-        public double FoodQualityCount { get; set; }
-        public double AttitudeCount { get; set; }
+        public int SupportServiceCount { get; set; }
+        public int DiffVateriesCount { get; set; }
+        public int ReasonablePriceCount { get; set; }
+        public int OnTimeCount { get; set; }
+        public int FoodQualityCount { get; set; }
+        public int AttitudeCount { get; set; }
         public double TotalSupportService { get; set; }
         public double TotalDiffVateries { get; set; }
         public double TotalReasonablePrice { get; set; }

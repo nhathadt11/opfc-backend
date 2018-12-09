@@ -133,7 +133,6 @@ namespace OPFC.Services.Implementations
             };
             
             sale.Refund(apiContext, refund);
-            _serviceUow.OrderLineService.Cancel(orderLineId);
         }
 
         public long SaveOrderAndExecutePayment(string paymentId, string payperID)

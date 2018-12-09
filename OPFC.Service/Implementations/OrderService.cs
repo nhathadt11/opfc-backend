@@ -90,7 +90,7 @@ namespace OPFC.Services.Implementations
                             MenuId = m.Id,
                             Quantity = 1,
                             Amount = m.Price,
-
+                            Note = GetNoteFromRequestMenu(orderRequest.RequestMenuList, m.Id)
                         }).ToList();
                         _opfcUow.OrderLineDetailRepository.CreateRange(orderLineDetails);
                         _opfcUow.Commit();
@@ -98,6 +98,11 @@ namespace OPFC.Services.Implementations
                         // notification
                         SendNotification(orderLine, userId, orderRequest.EventId, createdOrdered.OrderId);
                     });
+
+                    var planningEvent = _opfcUow.EventRepository.GetEventById(orderRequest.EventId);
+                    planningEvent.Status = (int)EventStatus.Planned;
+                    _opfcUow.EventRepository.UpdateEvent(planningEvent);
+                    _opfcUow.Commit();
 
                     scope.Complete();
 
@@ -109,6 +114,11 @@ namespace OPFC.Services.Implementations
                 // It will auto rollback if any exception, so wee do not need rollback manually here
                 throw ex;
             }
+        }
+        
+        private string GetNoteFromRequestMenu(List<RequestOrderItem> requestMenuList, long menuId)
+        {
+            return requestMenuList.SingleOrDefault(rm => rm.MenuId == menuId)?.Note;
         }
 
         public bool DeleteOrder(Order order)
@@ -300,6 +310,14 @@ namespace OPFC.Services.Implementations
                 .SingleOrDefault(m => m.Id == id)
                 ?.MenuName;
         }
+        
+        private string GetMenuPhotoById(long id)
+        {
+            return _opfcUow.MenuRepository
+                .GetAll()
+                .SingleOrDefault(m => m.Id == id)
+                ?.Photo;
+        }
 
         public EventPlannerOrder GetEventPlannerOrderById(long orderId)
         {
@@ -407,7 +425,7 @@ namespace OPFC.Services.Implementations
                 MenuName = GetMenuNameById(orderLineDetail.MenuId),
                 BrandId = orderLineDetail.BrandId,
                 BrandName = orderLineDetail.BrandName,
-                ImageUrl = null,
+                Photo = GetMenuPhotoById(orderLineDetail.MenuId),
                 MealList = mealList,
                 Note = orderLineDetail.Note,
                 StatusId = orderLineDetail.StatusId,

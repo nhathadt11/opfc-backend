@@ -17,5 +17,11 @@ namespace OPFC.Services.Implementations
         {
             return _opfcUow.BrandSummaryRepository.GetByBrandId(brandId);
         }
+
+        public void Update(BrandSummary brandSummary)
+        {
+            _opfcUow.BrandSummaryRepository.Update(brandSummary);
+            _opfcUow.Commit();
+        }
     }
 }

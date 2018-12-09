@@ -146,14 +146,14 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var foundEvent = _serviceUow.EventService.GetEventById(id);
-                if (foundEvent == null)
+                var eventExists = _serviceUow.EventService.IsEventExist(id);
+                if (!eventExists)
                 {
                     return NotFound(new { Message = "Event could not be found." });
                 }
 
-                var foundUser = _serviceUow.UserService.GetUserById(userId);
-                if (foundUser == null)
+                var userExists = _serviceUow.UserService.IsUserExist(userId);
+                if (!userExists)
                 {
                     return NotFound(new { Message = "User could not be found." });
                 }
@@ -256,9 +256,32 @@ namespace OPFC.API.Controllers
 
             try
             {
-                var combos = _serviceUow.EventService.GetSuggestion(eventId);
-                var total = combos.Count;
-                var result = combos
+                var combo = _serviceUow.EventService.GetSuggestionWithCache(eventId);
+                var total = combo.Count;
+                var result = combo
+                    .Skip((takePage - 1) * takeSize)
+                    .Take(takeSize)
+                    .ToList();
+
+                return Ok(new { total, result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("/Event/GetSuggestion/{eventId}/{orderLineId}")]
+        public ActionResult<List<Menu>> GetSuggestion(long eventId, int? page, int? size, long orderLineId = 0)
+        {
+            var takePage = page ?? 1;
+            var takeSize = size ?? 10;
+
+            try
+            {
+                var combo = _serviceUow.EventService.GetSuggestionWithCache(eventId, orderLineId);
+                var total = combo.Count;
+                var result = combo
                     .Skip((takePage - 1) * takeSize)
                     .Take(takeSize)
                     .ToList();

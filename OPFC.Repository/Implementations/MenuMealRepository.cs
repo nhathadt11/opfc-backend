@@ -14,12 +14,12 @@ namespace OPFC.Repositories.Implementations
 
         public List<MenuMeal> GetAllMenuMeals()
         {
-            return DbSet.Where(m => m.IsDeleted).ToList();
+            return DbSet.ToList();
         }
 
         public List<MenuMeal> GetByMenuId(long id)
         {
-            return DbSet.Where(m => m.MenuId == id && m.IsDeleted == false).ToList();
+            return DbSet.Where(m => m.MenuId == id).ToList();
         }
 
         public void CreateRange(List<MenuMeal> menuMealList)

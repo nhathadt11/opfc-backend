@@ -11,7 +11,7 @@ namespace OPFC.Models
         public string MenuName { get; set; }
         public long BrandId { get; set; }
         public string BrandName { get; set; }
-        public string ImageUrl { get; set; }
+        public string Photo { get; set; }
         public string Note { get; set; }
         public decimal Price { get; set; }
         public decimal OtherFee { get; set; }

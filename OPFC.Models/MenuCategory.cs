@@ -14,6 +14,8 @@ namespace OPFC.Models
         [Key, Column(Order = 1)]
         public long CategoryId { get; set; }
 
+        public Category Category { get; set; }
+
         public MenuCategory()
         {
         }

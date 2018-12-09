@@ -25,17 +25,37 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Where(m => m.IsActive == true && m.IsDeleted == false)
                         .Include(m => m.MenuEventTypeList)
+                        .Include(m => m.MenuMealList)
+                        .Include(m => m.MenuCategoryList)
                         .ToList();
         }
 
         public List<Menu> GetAllByBrandId(long id)
         {
-            return DbSet.Where(m => m.BrandId == id).ToList();
+            return DbSet.Where(m => m.BrandId == id)
+                        .Include(m => m.MenuEventTypeList)
+                        .Include("MenuEventTypeList.EventType")
+                        .Include(m => m.MenuMealList)
+                        .Include("MenuMealList.Meal")
+                        .Include(m => m.MenuCategoryList)
+                        .Include("MenuCategoryList.Category")
+                        .ToList();
+        }
+
+        public List<Menu> GetAllByBrandIds(List<long> brandIds)
+        {
+            return DbSet.Where(m => brandIds.Contains(m.BrandId)).ToList();
         }
 
         public Menu GetMenuById(long MenuId)
         {
-            return DbSet.SingleOrDefault(m => m.Id == MenuId && m.IsDeleted == false);
+            return DbSet.Include(m => m.MenuEventTypeList)
+                        .Include("MenuEventTypeList.EventType")
+                        .Include(m => m.MenuMealList)
+                        .Include("MenuMealList.Meal")
+                        .Include(m => m.MenuCategoryList)
+                        .Include("MenuCategoryList.Category")
+                        .SingleOrDefault(m => m.Id == MenuId && m.IsDeleted == false);
         }
 
         public Menu UpdateMenu(Menu menu)

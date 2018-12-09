@@ -1,6 +1,10 @@
 ﻿using OPFC.Models;
 using OPFC.Repositories.UnitOfWork;
 using OPFC.Services.Interfaces;
+using RedisService;
+using StackExchange.Redis;
+using StackExchange.Redis.Extensions.Core;
+using StackExchange.Redis.Extensions.Newtonsoft;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +36,7 @@ namespace OPFC.Services.Implementations
 
         public void DeleteEvent(long eventId, long userId)
         {
-            var aEvent = GetEventById(eventId);
+            var aEvent = _opfcUow.EventRepository.GetEventById(eventId);
 
             if (aEvent == null)
             {
@@ -40,7 +44,10 @@ namespace OPFC.Services.Implementations
             }
 
             aEvent.IsDeleted = true;
-            if (UpdateEvent(aEvent) == null)
+            var result = _opfcUow.EventRepository.UpdateEvent(aEvent);
+            _opfcUow.Commit();
+
+            if (result == null)
             {
                 throw new Exception("Event could not be deleted.");
             }
@@ -77,6 +84,7 @@ namespace OPFC.Services.Implementations
                 {
                     e.CityName = _opfcUow.CityRepository.GetById(e.CityId)?.Name;
                     e.DistrictName = _opfcUow.DistrictRepository.GetById(e.DistrictId)?.Name;
+                    e.OrderId = _opfcUow.OrderRepository.GetByEventId(e.Id)?.OrderId;
                     return e;
                 })
                 .ToList();
@@ -93,7 +101,7 @@ namespace OPFC.Services.Implementations
         {
             var result = new Event();
 
-            newEvent.Status = (int)EventStatus.OnGoing;
+            newEvent.Status = (int)EventStatus.Planning;
             newEvent.IsDeleted = false;
 
             using (var scope = new TransactionScope())
@@ -138,6 +146,9 @@ namespace OPFC.Services.Implementations
                 _opfcUow.Commit();
 
                 scope.Complete();
+                
+                // Clear suggestion result cache for that event
+                RedisService.RedisService.INSTANCE.Remove(result.Id.ToString());
             }
 
             return GetEventById(result.Id);
@@ -145,20 +156,11 @@ namespace OPFC.Services.Implementations
 
         public List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds)
         {
-            try
-            {
-
-                return _opfcUow.EventRepository.FindMatchedEvent(serviceLocation, servingNumber, price, eventTypeIds);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return _opfcUow.EventRepository.FindMatchedEvent(serviceLocation, servingNumber, price, eventTypeIds);
         }
 
-        public List<object> GetSuggestion(long eventId)
+        public List<object> GetSuggestion(long eventId, long orderLineId = 0)
         {
-
             var basedEvent = _opfcUow.EventRepository.GetEventById(eventId);
 
             if (basedEvent == null) throw new Exception("Event not found!");
@@ -175,12 +177,62 @@ namespace OPFC.Services.Implementations
             // List out list menu which matched event type
             var matchedMenus = existingMenus.Where(m => listMenuIdMatchedEventType.Contains(m.Id)).ToList();
 
+
+
             // Get all service location by event district Id
             var listBrandIdMatchedDistrictId = _opfcUow.ServiceLocationRepository.GetServiceLocationByDistrictId(basedEvent.DistrictId)
                                                                         .Select(sl => sl.BrandId)
                                                                         .ToList();
 
-            matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+            // for Cancel
+            var orderLine = new OrderLine();
+
+            if (orderLineId > 0)
+            {
+                orderLine = _opfcUow.OrderLineRepository.GetOrderLineById(orderLineId);
+
+                if (orderLine != null)
+                {
+                    var orderLinesByOrderId = _opfcUow.OrderLineRepository.GetAllByOrderId(orderLine.OrderId);
+                    var orderedMenus = _opfcUow.OrderLineDetailRepository.GetAllByOrderLineIds(orderLinesByOrderId.Select(x => x.Id).ToList()).ToList();
+
+                    var cancelledMenuIds = orderedMenus.Where(x => x.OrderLineId == orderLineId).Select(x => x.MenuId).ToList();
+                    var cancelledMenus = existingMenus.Where(m => cancelledMenuIds.Contains(m.Id)).ToList();
+
+                    var orderedMenuIds = orderedMenus.Select(x => x.MenuId).ToList();
+
+
+                    // remove cancelled menus 
+                    matchedMenus.RemoveAll(x => orderedMenuIds.Contains(x.Id));
+
+                    var cmCategoryIds = new List<long>();
+                    cancelledMenus.ForEach(cm =>
+                    {
+                        cmCategoryIds.AddRange(cm.MenuCategoryList.Select(x => x.CategoryId));
+                    });
+
+                    var result = new List<Menu>();
+                    // compare match category
+                    matchedMenus.ForEach(mm =>
+                    {
+                        var mmCategoryIds = mm.MenuCategoryList.Select(x => x.CategoryId).ToList();
+                        if (cmCategoryIds.Any(x => mmCategoryIds.Contains(x)))
+                        {
+                            result.Add(mm);
+                        }
+                    });
+
+                    result = result.Where(x => x.BrandId == orderLine.BrandId).ToList();
+                    var total = result.Count;
+
+                    return new List<object> { result };
+                }
+
+            }
+            else
+            {
+                matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
+            }
 
             var percent = basedEvent.ServingNumber * 0.2;
             var botServing = basedEvent.ServingNumber - percent;
@@ -188,6 +240,15 @@ namespace OPFC.Services.Implementations
 
             //matchedMenus = matchedMenus.Where(m => m.ServingNumber >= basedEvent.ServingNumber).ToList();
             matchedMenus = matchedMenus.Where(m => m.ServingNumber >= botServing && m.ServingNumber <= topServing).ToList();
+
+            //
+            InjectMealListIntoMenuList(matchedMenus);
+
+            //
+            InjectCategoryListIntoMenuList(matchedMenus);
+
+            //
+            InjectBrandName(matchedMenus);
 
             var groupMenuIds = matchedMenus.Select(m => m.Id).Distinct().ToList();
 
@@ -328,7 +389,13 @@ namespace OPFC.Services.Implementations
 
                 ComboCategoryIds = ComboCategoryIds.Distinct().OrderBy(x => x).ToList();
 
-                finalResult.Add(new { Menus, ComboTotal, ComboCategoryIds });
+                finalResult.Add(new MenuCombo
+                    {
+                        Guid = Guid.NewGuid().ToString(),
+                        Menus = Menus,
+                        ComboTotal = ComboTotal,
+                        ComboCategoryIds = ComboCategoryIds
+                    });
             });
 
             return finalResult;
@@ -389,6 +456,72 @@ namespace OPFC.Services.Implementations
             }
 
             return GetEventById(foundOrder.EventId);
+        }
+
+        private void InjectMealListIntoMenuList(List<Menu> menuList)
+        {
+            // prepare meal list to inject into matched menu
+            var mealList = _opfcUow.MealRepository.GetAllMeal();
+
+            // inject meal list into menu
+            menuList.ForEach(m =>
+            {
+                var listMealIds = m.MenuMealList.Select(mm => mm.MealId).Distinct().ToList();
+                m.MealList = mealList.Where(mm => listMealIds.Contains(mm.Id)).ToList();
+            });
+        }
+
+        private void InjectCategoryListIntoMenuList(List<Menu> menuList)
+        {
+            var categoryList = _opfcUow.CategoryRepository.GetAll();
+
+            menuList.ForEach(m =>
+            {
+                var listCategoryIds = m.MenuCategoryList.Select(mc => mc.CategoryId).Distinct().ToList();
+                m.CategoryList = categoryList.Where(c => listCategoryIds.Contains(c.Id)).ToList();
+            });
+        }
+        
+        private void InjectBrandName(List<Menu> menuList)
+        {
+            menuList.ForEach(m =>
+            {
+                m.BrandName = _opfcUow.BrandRepository.GetById(m.BrandId)?.BrandName;
+            });
+        }
+
+        void CacheToRedis(string key, List<object> menuCombo)
+        {
+            RedisService.RedisService.INSTANCE.Set<List<object>>(key, menuCombo);
+        }
+
+        List<object> GetFromRedis(string key)
+        {
+            return RedisService.RedisService.INSTANCE.Get<List<object>>(key);
+        }
+
+        public List<object> GetSuggestionWithCache(long eventId, long orderLineId = 0)
+        {
+            try
+            {
+                var cachedMenuCombo = GetFromRedis(eventId.ToString());
+                if (cachedMenuCombo != null)
+                {
+                    return cachedMenuCombo;
+                }
+    
+                var menuCombo = GetSuggestion(eventId, orderLineId);
+                
+                // Cache to redis if not exists
+                CacheToRedis(eventId.ToString(), menuCombo);
+                
+                return menuCombo;
+            }
+            catch (Exception ex)
+            {
+                // Fault tolerance in case of redis service initialization failure
+                return GetSuggestion(eventId, orderLineId);
+            }
         }
     }
 }

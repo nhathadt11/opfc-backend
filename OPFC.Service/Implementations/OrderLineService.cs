@@ -43,12 +43,28 @@ namespace OPFC.Services.Implementations
         public void MarkAsCompleted(long orderLineId)
         {
             var orderLine = ChangeOrderLineStatus(orderLineId, OrderStatus.Completed);
-            var success = _serviceUow.PaypalService.Transfer("nhathadt11-facilitator@gmail.com", (double) orderLine.AmountEarned);
+            var ofBrand = _serviceUow.BrandService.GetBrandById(orderLine.BrandId);
+            var success = _serviceUow.PaypalService.Transfer(ofBrand.PayPalEmail, (double) orderLine.AmountEarned);
             
             if (!success) throw new Exception("Could not transfer money");
-                
+
+            // Increase order count
+            var brandSummary = _serviceUow.BrandSummaryService.GetBrandSummaryByBrandId(orderLine.BrandId);
+            brandSummary.OrderCount += 1;
+            _serviceUow.BrandSummaryService.Update(brandSummary);
+
             OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
             orderPayload.Verb = "marked as completed";
+            FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
+        }
+        
+        public void MarkAsIncompleted(long orderLineId)
+        {
+            var orderLine = ChangeOrderLineStatus(orderLineId, OrderStatus.Incompleted);
+            _serviceUow.PaypalService.Refund(orderLineId);
+                
+            OrderPayload orderPayload = _serviceUow.OrderService.GetEventPlannerOrderPayloadByOrderLineId(orderLineId);
+            orderPayload.Verb = "marked as incompleted";
             FirebaseService.FirebaseService.Instance.SendNotification(orderPayload);
         }
 

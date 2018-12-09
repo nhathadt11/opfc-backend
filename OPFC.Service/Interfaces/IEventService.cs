@@ -21,7 +21,9 @@ namespace OPFC.Services.Interfaces
 
         List<Event> FindMatchedEvent(long serviceLocation, int servingNumber, decimal price, long[] eventTypeIds);
 
-        List<object> GetSuggestion(long eventId);
+        List<object> GetSuggestion(long eventId, long orderLineId = 0);
+        
+        List<object> GetSuggestionWithCache(long eventId, long orderLineId = 0);
 
         bool IsEventExist(long eventId);
 

@@ -25,6 +25,8 @@ namespace OPFC.Models
 
         public decimal Price { get; set; }
 
+        public string Photo { get; set; }
+
         [DefaultValue(0)]
         public int? TotalBookmark { get; set; }
 
@@ -38,6 +40,8 @@ namespace OPFC.Models
         public List<MenuMeal> MenuMealList { get; set; }
 
         public List<MenuEventType> MenuEventTypeList { get; set; }
+
+        public List<MenuCategory> MenuCategoryList { get; set; }
         
         [NotMapped]
         public BrandSummary BrandSummary { get; set; }
@@ -55,5 +59,20 @@ namespace OPFC.Models
 
         [NotMapped]
         public List<Category> CategoryList { get; set; }
+        
+        [NotMapped]
+        public List<EventType> EventTypeList { get; set; }
+
+        [NotMapped]
+        public string BrandName { get; set; }
+
+        [NotMapped]
+        public string BrandPhone { get; set; }
+
+        [NotMapped]
+        public int BrandParticipantNumber { get; set; }
+
+        [NotMapped]
+        public string BrandEmail { get; set; }
     }
 }

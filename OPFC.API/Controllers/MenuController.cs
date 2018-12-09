@@ -33,7 +33,7 @@ namespace OPFC.API.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         [AllowAnonymous]
         [HttpGet("Limit")]
         public IActionResult GetLimit()
@@ -62,26 +62,7 @@ namespace OPFC.API.Controllers
                 }
 
                 var returnMenu = Mapper.Map<MenuDTO>(found);
-
-                var mealList = _serviceUow.MealService.GetAllMealByMenuId(returnMenu.Id);
-                returnMenu.MealList = mealList;
-
-                var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(returnMenu.Id);
-                returnMenu.EventTypeList = eventTypeList;
-
-                var categoryList = _serviceUow.CategoryService.GetAllByMenuId(id);
-                returnMenu.CategoryList = categoryList;
-
-                var brand = _serviceUow.BrandService.GetBrandById(returnMenu.BrandId);
-                returnMenu.BrandName = brand.BrandName;
-
-                var brandSummary = _serviceUow.BrandSummaryService.GetBrandSummaryByBrandId(returnMenu.BrandId);
-                returnMenu.BrandSummary = brandSummary;
-
-                returnMenu.BrandPhone = brand.Phone;
-                returnMenu.BrandParticipantNumber = brand.ParticipantNumber;
-                returnMenu.BrandEmail = brand.Email;
-
+                returnMenu.Photo = found.Photo?.Split(";").ToArray();
                 return Ok(returnMenu);
             }
             catch (Exception e)
@@ -130,8 +111,11 @@ namespace OPFC.API.Controllers
                     return NotFound("Menu could not be found.");
                 }
 
-                var updated = Mapper.Map<Menu>(request);
-                return Ok(Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenu(updated)));
+                var updated = _serviceUow.MenuService.UpdateMenu(Mapper.Map<Menu>(request));
+                var result = Mapper.Map<MenuDTO>(updated);
+                result.Photo = updated.Photo?.Split(";").ToArray();
+
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -144,19 +128,24 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var foundBrand = _serviceUow.BrandService.GetBrandById(brandId);
-                if (foundBrand == null)
+                //var foundBrand = _serviceUow.BrandService.GetBrandById(brandId);
+                var isBrandExist = _serviceUow.BrandService.Exists(brandId);
+                if (!isBrandExist)
                 {
                     return NotFound("Brand could not be found.");
                 }
 
-                var foundMenu = _serviceUow.MenuService.GetMenuById(menuId);
-                if (foundMenu == null)
+                //var foundMenu = _serviceUow.MenuService.GetMenuById(menuId);
+                var isMenuExist = _serviceUow.MenuService.Exists(menuId);
+                if (!isMenuExist)
                 {
                     return NotFound("Menu could not be found.");
                 }
+                var updated = _serviceUow.MenuService.UpdateMenuByBrand(brandId, menuId, request);
+                var result = Mapper.Map<MenuDTO>(updated);
+                result.Photo = updated.Photo?.Split(";");
 
-                return Ok(Mapper.Map<MenuDTO>(_serviceUow.MenuService.UpdateMenuByBrand(brandId, menuId, request)));
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -169,13 +158,13 @@ namespace OPFC.API.Controllers
         {
             try
             {
-                var found = _serviceUow.MenuService.GetMenuById(id);
-                if (found == null)
+                var isExist = _serviceUow.MenuService.Exists(id);
+                if (!isExist)
                 {
                     return NotFound("Menu could not be found.");
                 }
 
-               _serviceUow.MenuService.DeleteMenuById(id);
+                _serviceUow.MenuService.DeleteMenuById(id);
                 return NoContent();
             }
             catch (Exception e)
@@ -186,35 +175,57 @@ namespace OPFC.API.Controllers
 
         [AllowAnonymous]
         [HttpGet("Brand/{brandId}")]
-        public ActionResult GetAllMenuByBrandId(long brandId)
+        public ActionResult GetAllMenuByBrandId(long brandId, int page = 1, int size = 12)
         {
             try
             {
                 var foundMenuList = _serviceUow.MenuService.GetAllMenuByBrandId(brandId);
                 var returnMenuList = Mapper.Map<List<MenuDTO>>(foundMenuList);
+
+                returnMenuList.ForEach(x =>
+                {
+                    x.Photo = foundMenuList.SingleOrDefault(y => y.Id == x.Id).Photo?.Split(";");
+                });
+
                 foreach (var menu in returnMenuList)
                 {
-                    var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
-                    menu.MealIds = mealList.Select(m => m.Id).ToList();
-                    menu.MealNames = mealList.Select(m => m.MealName).ToList();
+                    var menuIndex = returnMenuList.IndexOf(menu);
+                    var tempMenu = foundMenuList[menuIndex];
 
-                    var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
-                    menu.EventTypeIds = eventTypeList.Select(e => e.Id).ToList();
-                    menu.EventTypeNames = eventTypeList.Select(e => e.EventTypeName).ToList();
+                    //var mealList = _serviceUow.MealService.GetAllMealByMenuId(menu.Id);
+                    if (tempMenu.MenuMealList.Any() && tempMenu.MenuMealList != null)
+                    {
+                        menu.MealIds = tempMenu.MenuMealList.Select(m => m.Meal.Id).ToList();
+                        menu.MealNames = tempMenu.MenuMealList.Select(m => m.Meal.MealName).ToList();
+                    }
 
-                    var categoryList = _serviceUow.CategoryService.GetAllByMenuId(menu.Id);
-                    menu.CategoryIds = categoryList.Select(c => c.Id).ToList();
-                    menu.CategoryNames = categoryList.Select(c => c.Name).ToList();
+                    //var eventTypeList = _serviceUow.EventTypeService.GetAllEventTypeByMenuId(menu.Id);
+                    if (tempMenu.MenuEventTypeList.Any() && tempMenu.MenuEventTypeList != null)
+                    {
+                        menu.EventTypeIds = tempMenu.MenuEventTypeList.Select(e => e.EventType).Select(e => e.Id).ToList();
+                        menu.EventTypeNames = tempMenu.MenuEventTypeList.Select(e => e.EventType).Select(e => e.EventTypeName).ToList();
+                    }
+
+                    //var categoryList = _serviceUow.CategoryService.GetAllByMenuId(menu.Id);
+
+                    if (tempMenu.MenuCategoryList.Any() && tempMenu.MenuCategoryList != null)
+                    {
+                        menu.CategoryIds = tempMenu.MenuCategoryList.Select(c => c.Category).Select(c => c.Id).ToList();
+                        menu.CategoryNames = tempMenu.MenuCategoryList.Select(c => c.Category).Select(c => c.Name).ToList();
+                    }
                 }
-                
-                return Ok(returnMenuList);
+
+                var pagedMenuList = returnMenuList.Skip((page - 1) * size).Take(size);
+                var total = returnMenuList.Count;
+
+                return Ok(new { menuList = pagedMenuList, total });
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpGet("User/{userId}/Bookmark")]
         public ActionResult GetAllByUserId(long userId)
         {
@@ -223,10 +234,30 @@ namespace OPFC.API.Controllers
                 var userExists = _serviceUow.UserService.IsUserExist(userId);
                 if (!userExists)
                 {
-                    return BadRequest("User does not exist.");
+                    return NotFound("User does not exist.");
                 }
 
                 var result = _serviceUow.MenuService.GetAllBookmarkedMenuByUserId(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("User/{userId}/Bookmark/MenuIds")]
+        public ActionResult GetAllBookmarkedMenuIdsByUserId(long userId)
+        {
+            try
+            {
+                var userExists = _serviceUow.UserService.IsUserExist(userId);
+                if (!userExists)
+                {
+                    return NotFound("User does not exists.");
+                }
+
+                var result = _serviceUow.MenuService.GetAllBookmarkedMenuIdsByUserId(userId);
                 return Ok(result);
             }
             catch (Exception ex)
