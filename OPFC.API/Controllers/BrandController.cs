@@ -171,5 +171,26 @@ namespace OPFC.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("{brandName}/Available")]
+        public ActionResult IsBrandNameAvailable(string brandName)
+        {
+            try
+            {
+                var available = _serviceUow.BrandService.IsBrandNameAvailable(brandName);
+                if (available)
+                {
+                    return Ok(new { Message = $"{brandName} is available." });
+                }
+
+                return BadRequest(new { Message = $"{brandName} is already taken." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

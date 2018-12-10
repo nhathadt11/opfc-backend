@@ -64,5 +64,10 @@ namespace OPFC.Repositories.Implementations
         {
             return DbSet.Any(b => b.Id == id);
         }
+
+        public bool IsBrandNameAvailable(string brandName)
+        {
+            return !DbSet.Any(b => string.Equals(b.BrandName.ToLower(), brandName.ToLower()));
+        }
     }
 }
