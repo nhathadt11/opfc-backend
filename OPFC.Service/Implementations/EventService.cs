@@ -234,7 +234,7 @@ namespace OPFC.Services.Implementations
                 matchedMenus = matchedMenus.Where(m => listBrandIdMatchedDistrictId.Contains(m.BrandId)).ToList();
             }
 
-            var percent = basedEvent.ServingNumber * 0.2;
+            var percent = basedEvent.ServingNumber * 0.07;
             var botServing = basedEvent.ServingNumber - percent;
             var topServing = basedEvent.ServingNumber + percent;
 
