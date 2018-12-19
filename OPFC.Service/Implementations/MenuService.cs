@@ -76,7 +76,7 @@ namespace OPFC.Services.Implementations
         {
             using (var scope = new TransactionScope())
             {
-                var photo = string.Join(";", request.Photos);
+                var photo = (request.Photos != null && request.Photos.Count > 0) ? string.Join(";", request.Photos) : null;
                 var menu = new Menu
                 {
                     MenuName = request.MenuName,
