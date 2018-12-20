@@ -62,6 +62,7 @@ namespace OPFC.API.Controllers
             try
             {
                 _serviceUow.PaypalService.Refund(orderLineId);
+                _serviceUow.OrderLineService.Cancel(orderLineId);
 
                 return Ok();
             }
