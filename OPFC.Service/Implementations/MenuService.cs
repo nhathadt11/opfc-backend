@@ -76,7 +76,7 @@ namespace OPFC.Services.Implementations
         {
             using (var scope = new TransactionScope())
             {
-                var photo = string.Join(";", request.Photos);
+                var photo = (request.Photos != null && request.Photos.Count > 0) ? string.Join(";", request.Photos) : null;
                 var menu = new Menu
                 {
                     MenuName = request.MenuName,
@@ -113,8 +113,20 @@ namespace OPFC.Services.Implementations
                     })
                     .ToList();
 
+                var categoryIds = request.CategoryIds;
+                var menuCategoryList = _opfcUow.CategoryRepository
+                    .GetAllByIds(categoryIds)
+                    .Select(c => new MenuCategory
+                    {
+                        MenuId = menu.Id,
+                        CategoryId = c.Id,
+                    })
+                    .ToList();
+
+
                 _opfcUow.MenuMealRepository.CreateRange(menuMealList);
                 _opfcUow.MenuEventTypeRepository.CreateRange(menuEventTypeList);
+                _opfcUow.MenuCategoryRepository.CreateRange(menuCategoryList);
                 _opfcUow.Commit();
 
                 var brandSummary = _opfcUow.BrandSummaryRepository.GetByBrandId(brandId);

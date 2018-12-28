@@ -20,5 +20,6 @@ namespace OPFC.Services.Interfaces
         Brand GetBrandByUserId(long id);
 
         bool Exists(long id);
+        bool IsBrandNameAvailable(string brandName);
     }
 }

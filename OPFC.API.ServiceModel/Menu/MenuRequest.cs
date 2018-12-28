@@ -16,7 +16,7 @@ namespace OPFC.API.ServiceModel.Menu
         public List<string> Photos { get; set; }
         public List<long> EventTypeIds { get; set; }
         public List<long> MealIds { get; set; }
-        public List<string> Tags { get; set; }
+        public List<long> CategoryIds { get; set; }
     }
 
     [EnableCors("*", "*")]

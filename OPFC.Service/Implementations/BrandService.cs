@@ -117,5 +117,10 @@ namespace OPFC.Services.Implementations
         {
             return _opfcUow.BrandRepository.Exists(id);
         }
+
+        public bool IsBrandNameAvailable(string brandName)
+        {
+            return _opfcUow.BrandRepository.IsBrandNameAvailable(brandName);
+        }
     }
 }
